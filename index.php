@@ -14,7 +14,21 @@ $app = new \Slim\Slim();
 echo "New Slim Object: good";
 echo "<br>";
 
-$app->get('/retrieve/:gender', function ($gender) {
+
+
+$app->get('/users/:id/workZIP', function ($id)
+{
+$con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = 10");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['workZIP'];
+  					echo "<br>";
+				}	
+	    	mysqli_close($con);
+	
+});
+
+$app->get('/users:?gender=:value', function ($value) {
 
 
 	
@@ -25,7 +39,7 @@ echo "<br>";
   
 
 
-	if($gender=="male")
+	if($value=="male")
 	{
 	    	$con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE gender = '2'");
@@ -36,7 +50,7 @@ echo "<br>";
 	    	mysqli_close($con);
 	  	}
 	
-	  	if($gender == "female")
+	  	if($value == "female")
 	{
 
 	    	$con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
