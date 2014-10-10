@@ -1,7 +1,7 @@
 <?php
 echo "Page loaded: good";
 echo "<br>";
-
+ $con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
 require 'Slim/Slim.php';
 
 \Slim\Slim::registerAutoloader();
@@ -10,6 +10,7 @@ echo "<br>";
 $app = new \Slim\Slim();
 echo "New Slim Object: good";
 echo "<br>";
+ 
 
 //include '../Include/UserFactory.php';
 //$ufact = new UserFactory();
@@ -18,10 +19,11 @@ echo "<br>";
 //kelley: users/<id>/homeZIP, users/<id>/workZIP, users/<id>/schoolZIP, users/<id>/email
 
 
-$app->get('/users/:id/workZIP', function ($id)
+$app->get('/users/:id/workZIP', function ($id) use($app, $con) 
 {
-$con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = 10");
+
+
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
 	    		while($row = mysqli_fetch_array($result)) {
   					echo $row['id'] . " " . $row['workZIP'];
   					echo "<br>";
@@ -31,10 +33,14 @@ $con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt",
 	
 });
 
-$app->get('/users/:id/homeZIP', function ($id)
+
+
+
+
+$app->get('/users/:id/homeZIP', function ($id) use($app, $con) 
 {
-$con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = 10");
+
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
 	    		while($row = mysqli_fetch_array($result)) {
   					echo $row['id'] . " " . $row['homeZIP'];
   					echo "<br>";
@@ -44,10 +50,10 @@ $con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt",
 	
 });
 
-$app->get('/users/:id/schoolZIP', function ($id)
+$app->get('/users/:id/schoolZIP', function ($id) use($app, $con) 
 {
-$con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = 10");
+
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
 	    		while($row = mysqli_fetch_array($result)) {
   					echo $row['id'] . " " . $row['schoolZIP'];
   					echo "<br>";
@@ -57,10 +63,10 @@ $con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt",
 	
 });
 
-$app->get('/users/:id/email', function ($id)
+$app->get('/users/:id/email', function ($id) use($app, $con) 
 {
-$con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = 10");
+
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
 	    		while($row = mysqli_fetch_array($result)) {
   					echo $row['id'] . " " . $row['email'];
   					echo "<br>";
@@ -69,6 +75,64 @@ $con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt",
 
 	
 });
+
+
+
+//Kelley: filtering methods
+//$paramValue = $app->request()->params('paramName');
+
+$app->get('/users',  function () use($app, $con)  {
+		 
+          $paramValue = $app->request()->params(); //this gets the params, in an array
+          //what I want to do is to loop through the array, it doesn't care about 
+          //? or &, it gets the params just fine
+          //loop through the array, and for each filter, find the data, and add it to the
+          //return format
+          foreach($paramValue as $type=>$val)
+          {
+          	if($type == "age")
+          	{
+          		$result = mysqli_query($con,"SELECT * FROM user WHERE Age = '$val'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['age'];
+  					echo "<br>";
+				}	
+          	}
+          	if($type == "gender")
+          	{
+          		$result = mysqli_query($con,"SELECT * FROM user WHERE gender = '$val'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['gender'];
+  					echo "<br>";
+				}	
+          	}
+          	if($type == "ethnicity")
+          	{
+          		$result = mysqli_query($con,"SELECT * FROM user WHERE ethnicity = '$val'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['ethnicity'];
+  					echo "<br>";
+				}	
+          	}
+          	if($type == "income")
+          	{
+          		$result = mysqli_query($con,"SELECT * FROM user WHERE income = '$val'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['income'];
+  					echo "<br>";
+				}	
+          	}
+          }
+          var_dump( $paramValue );
+         
+	    	mysqli_close($con);
+});
+
+
+
+
+
+
 
 $app->get('/users:?gender=:value', function ($value) {
 
