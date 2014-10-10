@@ -13,9 +13,7 @@ echo "New Slim Object: good";
 echo "<br>";
  
 
-//include '../Include/UserFactory.php';
-//$ufact = new UserFactory();
-//echo $ufact;        
+       
 
 //kelley: users/<id>/homeZIP, users/<id>/workZIP, users/<id>/schoolZIP, users/<id>/email
 
@@ -99,6 +97,7 @@ $app->get('/users/:id/ethnicity', function ($id) use($app, $con)
 				}
 			mysqli_close($con);
 });				
+
 
 $app->get('/users/:id/device', function ($id) use($app, $con) 
 {
@@ -200,10 +199,35 @@ $app->get('/users/:id/cycling_freq', function ($id) use($app, $con)
 $app->get('/users',  function () use($app, $con)  {
 		 
           $paramValue = $app->request()->params(); //this gets the params, in an array
+          
           //what I want to do is to loop through the array, it doesn't care about 
           //? or &, it gets the params just fine
           //loop through the array, and for each filter, find the data, and add it to the
-          //return format
+          //return format (kelley)
+          
+          
+          /*******************************
+          
+          
+          NOTE: (kelley)
+          This, as it stands, does not check for duplicates. These calls
+          simply find ALL results matching that query. To truly do filtering,
+          we will need to do more with the code in order to check for duplicate data.
+          
+          For example, if we did a filter call checking for users in a certain income
+          bracket and for users who are female, right now you could get a list
+          of ALL users who are in an income bracket and ALL users who are female.
+          
+          
+          When we get to a point to do JSON creation, we will need to make sure
+          filtering finds us users with the right attributes, not just a dump of
+          all users of a certain criteria.
+          
+          
+          **********************************/
+          
+          
+          
           foreach($paramValue as $type=>$val)
           {
           	if($type == "age")
@@ -250,61 +274,10 @@ $app->get('/users',  function () use($app, $con)  {
 
 
 
-$app->get('/users:?gender=:value', function ($value) {
-
-
-	
-
-echo "<br>";
-
- //testing github push :D (Sam)
-  
-
-
-	if($value=="male")
-	{
-	    	$con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE gender = '2'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['gender'];
-  					echo "<br>";
-				}	
-	    	mysqli_close($con);
-	  	}
-	
-	  	if($value == "female")
-	{
-
-	    	$con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE gender = '1'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['gender'];
-  					echo "<br>";
-				}	
-	    	mysqli_close($con);
-	  	}
-	//  }
-	  	
-  
-});
 
 
 
 
-
-$app->get('/hello/:name', function ($name) {
-
-
-
-	 $con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
-	    $result = mysqli_query($con,"SELECT * FROM trip");
-	    while($row = mysqli_fetch_array($result)) {
-  			echo $row['user_id'] . " " . $row['purpose'];
-  			echo "<br>";
-		}	
-	    mysqli_close($con);
-    echo "Hello, $name";
-});
 
 
 
