@@ -76,7 +76,7 @@ $app->get('/users/:id/email', function ($id) use($app, $con)
 	
 });
 
-<<<<<<< HEAD
+
 //Yan
 //users/<id>/ethnicity, users/<id>/created, users/<id>/device
 
@@ -94,33 +94,9 @@ $app->get('/users/:id/ethnicity', function ($id) use($app, $con)
 			$result = mysqli_query($con,"SELECT * FROM ethnicity WHERE id = '$ethnicityID'");
 	    		while($row = mysqli_fetch_array($result)) {
   					echo " (" . $row['text'] . ") ";
-=======
-//Dhruv: income, rider type, rider history,rider frequency
-$app->get('/users/:id/income', function ($id) use($app, $con) 
-{
-
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['income'];
-  					echo "<br>";
-				}	
-	    	mysqli_close($con);
-});
-
-$app->get('/users/:id/rider_type', function ($id) use($app, $con) 
-{
-
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['rider_type'];
-  					echo "<br>";
-				}	
-	    	mysqli_close($con);
-
-<<<<<<< HEAD
-	
-});
-
+				}
+			mysqli_close($con);
+});				
 
 $app->get('/users/:id/device', function ($id) use($app, $con) 
 {
@@ -155,9 +131,39 @@ $app->get('/users/:id/created', function ($id) use($app, $con)
 
 	
 });
+					
 
-=======
+//Dhruv: income, rider type, rider history,rider frequency
+$app->get('/users/:id/income', function ($id) use($app, $con) 
+{
+
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['income'];
+  					echo "<br>";
+				}	
+	    	mysqli_close($con);
 });
+
+$app->get('/users/:id/rider_type', function ($id) use($app, $con) 
+{
+
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['rider_type'];
+  					echo "<br>";
+				}	
+	    	mysqli_close($con);
+
+
+	
+});
+
+
+
+
+
+
 
 $app->get('/users/:id/rider_history', function ($id) use($app, $con) 
 {
@@ -184,7 +190,6 @@ $app->get('/users/:id/cycling_freq', function ($id) use($app, $con)
 });
 
 
->>>>>>> 436ba60a7ebdfdd6576809b5ff9f683460452014
 
 
 //Kelley: filtering methods
