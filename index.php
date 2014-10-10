@@ -76,6 +76,55 @@ $app->get('/users/:id/email', function ($id) use($app, $con)
 	
 });
 
+//Dhruv: income, rider type, rider history,rider frequency
+$app->get('/users/:id/income', function ($id) use($app, $con) 
+{
+
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['income'];
+  					echo "<br>";
+				}	
+	    	mysqli_close($con);
+});
+
+$app->get('/users/:id/rider_type', function ($id) use($app, $con) 
+{
+
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['rider_type'];
+  					echo "<br>";
+				}	
+	    	mysqli_close($con);
+
+});
+
+$app->get('/users/:id/rider_history', function ($id) use($app, $con) 
+{
+
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['rider_history'];
+  					echo "<br>";
+				}	
+	    	mysqli_close($con);
+
+});
+
+$app->get('/users/:id/cycling_freq', function ($id) use($app, $con) 
+{
+
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['cycling_freq'];
+  					echo "<br>";
+				}	
+	    	mysqli_close($con);
+
+});
+
+
 
 
 //Kelley: filtering methods
