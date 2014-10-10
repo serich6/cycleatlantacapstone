@@ -76,6 +76,65 @@ $app->get('/users/:id/email', function ($id) use($app, $con)
 	
 });
 
+//Yan
+//users/<id>/ethnicity, users/<id>/created, users/<id>/device
+
+$app->get('/users/:id/ethnicity', function ($id) use($app, $con) 
+{
+
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+			$ethnicityID;
+			
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['ethnicity'];
+					$ethnicityID = $row['ethnicity'];
+				}	
+				
+			$result = mysqli_query($con,"SELECT * FROM ethnicity WHERE id = '$ethnicityID'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo " (" . $row['text'] . ") ";
+  					echo "<br>";
+				}	
+	    	mysqli_close($con);
+
+	
+});
+
+
+$app->get('/users/:id/device', function ($id) use($app, $con) 
+{
+
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+		
+			
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['device'];
+					echo "<br>";
+				}	
+				
+			
+	    	mysqli_close($con);
+
+	
+});
+
+$app->get('/users/:id/created', function ($id) use($app, $con) 
+{
+
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+		
+			
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['created'];
+					echo "<br>";
+				}	
+				
+			
+	    	mysqli_close($con);
+
+	
+});
+
 
 
 //Kelley: filtering methods
