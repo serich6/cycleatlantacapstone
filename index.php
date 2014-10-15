@@ -190,7 +190,42 @@ $app->get('/users/:id/cycling_freq', function ($id) use($app, $con)
 
 });
 
+//Sam  users/<id>, users/<id>/age, users/<id>/gender
 
+//Get a specific user's information for authentication
+$app->get('/users/:id', function ($id) use($app, $con) 
+{
+			//need to use this for authentication purposes, hopefully will later pull back a password as well?
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['email'];
+  					echo "<br>";
+				}	
+	    	mysqli_close($con);
+
+});
+//Get a specific user's age
+$app->get('/users/:id/svn_auth_get_parameter(key)', function ($id) use($app, $con) 
+{
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['age'];
+  					echo "<br>";
+				}	
+	    	mysqli_close($con);
+
+});
+//Get a specific user's gender
+$app->get('/users/:id/gender', function ($id) use($app, $con) 
+{
+			$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['gender'];
+  					echo "<br>";
+				}	
+	    	mysqli_close($con);
+
+});
 
 
 //Kelley: filtering methods
