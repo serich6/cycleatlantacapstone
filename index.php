@@ -205,7 +205,7 @@ $app->get('/users/:id', function ($id) use($app, $con)
 
 });
 //Get a specific user's age
-$app->get('/users/:id/svn_auth_get_parameter(key)', function ($id) use($app, $con) 
+$app->get('/users/:id/age', function ($id) use($app, $con) 
 {
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
 	    		while($row = mysqli_fetch_array($result)) {
