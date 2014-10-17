@@ -318,7 +318,28 @@ $app->get('/users',  function () use($app, $con)  {
           
           **********************************/
           
+          /**
+          **********************************
+          This is the code from the POST calls. This builds a SQL query.
+          It needs to be refactored to use for filtering. But, there are many
+          ways we can build a SQL statement to filter for us. We will need to
+          do some research on the easiest way to just get this up and running
           
+          
+          $query = "SELECT INTO user (".''.") VALUES (".''.")";
+		  $values = '';
+	      $keys = '';
+	      foreach($body as $k=>$v)
+	      {
+		    $keys .= $k.",";
+            $values .= '"'.$v.'"'.",";
+	
+          }
+          $keys = substr($keys, 0, -1);
+          $values = substr($values, 0, -1);
+         
+          $query = "Insert INTO user (".$keys.") VALUES (".$values.")";
+          */
           
           foreach($paramValue as $type=>$val)
           {
