@@ -1,5 +1,5 @@
 
-
+POST Test (for user):<br>
 <input type="submit" value="submit" onclick="javascript:document.myform.submit()">
 <form action="index.php/users/user" method="post" name="myform">
 Email:
@@ -25,10 +25,22 @@ Rider Type:
 App Version:
 <input name="app_version" value="1.0" /> <br>
 </form>
+<br>
+POST/PUT Test (not implemented):<br>
+<input type="submit" value="submit" onclick="javascript:document.putform.submit()">
+<form action="index.php/users/" method="put" name="putform">
+Id:
+<input name="id" value="1366" /><br>
+Work Zip:
+<input name="workZIP" value="30032" /> <br>
+</form>
+
 
 
 
 <script>
+//taken from http://stackoverflow.com/questions/1255948/post-data-in-json-format-with-javascript
+
 var form;
 
 form.onsubmit = function (e) {

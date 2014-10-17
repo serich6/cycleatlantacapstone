@@ -53,6 +53,23 @@ $app->post('/users/user', function () use($app, $con)
     echo $query;
 
     });
+    
+//kelley: PATCH
+
+$app->put('/users/:id/:workZIP', function ($id, $workZIP) use($app, $con) 
+{
+			$user = UserFactory::getUser($id); //how to access methods in factory files
+			var_dump($user);
+	
+	    	$result = mysqli_query($con,"UPDATE user SET workZIP = '$workZIP' WHERE id = '$id'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['workZIP'];
+  					echo "<br>";
+				}	
+	    	mysqli_close($con);
+
+	
+});    
 
 //kelley: users/<id>/homeZIP, users/<id>/workZIP, users/<id>/schoolZIP, users/<id>/email
 
