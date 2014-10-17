@@ -375,6 +375,30 @@ $app->get('/users',  function () use($app, $con)  {
   					echo "<br>";
 				}	
           	}
+			if($type == "rider_type")
+          	{
+          		$result = mysqli_query($con,"SELECT * FROM user WHERE income = '$val'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['rider_type'];
+  					echo "<br>";
+				}	
+          	}
+			if($type == "rider_history")
+          	{
+          		$result = mysqli_query($con,"SELECT * FROM user WHERE income = '$val'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['rider_history'];
+  					echo "<br>";
+				}	
+          	}
+			if($type == "homeZIP")
+          	{
+          		$result = mysqli_query($con,"SELECT * FROM user WHERE income = '$val'");
+	    		while($row = mysqli_fetch_array($result)) {
+  					echo $row['id'] . " " . $row['homeZIP'];
+  					echo "<br>";
+				}	
+          	}
           }
           var_dump( $paramValue );
          
