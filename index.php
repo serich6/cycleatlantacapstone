@@ -3,9 +3,9 @@ echo "Page loaded: good";
 echo "<br>";
  $con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
 require 'Slim/Slim.php';
-require_once('../Include/UserFactory.php');
+require_once('Include/UserFactory.php');
 
-\Slim\Slim::registerAutoloader();
+Slim\Slim::registerAutoloader();
 echo "Registered AutoLoader: good";
 echo "<br>";
 $app = new \Slim\Slim();
@@ -61,7 +61,7 @@ $app->put('/users/:id/:workZIP', function ($id, $workZIP) use($app, $con)
 			$user = UserFactory::getUser($id); //how to access methods in factory files
 			var_dump($user);
 	
-	    	$result = mysqli_query($con,"UPDATE user SET workZIP = '$workZIP' WHERE id = '$id'");
+	    	$result = mysqli_query($con,"UPDATE user SET workZIP = '$workZIP'");
 	    		while($row = mysqli_fetch_array($result)) {
   					echo $row['id'] . " " . $row['workZIP'];
   					echo "<br>";
