@@ -1,0 +1,49 @@
+
+
+<input type="submit" value="submit" onclick="javascript:document.myform.submit()">
+<form action="index.php/users/user" method="post" name="myform">
+<input name="device" value="a0d546c1224dfe5fb192e28837ab0447f01be3d6" />
+<input name="email" value="none" />
+<input name="gender" value="1" />
+<input name="income" value="1" />
+<input name="ethnicity" value="1" />
+<input name="homeZIP" value="30032" />
+<input name="schoolZIP" value="30032" />
+<input name="workZIP" value="30032" />
+<input name="cycling_freq" value="1" />
+<input name="rider_history" value="1" />
+<input name="rider_type" value="1" />
+<input name="app_version" value="1.0" />
+</form>
+
+
+
+<script>
+var form;
+
+form.onsubmit = function (e) {
+  // stop the regular form submission
+  e.preventDefault();
+
+  // collect the form data while iterating over the inputs
+  var data = {};
+  for (var i = 0, ii = form.length; i < ii; ++i) {
+    var input = form[i];
+    if (input.name) {
+      data[input.name] = input.value;
+    }
+  }
+
+  // construct an HTTP request
+  var xhr = new XMLHttpRequest();
+  xhr.open(form.method, form.action, true);
+  xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+
+  // send the collected data as JSON
+  xhr.send(JSON.stringify(data));
+
+  xhr.onloadend = function () {
+    // done
+  };
+};
+</script>

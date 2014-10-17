@@ -9,11 +9,68 @@ require_once('../Include/UserFactory.php');
 echo "Registered AutoLoader: good";
 echo "<br>";
 $app = new \Slim\Slim();
+$app->add(new \Slim\Middleware\ContentTypes());
 echo "New Slim Object: good";
 echo "<br>";
  
 
-       
+//kelley: post user
+//kelley's iphone uuid: a0d546c1224dfe5fb192e28837ab0447f01be3d6
+//user fields: device = ^, email = none, age = 2, gender = 1, income = 1, ethnicity = 1, homeZIP = 30032,
+//schoolZIP = 30032, workZIP = 30032, cycling_freq = 1, rider_history = 1, rider_type = 1, app_version = 1.0
+
+
+$app->post('/users/user', function () use($app, $con) 
+{
+
+
+    $body = $app->request()->params();
+    
+    
+	$query = "Insert INTO user (".''.") VALUES (".''.")";
+	$values = '';
+	$keys = '';
+	foreach($body as $k=>$v)
+	{
+		$keys .= $k.",";
+        $values .= '"'.$v.'"'.",";
+	
+    }
+    $keys = substr($keys, 0, -1);
+    $values = substr($values, 0, -1);
+         
+          $query = "Insert INTO user (".$keys.") VALUES (".$values.")";
+          		
+          		
+        mysqli_query($con, $query);
+	    	
+          	
+    echo $query;
+  /*  try {
+        $db = $con;
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam("id", $db->lastInsertId());
+        $stmt->bindParam("device", $newUser->device);
+        $stmt->bindParam("email", $newUser->email);
+        $stmt->bindParam("age", $newUser->age);
+        $stmt->bindParam("gender", $newUser->gender);
+        $stmt->bindParam("income", $newUser->income);
+        $stmt->bindParam("ethnicity", $newUser->ethnicity);
+        $stmt->bindParam("homeZIP", $newUser->homeZIP);
+        $stmt->bindParam("schoolZIP", $newUser->schoolZIP);
+        $stmt->bindParam("workZIP", $newUser->workZIP);
+        $stmt->bindParam("cycling_freq", $newUser->cycling_freq);
+        $stmt->bindParam("rider_history", $newUser->rider_history);
+        $stmt->bindParam("rider_type", $newUser->rider_type);
+        $stmt->bindParam("app_version", $newUser->app_version);
+        $stmt->execute();
+        
+        $db = null;
+        echo json_encode($newUser);
+    } catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }*/
+    });
 
 //kelley: users/<id>/homeZIP, users/<id>/workZIP, users/<id>/schoolZIP, users/<id>/email
 
@@ -265,6 +322,7 @@ $app->get('/users',  function () use($app, $con)  {
           
           foreach($paramValue as $type=>$val)
           {
+          
           	if($type == "age")
           	{
           		$result = mysqli_query($con,"SELECT * FROM user WHERE Age = '$val'");
