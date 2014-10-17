@@ -54,18 +54,40 @@ $app->post('/users/user', function () use($app, $con)
 
     });
     
-//kelley: PATCH
+//kelley: PUT
 
-$app->put('/users/:id/:workZIP', function ($id, $workZIP) use($app, $con) 
+$app->put('/users/user/:id', function ($id) use($app, $con) 
 {
-			$user = UserFactory::getUser($id); //how to access methods in factory files
-			var_dump($user);
+			//only works for workZIP
+			/***********************
+			@todo:
+			To make this most efficient, we will need to implement something
+			similar to the POST call. For anything PUT related for a USER,
+			we should parse all the inputs, then create a SQL query based on
+			that
+			**************************/
+			
+			
+    		$body = $app->request()->getBody();
+    		$workZIP = '';
+    		foreach($body as $k=>$v)
+			{	
+				
+				if($k == 'workZIP')
+				{
+					$workZIP = $v;
+					echo $v;
+				}
+			
+       			
 	
-	    	$result = mysqli_query($con,"UPDATE user SET workZIP = '$workZIP'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['workZIP'];
-  					echo "<br>";
-				}	
+    		}
+			
+			
+		echo $workZIP;
+	     mysqli_query($con,"UPDATE user SET workZIP = '$workZIP' WHERE id = '$id'");
+	    		
+				
 	    	mysqli_close($con);
 
 	

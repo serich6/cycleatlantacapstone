@@ -26,15 +26,29 @@ App Version:
 <input name="app_version" value="1.0" /> <br>
 </form>
 <br>
+
+
 POST/PUT Test (not implemented):<br>
-<input type="submit" value="submit" onclick="javascript:document.putform.submit()">
-<form action="index.php/users/" method="put" name="putform">
-Id:
-<input name="id" value="1366" /><br>
-Work Zip:
-<input name="workZIP" value="30032" /> <br>
+
+<form id="putForm">
+
+<label>Id:</label>
+<input id="id" name="id" type="text"  />
+
+<label>Work Zip:</label>
+<input type="text" id="workZIP" name="workZIP" />
+
+
+<button id="putButton">PUT</button>
+
+
+
 </form>
 
+<script src="js/jquery-1.7.1.min.js"></script>
+<script src="js/main.js"></script>
+
+   
 
 
 
@@ -44,8 +58,9 @@ Work Zip:
 var form;
 
 form.onsubmit = function (e) {
+	e.preventDefault();
   // stop the regular form submission
-  e.preventDefault();
+  
 
   // collect the form data while iterating over the inputs
   var data = {};
@@ -57,12 +72,13 @@ form.onsubmit = function (e) {
   }
 
   // construct an HTTP request
-  var xhr = new XMLHttpRequest();
+ var xhr = new XMLHttpRequest();
   xhr.open(form.method, form.action, true);
   xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 
   // send the collected data as JSON
   xhr.send(JSON.stringify(data));
+  
 
   xhr.onloadend = function () {
     // done
