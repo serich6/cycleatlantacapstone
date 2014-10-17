@@ -22,54 +22,36 @@ echo "<br>";
 
 $app->post('/users/user', function () use($app, $con) 
 {
-
-
+	//get the parameters sent over as JSON 
     $body = $app->request()->params();
-    
-    
-	$query = "Insert INTO user (".''.") VALUES (".''.")";
+    //initialize key value variables   
 	$values = '';
 	$keys = '';
+	//loop through the JSON data
 	foreach($body as $k=>$v)
-	{
+	{	
+		//create a comma separated string of keys and values to pass to SQL
 		$keys .= $k.",";
         $values .= '"'.$v.'"'.",";
 	
     }
+    //knock off the last comma at the end 
     $keys = substr($keys, 0, -1);
     $values = substr($values, 0, -1);
-         
-          $query = "Insert INTO user (".$keys.") VALUES (".$values.")";
-          		
-          		
+    //build the query, we're adding to the user table for this POST    
+    $query = "Insert INTO user (".$keys.") VALUES (".$values.")";
+    //try-catch block, make sure we can try to insert and not break things      		
+      try
+      {    		
         mysqli_query($con, $query);
-	    	
-          	
-    echo $query;
-  /*  try {
-        $db = $con;
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam("id", $db->lastInsertId());
-        $stmt->bindParam("device", $newUser->device);
-        $stmt->bindParam("email", $newUser->email);
-        $stmt->bindParam("age", $newUser->age);
-        $stmt->bindParam("gender", $newUser->gender);
-        $stmt->bindParam("income", $newUser->income);
-        $stmt->bindParam("ethnicity", $newUser->ethnicity);
-        $stmt->bindParam("homeZIP", $newUser->homeZIP);
-        $stmt->bindParam("schoolZIP", $newUser->schoolZIP);
-        $stmt->bindParam("workZIP", $newUser->workZIP);
-        $stmt->bindParam("cycling_freq", $newUser->cycling_freq);
-        $stmt->bindParam("rider_history", $newUser->rider_history);
-        $stmt->bindParam("rider_type", $newUser->rider_type);
-        $stmt->bindParam("app_version", $newUser->app_version);
-        $stmt->execute();
-        
-        $db = null;
-        echo json_encode($newUser);
-    } catch(PDOException $e) {
+      } catch(PDOException $e) 
+      {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
-    }*/
+      }
+	    	
+    //for debugging purposes, make sure query looks like it should      	
+    echo $query;
+
     });
 
 //kelley: users/<id>/homeZIP, users/<id>/workZIP, users/<id>/schoolZIP, users/<id>/email
