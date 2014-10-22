@@ -3,7 +3,7 @@ echo "Page loaded: good";
 echo "<br>";
  $con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
 require 'Slim/Slim.php';
-require_once('Include/UserFactory.php');
+require_once('include/UserFactory.php');
 
 Slim\Slim::registerAutoloader();
 echo "Registered AutoLoader: good";
@@ -12,6 +12,78 @@ $app = new \Slim\Slim();
 $app->add(new \Slim\Middleware\ContentTypes());
 echo "New Slim Object: good";
 echo "<br>";
+
+
+//Yan: register new user
+$app->post('/register', function () use($app, $con) 
+{
+
+	//get the parameters sent over as JSON 
+    $body = $app->request()->params();
+    //initialize key value variables   
+	$values = '';
+	$keys = '';
+	
+	//the new email that the user just had input
+	$userEmail;
+
+	//loop through the JSON data
+	foreach($body as $k=>$v)
+	{	
+		//create a comma separated string of keys and values to pass to SQL
+		$keys .= $k.",";
+        $values .= '"'.$v.'"'.",";
+		
+		if($k == 'email'){
+			echo "<br>";
+			echo "your email: ";
+			echo $v;
+			echo "<br>";
+			$userEmail = $v;
+		}
+	
+    }
+	
+	//store all emails in an array
+	$result = mysqli_query($con, "SELECT email FROM user");
+	$emailArray = Array();
+	while ($row = mysqli_fetch_array($result)) {
+		$emailArray[] =  $row['email'];  
+	}
+	
+	
+
+	$invalidEmail = false;
+	//check if new email matches with any of the emails in db 
+	foreach($emailArray as $email){
+		if($email == $userEmail){
+			echo "That email already exists";
+			$invalidEmail = true;
+		}
+	}
+	
+	
+	if($invalidEmail == false){
+		//knock off the last comma at the end 
+		$keys = substr($keys, 0, -1);
+		$values = substr($values, 0, -1);
+		//build the query, we're adding to the user table for this POST    
+		$query = "Insert INTO user (".$keys.") VALUES (".$values.")";
+		//try-catch block, make sure we can try to insert and not break things      		
+		  try
+		  {    		
+			mysqli_query($con, $query);
+		  } catch(PDOException $e) 
+		  {
+			echo '{"error":{"text":'. $e->getMessage() .'}}';
+		  }
+				
+		//for debugging purposes, make sure query looks like it should      	
+		echo $query;
+	}
+	
+	
+    }); 
  
 
 //kelley: post user
