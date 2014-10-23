@@ -1,34 +1,44 @@
 
 POST Test (for user):<br>
-<input type="submit" value="submit" onclick="javascript:document.myform.submit()">
-<form action="index.php/users/user" method="post" name="myform">
-Email:
-<input name="email" value="none" /> <br>
-Gender:
-<input name="gender" value="1" /> <br>
-Income:
-<input name="income" value="1" /> <br>
-Ethnicity:
-<input name="ethnicity" value="1" /> <br>
-Home Zip:
-<input name="homeZIP" value="30032" /> <br>
-School Zip:
-<input name="schoolZIP" value="30032" /> <br>
-Work Zip:
-<input name="workZIP" value="30032" /> <br>
-Cycling Frequency:
-<input name="cycling_freq" value="1" /> <br>
-Rider History:
-<input name="rider_history" value="1" /> <br>
-Rider Type:
-<input name="rider_type" value="1" /> <br>
-App Version:
-<input name="app_version" value="1.0" /> <br>
-</form>
+
 <br>
 
+<form id="postForm">
 
-POST/PUT Test (not implemented):<br>
+<label>Email:</label>
+<input id="email" name="email" type="text"  /><br>
+<label>Gender:</label>
+<input type="text" id="gender" name="gender" /><br>
+<label>Income:</label>
+<input type="text" id="income" name="income" /> <br>
+<label>Ethnicity:</label>
+<input type="text" id="ethnicity" name="ethnicity" /> <br>
+<label>Home Zip:</label>
+<input type="text" id="homeZIP" name="homeZIP" /> <br>
+<label>School Zip:</label>
+<input type="text" id="schoolZIP" name="schoolZIP" /> <br>
+<label>Work Zip:</label>
+<input type="text" id="workZIP" name="workZIP" /> <br>
+<label>Cycling Frequency:</label>
+<input type="text" id="cycling_freq" name="cycling_freq" /> <br>
+<label>Rider History:</label>
+<input type="text" id="rider_history" name="rider_history" /> <br>
+<label>Rider Type:</label>
+<input type="text" id="rider_type" name="rider_type" /> <br>
+<label>App Version:</label>
+<input type="text" id="app_version" name="app_version" /> <br>
+
+
+<button id="postButton">POST</button>
+
+
+
+</form>
+
+
+
+
+POST/PUT Test :<br>
 
 <form id="putForm">
 
@@ -36,7 +46,7 @@ POST/PUT Test (not implemented):<br>
 <input id="id" name="id" type="text"  />
 
 <label>Work Zip:</label>
-<input type="text" id="workZIP" name="workZIP" />
+<input type="text" id="putWorkZip" name="putWorkZip" />
 
 
 <button id="putButton">PUT</button>
@@ -49,39 +59,3 @@ POST/PUT Test (not implemented):<br>
 <script src="js/main.js"></script>
 
    
-
-
-
-<script>
-//taken from http://stackoverflow.com/questions/1255948/post-data-in-json-format-with-javascript
-
-var form;
-
-form.onsubmit = function (e) {
-	e.preventDefault();
-  // stop the regular form submission
-  
-
-  // collect the form data while iterating over the inputs
-  var data = {};
-  for (var i = 0, ii = form.length; i < ii; ++i) {
-    var input = form[i];
-    if (input.name) {
-      data[input.name] = input.value;
-    }
-  }
-
-  // construct an HTTP request
- var xhr = new XMLHttpRequest();
-  xhr.open(form.method, form.action, true);
-  xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-
-  // send the collected data as JSON
-  xhr.send(JSON.stringify(data));
-  
-
-  xhr.onloadend = function () {
-    // done
-  };
-};
-</script>

@@ -95,7 +95,7 @@ $app->post('/register', function () use($app, $con)
 $app->post('/users/user', function () use($app, $con) 
 {
 	//get the parameters sent over as JSON 
-    $body = $app->request()->params();
+    $body = $app->request()->getBody();
     //initialize key value variables   
 	$values = '';
 	$keys = '';
@@ -138,17 +138,20 @@ $app->put('/users/user/:id', function ($id) use($app, $con)
 			we should parse all the inputs, then create a SQL query based on
 			that
 			**************************/
-			
+		
 			
     		$body = $app->request()->getBody();
+    		
     		$workZIP = '';
     		foreach($body as $k=>$v)
 			{	
 				
+				
 				if($k == 'workZIP')
 				{
+					
 					$workZIP = $v;
-					echo $v;
+					
 				}
 			
        			
@@ -156,8 +159,8 @@ $app->put('/users/user/:id', function ($id) use($app, $con)
     		}
 			
 			
-		echo $workZIP;
-	     mysqli_query($con,"UPDATE user SET workZIP = '$workZIP' WHERE id = '$id'");
+		
+	    	 mysqli_query($con,"UPDATE user SET workZIP = '$workZIP' WHERE id = '$id'");
 	    		
 				
 	    	mysqli_close($con);
