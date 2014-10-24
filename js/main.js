@@ -43,10 +43,10 @@ function updateUser() {
 	$.ajax({
 		type: 'PUT',
 		contentType: 'application/json',
-		url: rootURL + '/' + $('#id').val(),
+		url: rootURL + '/' + $('#id').val() + '/workZip',
 		dataType: "json",
 		data: userFormToJSON(),
-		success: function(data, textStatus, jqXHR){
+		success: function(textStatus, jqXHR){
 			alert('User updated successfully');
 		}
 		

@@ -5,6 +5,15 @@ echo "<br>";
 require 'Slim/Slim.php';
 require_once('include/UserFactory.php');
 
+/*********************
+since we never actually used the dir structure live in prod for our dev,
+we need to include this line like this:
+require_once('../include/UserFactory.php');
+
+to access anything we need from the include directory when we go live to
+production
+***********************/
+
 Slim\Slim::registerAutoloader();
 echo "Registered AutoLoader: good";
 echo "<br>";
@@ -128,45 +137,79 @@ $app->post('/users/user', function () use($app, $con)
     
 //kelley: PUT
 
-$app->put('/users/user/:id', function ($id) use($app, $con) 
+$app->put('/users/user/:id/workZip', function ($id) use($app, $con) 
 {
-			//only works for workZIP
-			/***********************
-			@todo:
-			To make this most efficient, we will need to implement something
-			similar to the POST call. For anything PUT related for a USER,
-			we should parse all the inputs, then create a SQL query based on
-			that
-			**************************/
-		
-			
-    		$body = $app->request()->getBody();
-    		
+						
+    		$body = $app->request()->getBody();    		
     		$workZIP = '';
     		foreach($body as $k=>$v)
-			{	
-				
+			{					
 				
 				if($k == 'workZIP')
 				{
 					
 					$workZIP = $v;
 					
-				}
-			
+				}		
        			
 	
-    		}
-			
-			
+    		}			
 		
 	    	 mysqli_query($con,"UPDATE user SET workZIP = '$workZIP' WHERE id = '$id'");
-	    		
-				
-	    	mysqli_close($con);
+	    	 mysqli_close($con);
 
 	
 });    
+
+$app->put('/users/user/:id/schoolZip', function ($id) use($app, $con) 
+{
+						
+    		$body = $app->request()->getBody();    		
+    		$schoolZip = '';
+    		foreach($body as $k=>$v)
+			{					
+				
+				if($k == 'schoolZip')
+				{
+					
+					$schoolZip = $v;
+					
+				}		
+       			
+	
+    		}			
+		
+	    	 mysqli_query($con,"UPDATE user SET schoolZIP = '$schoolZIP' WHERE id = '$id'");
+	    	 mysqli_close($con);
+
+	
+});    
+
+
+$app->put('/users/user/:id/email', function ($id) use($app, $con) 
+{
+						
+    		$body = $app->request()->getBody();    		
+    		$email = '';
+    		foreach($body as $k=>$v)
+			{					
+				
+				if($k == 'email')
+				{
+					
+					$email = $v;
+					
+				}		
+       			
+	
+    		}			
+		
+	    	 mysqli_query($con,"UPDATE user SET email = '$email' WHERE id = '$id'");
+	    	 mysqli_close($con);
+
+	
+});    
+
 
 //kelley: users/<id>/homeZIP, users/<id>/workZIP, users/<id>/schoolZIP, users/<id>/email
 
