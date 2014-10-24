@@ -134,7 +134,35 @@ $app->post('/users/user', function () use($app, $con)
     echo $query;
 
     });
-    
+//dhruv POST notes
+$app->post('/notes/note', function () use($app, $con) 
+{
+    $body = $app->request()->getBody();
+	$values = '';
+	$keys = '';
+	foreach($body as $k=>$v)
+	{	
+		//create a comma separated string of keys and values to pass to SQL
+		$keys .= $k.",";
+        $values .= '"'.$v.'"'.",";
+	
+    }
+    $keys = substr($keys, 0, -1);
+    $values = substr($values, 0, -1);
+    $query = "Insert INTO note (".$keys.") VALUES (".$values.")";
+      try
+      {    		
+        mysqli_query($con, $query);
+      } catch(PDOException $e) 
+      {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+      }
+	    	
+    echo $query;
+
+    });
+
+
 //kelley: PUT
 
 $app->put('/users/user/:id/workZip', function ($id) use($app, $con) 
