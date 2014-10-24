@@ -209,6 +209,68 @@ $app->put('/users/user/:id/email', function ($id) use($app, $con)
 
 	
 });    
+//dhruv put / patch income, rider_type, rider_history, cycling_freq
+
+$app->put('/users/user/:id/income', function ($id) use($app, $con) 
+{		
+    		$body = $app->request()->getBody();    		
+    		$income = '';
+    		foreach($body as $k=>$v)
+			{					
+				if($k == 'income')
+				{
+					$income = $v;	
+				}		
+    		}			
+	    	 mysqli_query($con,"UPDATE user SET income = '$income' WHERE id = '$id'");
+	    	 mysqli_close($con);
+}); 
+
+$app->put('/users/user/:id/rider_type', function ($id) use($app, $con) 
+{		
+    		$body = $app->request()->getBody();    		
+    		$rider_type = '';
+    		foreach($body as $k=>$v)
+			{					
+				if($k == 'rider_type')
+				{
+					$rider_type = $v;	
+				}		
+    		}			
+	    	 mysqli_query($con,"UPDATE user SET rider_type = '$rider_type' WHERE id = '$id'");
+	    	 mysqli_close($con);
+}); 
+
+
+$app->put('/users/user/:id/rider_history', function ($id) use($app, $con) 
+{		
+    		$body = $app->request()->getBody();    		
+    		$rider_history = '';
+    		foreach($body as $k=>$v)
+			{					
+				if($k == 'rider_history')
+				{
+					$rider_history = $v;	
+				}		
+    		}			
+	    	 mysqli_query($con,"UPDATE user SET rider_history = '$rider_history' WHERE id = '$id'");
+	    	 mysqli_close($con);
+}); 
+
+$app->put('/users/user/:id/cycling_freq', function ($id) use($app, $con) 
+{		
+    		$body = $app->request()->getBody();    		
+    		$cycling_freq = '';
+    		foreach($body as $k=>$v)
+			{					
+				if($k == 'cycling_freq')
+				{
+					$cycling_freq = $v;	
+				}		
+    		}			
+	    	 mysqli_query($con,"UPDATE user SET cycling_freq = '$cycling_freq' WHERE id = '$id'");
+	    	 mysqli_close($con);
+}); 
 
 
 //kelley: users/<id>/homeZIP, users/<id>/workZIP, users/<id>/schoolZIP, users/<id>/email
