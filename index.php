@@ -423,11 +423,86 @@ $app->get('/users/:id/gender', function ($id) use($app, $con)
 
 });
 
+//Sam: filtering get
+$app->get('/users', function() use($app, $con)
+ {
+
+	echo "Made it to the filtering get!";
+	
+	$req = $app->request();
+
+	//set all possible variables...
+	$id = $req->get('id');
+	$age = $req->get('age');
+	$gender = $req->get('gender');
+	$income = $req->get('income');
+	$ethnicity = $req->get('ethnicity');
+	$homeZIP = $req->get('homeZIP');
+	$schoolZIP = $req->get('schoolZIP');
+	$workZIP = $req->get('workZIP');
+	$cycling_freq = $req->get('cycling_freq');
+	$rider_type = $req->get('rider_type');
+
+	$qstring = 'SELECT * FROM user WHERE ';
+
+	//if each parameter is set, add it to the query
+	if(isset($id)){
+		$qstring = $qstring . " id = " . $id . " AND ";
+	}
+	
+	if(isset($age)){
+		$qstring = $qstring . " age = " . $age . " AND ";
+	}
+	
+	if(isset($gender)){
+		$qstring = $qstring . " gender = " . $gender . " AND ";
+	}
+
+	if(isset($income)){
+		$qstring = $qstring . " income = " . $income . " AND ";
+	}
+	if(isset($ethnicity)){
+		$qstring = $qstring . " ethnicity = " . $ethnicity . " AND ";
+	}
+	if(isset($homeZIP)){
+		$qstring = $qstring . " homeZIP = " . $homeZIP . " AND ";
+	}
+	if(isset($schoolZIP)){
+		$qstring = $qstring . " schoolZIP = " . $schoolZIP . " AND ";
+	}
+	if(isset($workZIP)){
+		$qstring = $qstring . " workZIP = " . $workZIP . " AND ";
+	}
+	if(isset($cycling_freq)){
+		$qstring = $qstring . " cycling_freq = " . $cycling_freq . " AND ";
+	}
+	if(isset($rider_type)){
+		$qstring = $qstring . " rider_type = " . $rider_type . " AND ";
+	}	
+
+	//take of the last AND
+	$query = substr($query, 0, -4);
+	
+	//for testing purposes
+	echo $query;
+
+	/**
+	try
+	{
+		mysqli_query($con, $query);
+	}
+	catch(PDOException $e)
+	{
+		echo'{"error":{"text":'.$e->getMessage().'}}';
+	}
+	*/
+
+});
 
 //Kelley: filtering methods
 //$paramValue = $app->request()->params('paramName');
 
-$app->get('/users',  function () use($app, $con)  {
+$app->get('/test',  function () use($app, $con)  {
 		 
           $paramValue = $app->request()->params(); //this gets the params, in an array
           
