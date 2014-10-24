@@ -423,12 +423,9 @@ $app->get('/users/:id/gender', function ($id) use($app, $con)
 
 });
 
-//Sam: filtering get
+//USERS filtering URI
 $app->get('/users', function() use($app, $con)
  {
-
-	echo "Made it to the filtering get!";
-	
 	$req = $app->request();
 
 	//set all possible variables...
@@ -481,21 +478,229 @@ $app->get('/users', function() use($app, $con)
 	}	
 
 	//take of the last AND
-	$query = substr($query, 0, -4);
+	$qstring = substr($qstring, 0, -5);
+	echo $qstring;
+	echo '<br>';
 	
+	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
+	if(substr($qstring, -1)== 'W'){
+		$qstring = substr($qstring, 0, -1);
+	}
 	//for testing purposes
-	echo $query;
+	echo $qstring;
 
-	/**
 	try
 	{
-		mysqli_query($con, $query);
+		$result = mysqli_query($con, $qstring);
 	}
 	catch(PDOException $e)
 	{
 		echo'{"error":{"text":'.$e->getMessage().'}}';
 	}
+
+	$count=0;
+	//need to remove this for later TESTING ONLY
+	while($row = mysqli_fetch_array($result)) {
+  		echo $row['id'];
+  		echo "<br>";
+  		$count=$count + 1;
+	}	
+
+	echo "<br>";
+	echo "<br>";
+	echo "Count: " . $count;
+	
+	mysqli_close($con);
+
+});
+
+//TRIPS filtering URI
+$app->get('/trips', function() use($app, $con)
+ {
+
+	$req = $app->request();
+
+	//set all possible variables...
+	$id = $req->get('id');
+	$user_id = $req->get('user_id');
+	$purpose = $req->get('purpose');
+	$notes = $req->get('notes');
+	$start = $req->get('start');
+	$stop = $req->get('stop');
+	//$n_coord = $req->get('n_coord');
+	
+	$qstring = 'SELECT * FROM trip WHERE ';
+
+	//if each parameter is set, add it to the query
+	if(isset($id)){
+		$qstring = $qstring . " id = " . $id . " AND ";
+	}
+	
+	if(isset($user_id)){
+		$qstring = $qstring . " user_id = " . $user_id . " AND ";
+	}
+	
+	if(isset($notes)){
+		$qstring = $qstring . " notes = " . $notes . " AND ";
+	}
+
+	if(isset($start)){
+		$qstring = $qstring . " start = " . $start . " AND ";
+	}
+	if(isset($stop)){
+		$qstring = $qstring . " stop = " . $stop . " AND ";
+	}
+	/**
+	if(isset($n_coord)){
+		$qstring = $qstring . " n_coord = " . $n_coord . " AND ";
+	}
 	*/
+	
+
+	//take of the last AND
+	$qstring = substr($qstring, 0, -5);
+	echo $qstring;
+	echo '<br>';
+	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
+	
+	if(substr($qstring, -1)== 'W'){
+		$qstring = substr($qstring, 0, -1);
+	}
+	
+	
+	//for testing purposes
+	echo $qstring;
+
+	echo '<br>';
+	
+	try
+	{
+		$result = mysqli_query($con, $qstring);
+	}
+	catch(PDOException $e)
+	{
+		echo'{"error":{"text":'.$e->getMessage().'}}';
+	}
+
+	$count=0;
+	//need to remove this for later TESTING ONLY
+	while($row = mysqli_fetch_array($result)) {
+  		echo $row['user_id'] . " " . $row['id'];
+  		echo "<br>";
+  		$count=$count + 1;
+	}	
+
+	echo "<br>";
+	echo "<br>";
+	echo "Count: " . $count;
+	
+	mysqli_close($con);
+
+});
+
+//NOTES filtering URI
+$app->get('/notes', function() use($app, $con)
+ {
+
+	$req = $app->request();
+
+	//set all possible variables...
+	$id = $req->get('id');
+	$user_id = $req->get('user_id');
+	$trip_id = $req->get('purpose');
+	$recorded = $req->get('notes');
+	$latitude = $req->get('start');
+	$longitude = $req->get('stop');
+	$altitude = $req->get('altitude');
+	$speed = $req->get('speed');
+	$hAccuracy = $req->get('hAccuracy');
+	$vAccuracy = $req->get('vAccuracy');
+	$note_type = $req->get('note_type');
+	$details = $req->get('details');
+	$img_url = $req->get('img_url');
+	
+	$qstring = 'SELECT * FROM note WHERE ';
+
+	//if each parameter is set, add it to the query
+	if(isset($id)){
+		$qstring = $qstring . " id = " . $id . " AND ";
+	}
+	
+	if(isset($user_id)){
+		$qstring = $qstring . " user_id = " . $user_id . " AND ";
+	}
+
+	if(isset($trip_id)){
+		$qstring = $qstring . " trip_id = " . $trip_id . " AND ";
+	}
+	if(isset($recorded)){
+		$qstring = $qstring . " recorded = " . $recorded . " AND ";
+	}
+	if(isset($latitude)){
+		$qstring = $qstring . " latitude = " . $latitude . " AND ";
+	}
+	if(isset($longitude)){
+		$qstring = $qstring . " longitude = " . $longitude . " AND ";
+	}
+	if(isset($altitude)){
+		$qstring = $qstring . " altitude = " . $altitude . " AND ";
+	}
+	if(isset($speed)){
+		$qstring = $qstring . " speed = " . $speed . " AND ";
+	}
+	if(isset($hAccuracy)){
+		$qstring = $qstring . " hAccuracy = " . $hAccuracy . " AND ";
+	}
+	if(isset($vAccuracy)){
+		$qstring = $qstring . " vAccuracy = " . $vAccuracy . " AND ";
+	}
+	if(isset($note_type)){
+		$qstring = $qstring . " note_type = " . $note_type . " AND ";
+	}
+	if(isset($details)){
+		$qstring = $qstring . " details = " . $details . " AND ";
+	}
+	if(isset($img_url)){
+		$qstring = $qstring . " img_url = " . $img_url . " AND ";
+	}
+	//take of the last AND
+	$qstring = substr($qstring, 0, -5);
+	echo $qstring;
+	echo '<br>';
+	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
+	
+	if(substr($qstring, -1)== 'W'){
+		$qstring = substr($qstring, 0, -1);
+	}
+	
+	
+	//for testing purposes
+	echo $qstring;
+
+	echo '<br>';
+	
+	try
+	{
+		$result = mysqli_query($con, $qstring);
+	}
+	catch(PDOException $e)
+	{
+		echo'{"error":{"text":'.$e->getMessage().'}}';
+	}
+
+	$count=0;
+	//need to remove this for later TESTING ONLY
+	while($row = mysqli_fetch_array($result)) {
+  		echo $row['user_id'] . " " . $row['id'];
+  		echo "<br>";
+  		$count=$count + 1;
+	}	
+
+	echo "<br>";
+	echo "<br>";
+	echo "Count: " . $count;
+	
+	mysqli_close($con);
 
 });
 
