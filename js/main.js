@@ -221,6 +221,16 @@ function getRiderType(id)
 	
 }
 
+
+function getUserData(id)
+{
+
+	//can honestly just use one ajax call to users/:id and parse the json response as needed
+
+
+}
+
+
 function updateUser() {
 	
 	$.ajax({
