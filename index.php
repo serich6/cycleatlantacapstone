@@ -1,6 +1,6 @@
 <?php
-echo "Page loaded: good";
-echo "<br>";
+//echo "Page loaded: good";
+//echo "<br>";
  $con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
 require 'Slim/Slim.php';
 require_once('include/UserFactory.php');
@@ -15,12 +15,12 @@ production
 ***********************/
 
 Slim\Slim::registerAutoloader();
-echo "Registered AutoLoader: good";
-echo "<br>";
+//echo "Registered AutoLoader: good";
+//echo "<br>";
 $app = new \Slim\Slim();
 $app->add(new \Slim\Middleware\ContentTypes());
-echo "New Slim Object: good";
-echo "<br>";
+//echo "New Slim Object: good";
+//echo "<br>";
 
 
 //Yan: register new user
@@ -165,6 +165,86 @@ $app->post('/notes/note', function () use($app, $con)
 
 //kelley: PUT
 
+/**User PUT for multiple params
+*/
+/**
+$app->put('/users/user/:id/', function ($id) use($app, $con)
+{
+
+		
+		$req = $app->request();
+
+	//set all possible variables...
+	$id = $req->put('id');
+	$age = $req->put('age');
+	$gender = $req->put('gender');
+	$income = $req->put('income');
+	$ethnicity = $req->put('ethnicity');
+	$homeZIP = $req->put('homeZIP');
+	$schoolZIP = $req->put('schoolZIP');
+	$workZIP = $req->put('workZIP');
+	$cycling_freq = $req->put('cycling_freq');
+	$rider_type = $req->put('rider_type');
+
+	$qstring = "UPDATE user SET workZIP = '$workZIP' WHERE id = '$id'";
+
+	//if each parameter is set, add it to the query
+	if(isset($id)){
+		$qstring = $qstring . " id = " . $id . " AND ";
+	}
+	
+	if(isset($age)){
+		$qstring = $qstring . " age = " . $age . " AND ";
+	}
+	
+	if(isset($gender)){
+		$qstring = $qstring . " gender = " . $gender . " AND ";
+	}
+
+	if(isset($income)){
+		$qstring = $qstring . " income = " . $income . " AND ";
+	}
+	if(isset($ethnicity)){
+		$qstring = $qstring . " ethnicity = " . $ethnicity . " AND ";
+	}
+	if(isset($homeZIP)){
+		$qstring = $qstring . " homeZIP = " . $homeZIP . " AND ";
+	}
+	if(isset($schoolZIP)){
+		$qstring = $qstring . " schoolZIP = " . $schoolZIP . " AND ";
+	}
+	if(isset($workZIP)){
+		$qstring = $qstring . " workZIP = " . $workZIP . " AND ";
+	}
+	if(isset($cycling_freq)){
+		$qstring = $qstring . " cycling_freq = " . $cycling_freq . " AND ";
+	}
+	if(isset($rider_type)){
+		$qstring = $qstring . " rider_type = " . $rider_type . " AND ";
+	}	
+
+	//take of the last AND
+	$qstring = substr($qstring, 0, -5);
+	echo $qstring;
+	echo '<br>';
+	
+	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
+	if(substr($qstring, -1)== 'W'){
+		$qstring = substr($qstring, 0, -1);
+	}
+	//for testing purposes
+	echo $qstring;
+
+	try
+	{
+		$result = mysqli_query($con, $qstring);
+	}
+
+
+
+}
+**/
+
 $app->put('/users/user/:id/workZip', function ($id) use($app, $con) 
 {
 						
@@ -306,15 +386,28 @@ $app->put('/users/user/:id/cycling_freq', function ($id) use($app, $con)
 
 $app->get('/users/:id/workZIP', function ($id) use($app, $con) 
 {
-			$user = UserFactory::getUser($id); //how to access methods in factory files
-			var_dump($user);
+		//	$user = UserFactory::getUser($id); //how to access methods in factory files
+		//	var_dump($user);
 	
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['workZIP'];
-  					echo "<br>";
-				}	
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
 	    	mysqli_close($con);
+	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	 // var_dump($test);
+    	  exit();
 
 	
 });
@@ -327,11 +420,25 @@ $app->get('/users/:id/homeZIP', function ($id) use($app, $con)
 {
 
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['homeZIP'];
-  					echo "<br>";
-				}	
+	    	//	while($row = mysqli_fetch_array($result)) {
+  			//		echo $row['id'] . " " . $row['homeZIP'];
+  			//		echo "<br>";
+			//	}	
 	    	mysqli_close($con);
+	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	 // var_dump($test);
+    	  exit();
+
 
 	
 });
@@ -340,11 +447,24 @@ $app->get('/users/:id/schoolZIP', function ($id) use($app, $con)
 {
 
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['schoolZIP'];
-  					echo "<br>";
-				}	
+	    	//	while($row = mysqli_fetch_array($result)) {
+  			//		echo $row['id'] . " " . $row['schoolZIP'];
+  			//		echo "<br>";
+			//	}	
 	    	mysqli_close($con);
+	    	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	 // var_dump($test);
+    	  exit();
 
 	
 });
@@ -353,11 +473,24 @@ $app->get('/users/:id/email', function ($id) use($app, $con)
 {
 
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['email'];
-  					echo "<br>";
-				}	
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['email'];
+  		//			echo "<br>";
+		//		}	
 	    	mysqli_close($con);
+	    		    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	 // var_dump($test);
+    	  exit();
 
 	
 });

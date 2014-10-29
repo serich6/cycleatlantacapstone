@@ -36,7 +36,96 @@ function addUser() {
 }
 
 
+function getHomeZip()
+{
+	
+	$.ajax({
+		type: 'GET',
+		contentType: 'application/json',
+		url: "index.php/users/10/homeZIP",
+		dataType: "json",
+		
+		success: function(response){
+       // $(".name").html(response[0]["age"]);
+       
+       $('#hZIP').replaceWith(response[0]["homeZIP"]);
+    }
+		
+	});
+	
+	
+}
 
+function getWorkZip()
+{
+	
+	$.ajax({
+		type: 'GET',
+		contentType: 'application/json',
+		url: "index.php/users/10/workZIP",
+		dataType: "json",
+		
+		success: function(response){
+   
+       $('#wZIP').replaceWith(response[0]["workZIP"]);
+    }
+		
+	});
+	
+	
+}
+
+function getSchoolZip()
+{
+	
+	$.ajax({
+		type: 'GET',
+		contentType: 'application/json',
+		url: "index.php/users/10/schoolZIP",
+		dataType: "json",
+		
+		success: function(response){
+   		console.log(response);
+   		if(response[0]["schoolZIP"] == null)
+   		{
+   			$('#sZIP').replaceWith("Not applicable");
+   		}
+   		else
+   		{
+      	 $('#sZIP').replaceWith(response[0]["schoolZIP"]);
+      	 }
+    }
+		
+	});
+	
+	
+}
+
+function getEmail(id)
+{
+	
+	$.ajax({
+		type: 'GET',
+		contentType: 'application/json',
+		url: "index.php/users/" + id + "/email",
+		dataType: "json",
+		
+		success: function(response){
+   		console.log(response);
+   		if(response[0]["email"] == null)
+   		{
+   			$('#email').replaceWith("Not applicable");
+   		}
+   		else
+   		{
+      	 $('#email').replaceWith(response[0]["email"]);
+      	 }
+    }
+		
+	});
+	
+	
+}
 
 function updateUser() {
 	

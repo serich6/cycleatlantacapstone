@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<!--
+	*****************************************************************
+	Fluid Baseline Grid v1.0.0
+	Designed & Built by Josh Hopkins and 40 Horse, http://40horse.com
+	Licensed under Unlicense, http://unlicense.org/
+	*****************************************************************
+	-->
+	<title>Cycle Atlanta Portal</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="description" content="" />
+	<meta name="author" content="">
+	<meta name="keywords" content="" />
+
+	<!-- Optimized mobile viewport -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<!-- Place favicon.ico and apple-touch-icon.png in root directory -->
+		
+	<link href="css/style.css" rel="stylesheet" />
+</head>
+<!-- use g3 to span across entire page, g2 to span across two columns, g1 to span one column -->
+<body>
+	
+	<header>
+		<div class="g1">
+			<h2>Welcome!</h5> <!--figure out way to get user name in here -->
+			<!-- This will be a header menu, with options: update profile, maps, logout -->
+		</div>
+		<nav class ="g2">
+			<ul class="nav">
+				<ul><a href="#features">Features</a></ul>
+				<ul><a href="#download">Download</a></ul>
+				<ul><a href="#support">Support</a></ul>
+			</ul>
+		</nav>
+	</header>
+	<div class="cf"></div>
+	<div id="content">
+		<div class="g1">
+			<h3>Notes</h3>
+			<p>Here we will display the most recent note a user posted, and a drop down to view other recent notes.</p>
+		</div>
+		<div class="g1">
+			<h3>Trips</h3>
+			<p>Here we will show the most recent trip, possibly on a map. We will have a dropdown menu to view other recent trips.</p>
+		</div>
+		<div class="g1">
+			<h3>User Data</h3>
+			<p>Here we will show the user's data (rider confidence, frequency, etc) and a link to change that data</p>
+		
+		<div>
+			<strong>Name:</strong> Chris <br>
+			<strong>Email:</strong> <p id="email"></p> <br>
+			<strong>Home Zipcode:</strong> <p id="hZIP"></p> <br>
+			<strong>Work Zipcode:</strong> <p id="wZIP"></p> <br>
+			<strong>School Zipcode:</strong> <p id="sZIP"></p> <br>
+			<strong>Cycling Frequency:</strong> <p id="cFREQ"></p> <br>
+			<strong>Cycling Confidence:</strong> <p id="cCONF"></p> <br>
+			<strong>Cycling history:</strong> <p id="cHIST"></p> <br> 
+			<strong>Mobile App Version: </strong> <p id="appVERSION"></p> <br>
+			<strong>Update Profile</strong>
+		</div>
+		</div>			
+	</div>
+	<footer class="g3 cf">
+		<small>2011 <span class="license">Created by <a href="http://twitter.com/thedayhascome">Josh Hopkins</a> <span class="amp">&amp;</span> <a href="http://40horse.com">40 Horse</a></span>. Released under <a href="http://unlicense.org">Unlicense</a>. Text provided by <a href="http://slipsum.com/">Samuel L. Ipsum</a>.</small>
+	</footer>
+
+	<!-- JavaScript at the bottom for fast page loading -->
+
+	<!-- Minimized jQuery from Google CDN -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+	<!-- HTML5 IE Enabling Script -->
+	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	
+	<!-- CSS3 Media Queries -->
+	<script src="js/respond.min.js"></script>
+	<script src="js/main.js"></script>
+
+	
+	
+</body>
+</html>
+
+
+<script>
+getHomeZip();
+getWorkZip();
+getSchoolZip();
+getEmail(10);
+
+//var data = JSON.parse(user);
+
+</script>
