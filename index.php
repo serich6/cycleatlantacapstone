@@ -436,7 +436,7 @@ $app->get('/users/:id/homeZIP', function ($id) use($app, $con)
     	  $response->body(json_encode($rows));
     	  $data = $response->body(json_encode($rows));
     	  return $data;
-    	 // var_dump($test);
+    	  var_dump($test);
     	  exit();
 
 
@@ -569,11 +569,23 @@ $app->get('/users/:id/rider_type', function ($id) use($app, $con)
 {
 
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['rider_type'];
-  					echo "<br>";
-				}	
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['rider_type'];
+  		//			echo "<br>";
+		//		}	
 	    	mysqli_close($con);
+	    	 	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	 // var_dump($test);
+    	  exit();
 
 
 	

@@ -174,6 +174,53 @@ function getCycleFreq(id)
 	
 }
 
+function getRiderType(id)
+{
+	
+	$.ajax({
+		type: 'GET',
+		contentType: 'application/json',
+		url: "index.php/users/" + id + "/rider_type",
+		dataType: "json",
+		
+		success: function(response){
+   		console.log(response);
+   		if(response[0]["rider_type"] == null)
+   		{
+   			$('#cCONF').replaceWith("Not applicable");
+   		}
+   		if(response[0]["rider_type"] != null)
+   		{
+   			if(response[0]["rider_type"] == 0)
+   			{
+   				$('#cCONF').replaceWith("No data");	
+   			}
+   			if(response[0]["rider_type"] == 1)
+   			{
+   				$('#cCONF').replaceWith("Strong and fearless");	
+   			}
+   			if(response[0]["rider_type"] == 2)
+   			{
+   				$('#cCONF').replaceWith("Enthused and confident");	
+   			}
+   			if(response[0]["rider_type"] == 3)
+   			{
+   				$('#cCONF').replaceWith("Comfortable, but cautious");	
+   			}
+   			if(response[0]["rider_type"] == 4)
+   			{
+   				$('#cCONF').replaceWith("Interested, but concerned");	
+   			}
+   		
+      	 
+      	 }
+    }
+		
+	});
+	
+	
+}
+
 function updateUser() {
 	
 	$.ajax({
