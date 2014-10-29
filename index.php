@@ -601,11 +601,24 @@ $app->get('/users/:id/cycling_freq', function ($id) use($app, $con)
 {
 
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['cycling_freq'];
-  					echo "<br>";
-				}	
+	    	//	while($row = mysqli_fetch_array($result)) {
+  			//		echo $row['id'] . " " . $row['cycling_freq'];
+  			//		echo "<br>";
+			//	}	
 	    	mysqli_close($con);
+	    	 		    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	 // var_dump($test);
+    	  exit();
 
 });
 

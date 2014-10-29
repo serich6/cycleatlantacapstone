@@ -127,6 +127,53 @@ function getEmail(id)
 	
 }
 
+function getCycleFreq(id)
+{
+	
+	$.ajax({
+		type: 'GET',
+		contentType: 'application/json',
+		url: "index.php/users/" + id + "/cycling_freq",
+		dataType: "json",
+		
+		success: function(response){
+   		console.log(response);
+   		if(response[0]["cycling_freq"] == null)
+   		{
+   			$('#cFREQ').replaceWith("Not applicable");
+   		}
+   		if(response[0]["cycling_freq"] != null)
+   		{
+   			if(response[0]["cycling_freq"] == 0)
+   			{
+   				$('#cFREQ').replaceWith("No data");	
+   			}
+   			if(response[0]["cycling_freq"] == 1)
+   			{
+   				$('#cFREQ').replaceWith("> Once/month");	
+   			}
+   			if(response[0]["cycling_freq"] == 2)
+   			{
+   				$('#cFREQ').replaceWith("Several times/month");	
+   			}
+   			if(response[0]["cycling_freq"] == 3)
+   			{
+   				$('#cFREQ').replaceWith("Several times/week");	
+   			}
+   			if(response[0]["cycling_freq"] == 4)
+   			{
+   				$('#cFREQ').replaceWith("Daily");	
+   			}
+   		
+      	 
+      	 }
+    }
+		
+	});
+	
+	
+}
+
 function updateUser() {
 	
 	$.ajax({
