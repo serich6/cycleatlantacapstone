@@ -33,9 +33,10 @@
 		</div>
 		<nav class ="g2">
 			<ul class="nav">
-				<ul><a href="#features">Features</a></ul>
-				<ul><a href="#download">Download</a></ul>
-				<ul><a href="#support">Support</a></ul>
+				<ul><a href="portal.html">Home</a></ul>
+				<ul><a href="updateProfile.html">Update Profile</a></ul>
+				<ul><a href="#Maps">View Your Maps</a></ul>
+				<ul><a href="#Logout">Log Out</a></ul>
 			</ul>
 		</nav>
 	</header>
@@ -48,6 +49,13 @@
 		<div class="g1">
 			<h3>Trips</h3>
 			<p>Here we will show the most recent trip, possibly on a map. We will have a dropdown menu to view other recent trips.</p>
+			<div>
+			<strong>Trip Purpose:</strong> <p id="tripPurpose"></p> <br>
+			<strong>Trip Notes:</strong> <p id="tripNotes"></p> <br>
+			<strong>Trip Start:</strong> <p id="tripStart"></p><br>
+			<strong>Trip End:</strong> <p id="tripEnd"></p><br>
+			<strong>Trip Length:</strong> <p id="tripLength"></p> <br>
+		</div>
 		</div>
 		<div class="g1">
 			<h3>User Data</h3>
@@ -61,12 +69,12 @@
 			<strong>School Zipcode:</strong> <p id="sZIP"></p> <br>
 			<strong>Cycling Frequency:</strong> <p id="cFREQ"></p> <br>
 			<strong>Cycling Confidence:</strong> <p id="cCONF"></p> <br>
-			<button type="button">Update Profile</button>
+			<button type="button" id="updateButton">Update Profile</button>
 		</div>
 		</div>			
 	</div>
 	<footer class="g3 cf">
-		<small>2011 <span class="license">Created by <a href="http://twitter.com/thedayhascome">Josh Hopkins</a> <span class="amp">&amp;</span> <a href="http://40horse.com">40 Horse</a></span>. Released under <a href="http://unlicense.org">Unlicense</a>. Text provided by <a href="http://slipsum.com/">Samuel L. Ipsum</a>.</small>
+		<small>2011 <span class="license">Created by <a href="http://twitter.com/thedayhascome">Josh Hopkins</a> <span class="amp">&amp;</span> <a href="http://40horse.com">40 Horse</a></span>. Released under <a href="http://unlicense.org">Unlicense</a>. </small>
 	</footer>
 
 	<!-- JavaScript at the bottom for fast page loading -->
@@ -88,13 +96,22 @@
 
 
 <script>
-getHomeZip();
-getWorkZip();
-getSchoolZip();
-getEmail(10);
-getCycleFreq(10);
-getRiderType(10);
+var user_id = 10;
+getUserData(user_id);
+//getHomeZip(user_id);
+//getWorkZip(user_id);
+//getSchoolZip(user_id);
+//getEmail(user_id);
+//getCycleFreq(user_id);
+//getRiderType(user_id);
+
+getTripData(user_id);
 
 //var data = JSON.parse(user);
+
+
+  document.getElementById("updateButton").onclick = function () {
+        location.href = "updateProfile.html";
+    };
 
 </script>

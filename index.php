@@ -383,6 +383,35 @@ $app->put('/users/user/:id/cycling_freq', function ($id) use($app, $con)
 
 //kelley: users/<id>/homeZIP, users/<id>/workZIP, users/<id>/schoolZIP, users/<id>/email
 
+$app->get('/trips/:id/', function ($id) use($app, $con) 
+{
+		//	$user = UserFactory::getUser($id); //how to access methods in factory files
+		//	var_dump($user);
+	
+	    	$result = mysqli_query($con,"SELECT * FROM trip WHERE user_id = '$id' ORDER BY stop DESC");
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
+	    	mysqli_close($con);
+	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	//  var_dump($test);
+    	  exit();
+
+	
+});
+
 
 $app->get('/users/:id/workZIP', function ($id) use($app, $con) 
 {
@@ -641,11 +670,24 @@ $app->get('/users/:id', function ($id) use($app, $con)
 {
 			//need to use this for authentication purposes, hopefully will later pull back a password as well?
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['email'];
-  					echo "<br>";
-				}	
+	    	//	while($row = mysqli_fetch_array($result)) {
+  			//		echo $row['id'] . " " . $row['email'];
+  			//		echo "<br>";
+			//	}	
 	    	mysqli_close($con);
+	    	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	 // var_dump($test);
+    	  exit();
+
 
 });
 //Get a specific user's age
