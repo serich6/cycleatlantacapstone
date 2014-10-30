@@ -11,6 +11,12 @@ $('#putButton').click(function() {
 	return false;
 });
 
+$('#submitUpdates').click(function() {
+	
+	updateUser();
+	return false;
+});
+
 $('#postButton').click(function() {
 	
 	addUser();
@@ -357,11 +363,15 @@ function updateUser() {
 	$.ajax({
 		type: 'PUT',
 		contentType: 'application/json',
-		url: rootURL + '/' + $('#id').val() + '/workZip',
+		url: 'index.php/users/user',
 		dataType: "json",
 		data: userFormToJSON(),
-		success: function(textStatus, jqXHR){
-			alert('User updated successfully');
+		success: function(data){
+			if(data["status"]=="success")
+			{
+				location.href = "success.html"
+			//	console.log(data["status"]);
+			}
 		}
 		
 	});
@@ -371,8 +381,13 @@ function updateUser() {
 // Helper function to serialize all the form fields into a JSON string
 function userFormToJSON() {
 	return JSON.stringify({
-		"id": $('#id').val(), 
-		"workZIP": $('#putWorkZip').val()
+		"id": $('#updateId').val(), 
+		"email": $('#updateEmail').val(),
+		"homeZIP": $('#updateHomeZip').val(),
+		"workZIP": $('#updateWorkZip').val(),
+		"schoolZIP": $('#updateSchoolZip').val(),
+		"cycling_freq": $('#updateCycleFreq').val(),
+		"rider_type": $('#updateCycleConf').val()
 		});
 }
 

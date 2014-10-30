@@ -167,83 +167,150 @@ $app->post('/notes/note', function () use($app, $con)
 
 /**User PUT for multiple params
 */
-/**
-$app->put('/users/user/:id/', function ($id) use($app, $con)
+
+$app->put('/users/user', function () use($app, $con)
 {
 
+	
+	//	$req = $app->request();
+	$body = $app->request()->getBody();
+	$id='';
+	$age='';
+	$email='';
+	$gender='';
+	$income='';
+	$ethnicity='';
+	$homeZIP='';
+	$schoolZIP='';
+	$workZIP='';
+	$cycling_freq='';
+	$rider_type='';
+	foreach($body as $k=>$v)
+	{
+		if($k=="id")
+		{
+			$id=$v;
+		}
+		if($k=="homeZIP")
+		{
+			$homeZIP=$v;
+		}
+		if($k=="workZIP")
+		{
+			$workZIP=$v;
+		}
+		if($k=="schoolZIP")
+		{
+			$schoolZIP=$v;
+		}
+		if($k=="cycling_freq")
+		{
+			$cycling_freq=$v;
+		}
+		if($k=="rider_type")
+		{
+			$rider_type=$v;
+		}
+		if($k=="email")
+		{
+			$email=$v;
+		}
 		
-		$req = $app->request();
-
+	}
 	//set all possible variables...
+	/**
 	$id = $req->put('id');
 	$age = $req->put('age');
 	$gender = $req->put('gender');
 	$income = $req->put('income');
 	$ethnicity = $req->put('ethnicity');
-	$homeZIP = $req->put('homeZIP');
+	$homeZIP = $app->request()->put('homeZIP');
 	$schoolZIP = $req->put('schoolZIP');
 	$workZIP = $req->put('workZIP');
 	$cycling_freq = $req->put('cycling_freq');
 	$rider_type = $req->put('rider_type');
-
-	$qstring = "UPDATE user SET workZIP = '$workZIP' WHERE id = '$id'";
+	*/
+	$qstring = "UPDATE user SET";
 
 	//if each parameter is set, add it to the query
-	if(isset($id)){
-		$qstring = $qstring . " id = " . $id . " AND ";
+	//if(isset($id)){
+	//	$qstring = $qstring . " id = " . $id . " AND ";
+	//}
+	
+	//if(isset($age)){
+	if($age!=''){
+		$qstring = $qstring . " 'age' = " . $age . " ,";
 	}
 	
-	if(isset($age)){
-		$qstring = $qstring . " age = " . $age . " AND ";
-	}
-	
-	if(isset($gender)){
-		$qstring = $qstring . " gender = " . $gender . " AND ";
+	//if(isset($gender)){
+	if($gender!=''){
+		$qstring = $qstring . " 'gender' = " . $gender . " ,";
 	}
 
-	if(isset($income)){
-		$qstring = $qstring . " income = " . $income . " AND ";
+	//if(isset($income)){
+	if($income!=''){
+		$qstring = $qstring . " income = " . $income . " ,";
 	}
-	if(isset($ethnicity)){
-		$qstring = $qstring . " ethnicity = " . $ethnicity . " AND ";
+	//if(isset($ethnicity)){
+	if($ethnicity!=''){
+		$qstring = $qstring . " ethnicity = " . $ethnicity . " ,";
 	}
-	if(isset($homeZIP)){
-		$qstring = $qstring . " homeZIP = " . $homeZIP . " AND ";
+	//if(isset($homeZIP)){
+	if($homeZIP!=''){
+		$qstring = $qstring . " homeZIP = " . $homeZIP . " ,";
 	}
-	if(isset($schoolZIP)){
-		$qstring = $qstring . " schoolZIP = " . $schoolZIP . " AND ";
+	//if(isset($schoolZIP)){
+	if($schoolZIP!=''){
+		$qstring = $qstring . " schoolZIP = " . $schoolZIP . " ,";
 	}
-	if(isset($workZIP)){
-		$qstring = $qstring . " workZIP = " . $workZIP . " AND ";
+	//if(isset($workZIP)){
+	if($workZIP!=''){
+		$qstring = $qstring . " workZIP = " . $workZIP . " ,";
 	}
-	if(isset($cycling_freq)){
-		$qstring = $qstring . " cycling_freq = " . $cycling_freq . " AND ";
+	//if(isset($cycling_freq)){
+	if($cycling_freq!=''){
+		$qstring = $qstring . " cycling_freq = " . $cycling_freq . " ,";
 	}
-	if(isset($rider_type)){
-		$qstring = $qstring . " rider_type = " . $rider_type . " AND ";
+	//if(isset($rider_type)){
+	if($rider_type!=''){
+		$qstring = $qstring . " rider_type = " . $rider_type . " ,";
+	}	
+	if($email!=''){
+		$qstring = $qstring . " email = " . "'".$email."'"." ,";
 	}	
 
 	//take of the last AND
-	$qstring = substr($qstring, 0, -5);
-	echo $qstring;
-	echo '<br>';
+	$qstring = substr($qstring, 0, -1);
+	if(isset($id)){
+		$qstring = $qstring . "WHERE" . " id = " . $id ;
+	}
+	
+	//echo $qstring;
+	//echo '<br>';
 	
 	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
 	if(substr($qstring, -1)== 'W'){
 		$qstring = substr($qstring, 0, -1);
 	}
 	//for testing purposes
-	echo $qstring;
+	//echo $qstring;
+	//$data;
+	//try
+	//{
+		mysqli_query($con, $qstring);
+	
+		$result = array("status" => "success");
+		json_encode($result);
+		$response = $app->response();
+   		$response['Content-Type'] = 'application/json';
+		  $response->body(json_encode($result));
+    	  $data = $response->body(json_encode($result));
+    	  
+		//return(json_encode($result));
+	//}
+	return $data;
+});
 
-	try
-	{
-		$result = mysqli_query($con, $qstring);
-	}
-
-
-
-}
-**/
 
 $app->put('/users/user/:id/workZip', function ($id) use($app, $con) 
 {

@@ -43,7 +43,7 @@
 	<div class="cf"></div>
 	<div id="content">
 		<div id="proForm" class="g3">
-			<form id="putForm">
+			<form id="updateForm">
 				<br>
 				<label><strong>User Id (for testing/demo purposes):</strong></label><br> <input id="updateId" name="updateId" type="text"  /><br>
 				<br>
@@ -53,22 +53,26 @@
 				<label><strong>School Zip:</strong></label><input type="text" id="updateSchoolZip" name="updateSchoolZip" /><br>
 				<br>
 				<label><strong>Cycling Frequency:</strong><br>
-				<input type="radio" name="updateCycleFreq" value="onceMonth">Less than once a month<br>
-				<input type="radio" name="updateCycleFreq" value="severlMonth">Several times per month<br>
-				<input type="radio" name="updateCycleFreq" value="severalWeek">Several times per week<br>
-				<input type="radio" name="updateCycleFreq" value="daily">Daily<br>
+				<input type="radio" id="updateCycleFreq" name="updateCycleFreq" value="1">Less than once a month<br>
+				<input type="radio" id="updateCycleFreq" name="updateCycleFreq" value="2">Several times per month<br>
+				<input type="radio" id="updateCycleFreq" name="updateCycleFreq" value="3">Several times per week<br>
+				<input type="radio" id="updateCycleFreq" name="updateCycleFreq" value="4">Daily<br>
 				<br>
 				<label><strong>Cycling Confidence:</strong><br>
-				<input type="radio" name="updateCycleConf" value="strongFearless">Strong and fearless<br>
-				<input type="radio" name="updateCycleConf" value="enthused">Enthused and confident<br>
-				<input type="radio" name="updateCycleConf" value="comfortable">Comfortable, but cautious<br>
-				<input type="radio" name="updateCycleConf" value="interested">Interested, but concerned<br>
+				<input type="radio" id="updateCycleConf" name="updateCycleConf" value="1">Strong and fearless<br>
+				<input type="radio" id="updateCycleConf" name="updateCycleConf" value="2">Enthused and confident<br>
+				<input type="radio" id="updateCycleConf" name="updateCycleConf" value="3">Comfortable, but cautious<br>
+				<input type="radio" id="updateCycleConf" name="updateCycleConf" value="4">Interested, but concerned<br>
 				<br>
-				<button id="putButton">Submit Changes</button>
+				<button id="submitUpdates">Submit Changes</button>
 			</form>
 		</div>
 	</div>
 	</div>
+
+
+</body>
+</html>
 
 
 	<script src="js/jquery-1.7.1.min.js"></script>
@@ -80,5 +84,3 @@
 	
 	<!-- CSS3 Media Queries -->
 	<script src="js/respond.min.js"></script>
-</body>
-</html>
