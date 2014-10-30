@@ -44,10 +44,10 @@ $app->post('/register', function () use($app, $con)
         $values .= '"'.$v.'"'.",";
 		
 		if($k == 'email'){
-			echo "<br>";
-			echo "your email: ";
-			echo $v;
-			echo "<br>";
+			//echo "<br>";
+			//echo "your email: ";
+			//echo $v;
+			//echo "<br>";
 			$userEmail = $v;
 		}
 	
@@ -66,7 +66,7 @@ $app->post('/register', function () use($app, $con)
 	//check if new email matches with any of the emails in db 
 	foreach($emailArray as $email){
 		if($email == $userEmail){
-			echo "That email already exists";
+			//echo "That email already exists";
 			$invalidEmail = true;
 		}
 	}
@@ -84,11 +84,11 @@ $app->post('/register', function () use($app, $con)
 			mysqli_query($con, $query);
 		  } catch(PDOException $e) 
 		  {
-			echo '{"error":{"text":'. $e->getMessage() .'}}';
+			//echo '{"error":{"text":'. $e->getMessage() .'}}';
 		  }
 				
 		//for debugging purposes, make sure query looks like it should      	
-		echo $query;
+		//echo $query;
 	}
 	
 	
