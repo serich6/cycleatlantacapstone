@@ -35,34 +35,33 @@ $app->post('/register', function () use($app, $con)
 	
 	//the new email that the user just had input
 	$userEmail;
-
+	$userPassword;
+	
 	//loop through the JSON data
 	foreach($body as $k=>$v)
 	{	
-		//create a comma separated string of keys and values to pass to SQL
-		$keys .= $k.",";
-        $values .= '"'.$v.'"'.",";
-		
+		if($k != 'password'){//only add fields for the 'user' table
+			//create a comma separated string of keys and values to pass to SQL
+			$keys .= $k.",";
+			$values .= '"'.$v.'"'.",";
+		}
+		if($k == 'password'){
+			$userPassword = $v;
+		}
 		if($k == 'email'){
-			//echo "<br>";
-			//echo "your email: ";
-			//echo $v;
-			//echo "<br>";
 			$userEmail = $v;
 		}
-	
+		
     }
 	
-	//store all emails in an array
+	$invalidEmail = false;
+	//store all emails in an array for comparison purposes 
 	$result = mysqli_query($con, "SELECT email FROM user");
 	$emailArray = Array();
 	while ($row = mysqli_fetch_array($result)) {
 		$emailArray[] =  $row['email'];  
 	}
 	
-	
-
-	$invalidEmail = false;
 	//check if new email matches with any of the emails in db 
 	foreach($emailArray as $email){
 		if($email == $userEmail){
