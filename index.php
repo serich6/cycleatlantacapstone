@@ -187,6 +187,63 @@ $app->post('/notes/note', function () use($app, $con)
 
     });
 
+//Sam POST trip
+$app->post('/trips/trip', function () use($app, $con) 
+{
+    $echo "Made it to trips/trip";
+    $body = $app->request()->getBody();
+	$values = '';
+	$keys = '';
+	foreach($body as $k=>$v)
+	{	
+		//create a comma separated string of keys and values to pass to SQL
+		$keys .= $k.",";
+        $values .= '"'.$v.'"'.",";
+	
+    }
+    $keys = substr($keys, 0, -1);
+    $values = substr($values, 0, -1);
+    $query = "Insert INTO trip (".$keys.") VALUES (".$values.")";
+    
+    //add the trip to the 
+    echo $query;
+      try
+      {    		
+        mysqli_query($con, $query);
+      } catch(PDOException $e) 
+      {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+      }    	
+    echo $query;
+
+	//trying to handle the query to get the global id
+	//$query = "SELECT id  FROM trip WHERE "
+		//foreach($body as $k=>$v){
+		// $query = $k. " = ".$v. " AND "		
+		//}
+	//get rid of the last AND
+	//there should always be a last "AND" since you're never posting a blank trip...	    
+    //$query = substr($query, 0, -4);
+	
+	//get the global ID
+// 	echo $query;
+//       try
+//       {    		
+//         $result = mysqli_query($con, $query);
+//       } catch(PDOException $e) 
+//       {
+//         echo '{"error":{"text":'. $e->getMessage() .'}}';
+//       }    	
+//     echo $query;
+    //header("Content-Type: application/json");
+    //echo json_encode($result);
+    //exit;
+
+	
+	
+    });
+
+
 
 //kelley: PUT
 
@@ -461,7 +518,48 @@ $app->put('/users/user/:id/cycling_freq', function ($id) use($app, $con)
 	    	 mysqli_query($con,"UPDATE user SET cycling_freq = '$cycling_freq' WHERE id = '$id'");
 	    	 mysqli_close($con);
 }); 
-
+$app->put('/users/user/:id/age', function ($id) use($app, $con) 
+{		
+    		$body = $app->request()->getBody();    		
+    		$age = '';
+    		foreach($body as $k=>$v)
+			{					
+				if($k == 'age')
+				{
+					$age = $v;	
+				}		
+    		}			
+	    	 mysqli_query($con,"UPDATE user SET age = '$age' WHERE id = '$id'");
+	    	 mysqli_close($con);
+}); 
+$app->put('/users/user/:id/gender', function ($id) use($app, $con) 
+{		
+    		$body = $app->request()->getBody();    		
+    		$gender = '';
+    		foreach($body as $k=>$v)
+			{					
+				if($k == 'gender')
+				{
+					$gender = $v;	
+				}		
+    		}			
+	    	 mysqli_query($con,"UPDATE user SET gender = '$gender' WHERE id = '$id'");
+	    	 mysqli_close($con);
+}); 
+$app->put('/users/user/:id/ethnicity', function ($id) use($app, $con) 
+{		
+    		$body = $app->request()->getBody();    		
+    		$ethnicity = '';
+    		foreach($body as $k=>$v)
+			{					
+				if($k == 'ethnicity')
+				{
+					$ethnicity = $v;	
+				}		
+    		}			
+	    	 mysqli_query($con,"UPDATE user SET ethnicity = '$ethnicity' WHERE id = '$id'");
+	    	 mysqli_close($con);
+}); 
 
 //kelley: users/<id>/homeZIP, users/<id>/workZIP, users/<id>/schoolZIP, users/<id>/email
 
