@@ -190,7 +190,7 @@ $app->post('/notes/note', function () use($app, $con)
 //Sam POST trip
 $app->post('/trips/trip', function () use($app, $con) 
 {
-    //$echo "Made it to trips/trip";
+    
     $body = $app->request()->getBody();
 	$values = '';
 	$keys = '';
