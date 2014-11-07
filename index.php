@@ -206,7 +206,7 @@ $app->post('/trips/trip', function () use($app, $con)
     $query = "Insert INTO trip (".$keys.") VALUES (".$values.")";
     
     //add the trip to the 
-    echo $query;
+    //echo $query;
       try
       {    		
         mysqli_query($con, $query);
@@ -214,7 +214,7 @@ $app->post('/trips/trip', function () use($app, $con)
       {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
       }    	
-    echo $query;
+    //echo $query;
 
 	//trying to handle the query to get the global id
 	//$query = "SELECT id  FROM trip WHERE "
@@ -235,6 +235,7 @@ $app->post('/trips/trip', function () use($app, $con)
 //         echo '{"error":{"text":'. $e->getMessage() .'}}';
 //       }    	
 //     echo $query;
+    
     //header("Content-Type: application/json");
     //echo json_encode($result);
     //exit;
@@ -297,65 +298,65 @@ $app->put('/users/user', function () use($app, $con)
 		}
 		
 	}	
-	$qstring = "UPDATE user SET";	
+	$query = "UPDATE user SET";	
 	
 	//if(isset($age)){
 	if($age!=''){
-		$qstring = $qstring . " 'age' = " . $age . " ,";
+		$query = $query . " 'age' = " . $age . " ,";
 	}
 	
 	//if(isset($gender)){
 	if($gender!=''){
-		$qstring = $qstring . " 'gender' = " . $gender . " ,";
+		$query = $query . " 'gender' = " . $gender . " ,";
 	}
 
 	//if(isset($income)){
 	if($income!=''){
-		$qstring = $qstring . " income = " . $income . " ,";
+		$query = $query . " income = " . $income . " ,";
 	}
 	//if(isset($ethnicity)){
 	if($ethnicity!=''){
-		$qstring = $qstring . " ethnicity = " . $ethnicity . " ,";
+		$query = $query . " ethnicity = " . $ethnicity . " ,";
 	}
 	//if(isset($homeZIP)){
 	if($homeZIP!=''){
-		$qstring = $qstring . " homeZIP = " . $homeZIP . " ,";
+		$query = $query . " homeZIP = " . $homeZIP . " ,";
 	}
 	//if(isset($schoolZIP)){
 	if($schoolZIP!=''){
-		$qstring = $qstring . " schoolZIP = " . $schoolZIP . " ,";
+		$query = $query . " schoolZIP = " . $schoolZIP . " ,";
 	}
 	//if(isset($workZIP)){
 	if($workZIP!=''){
-		$qstring = $qstring . " workZIP = " . $workZIP . " ,";
+		$query = $query . " workZIP = " . $workZIP . " ,";
 	}
 	//if(isset($cycling_freq)){
 	if($cycling_freq!=''){
-		$qstring = $qstring . " cycling_freq = " . $cycling_freq . " ,";
+		$query = $query . " cycling_freq = " . $cycling_freq . " ,";
 	}
 	//if(isset($rider_type)){
 	if($rider_type!=''){
-		$qstring = $qstring . " rider_type = " . $rider_type . " ,";
+		$query = $query . " rider_type = " . $rider_type . " ,";
 	}	
 	if($email!=''){
-		$qstring = $qstring . " email = " . "'".$email."'"." ,";
+		$query = $query . " email = " . "'".$email."'"." ,";
 	}	
 
 	//take of the last AND
-	$qstring = substr($qstring, 0, -1);
+	$query = substr($query, 0, -1);
 	if(isset($id)){
-		$qstring = $qstring . "WHERE" . " id = " . $id ;
+		$query = $query . "WHERE" . " id = " . $id ;
 	}
 	
-	//echo $qstring;
+	//echo $query;
 	//echo '<br>';
 	
 	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
-	if(substr($qstring, -1)== 'W'){
-		$qstring = substr($qstring, 0, -1);
+	if(substr($query, -1)== 'W'){
+		$query = substr($query, 0, -1);
 	}
 	
-	mysqli_query($con, $qstring);
+	mysqli_query($con, $query);
 	
 	$result = array("status" => "success");
 	json_encode($result);
@@ -837,19 +838,15 @@ $app->get('/users/:id/cycling_freq', function ($id) use($app, $con)
 
 });
 
-//Sam  users/<id>, users/<id>/age, users/<id>/gender
 
 //Get a specific user's information for authentication
 $app->get('/users/:id', function ($id) use($app, $con) 
 {
 			//need to use this for authentication purposes, hopefully will later pull back a password as well?
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-	    	//	while($row = mysqli_fetch_array($result)) {
-  			//		echo $row['id'] . " " . $row['email'];
-  			//		echo "<br>";
-			//	}	
+	    		
 	    	mysqli_close($con);
-	    	    	while($r = mysqli_fetch_assoc($result))
+	    	while($r = mysqli_fetch_assoc($result))
 	    	{
 	    		$rows[] = $r;
 	    	}
@@ -866,23 +863,40 @@ $app->get('/users/:id', function ($id) use($app, $con)
 //Get a specific user's age
 $app->get('/users/:id/age', function ($id) use($app, $con) 
 {
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['age'];
-  					echo "<br>";
-				}	
+	    	$result = mysqli_query($con,"SELECT age FROM user WHERE id = '$id'");
 	    	mysqli_close($con);
+	    	
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
 
 });
 //Get a specific user's gender
 $app->get('/users/:id/gender', function ($id) use($app, $con) 
 {
-			$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['gender'];
-  					echo "<br>";
-				}	
+			$result = mysqli_query($con,"SELECT gender FROM user WHERE id = '$id'");
+	    	
 	    	mysqli_close($con);
+	    	
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
 
 });
 
@@ -903,77 +917,76 @@ $app->get('/users', function() use($app, $con)
 	$cycling_freq = $req->get('cycling_freq');
 	$rider_type = $req->get('rider_type');
 
-	$qstring = 'SELECT * FROM user WHERE ';
+	$query = 'SELECT * FROM user WHERE ';
 
 	//if each parameter is set, add it to the query
 	if(isset($id)){
-		$qstring = $qstring . " id = " . $id . " AND ";
+		$query = $query . " id = " . $id . " AND ";
 	}
 	
 	if(isset($age)){
-		$qstring = $qstring . " age = " . $age . " AND ";
+		$query = $query . " age = " . $age . " AND ";
 	}
 	
 	if(isset($gender)){
-		$qstring = $qstring . " gender = " . $gender . " AND ";
+		$query = $query . " gender = " . $gender . " AND ";
 	}
 
 	if(isset($income)){
-		$qstring = $qstring . " income = " . $income . " AND ";
+		$query = $query . " income = " . $income . " AND ";
 	}
 	if(isset($ethnicity)){
-		$qstring = $qstring . " ethnicity = " . $ethnicity . " AND ";
+		$query = $query . " ethnicity = " . $ethnicity . " AND ";
 	}
 	if(isset($homeZIP)){
-		$qstring = $qstring . " homeZIP = " . $homeZIP . " AND ";
+		$query = $query . " homeZIP = " . $homeZIP . " AND ";
 	}
 	if(isset($schoolZIP)){
-		$qstring = $qstring . " schoolZIP = " . $schoolZIP . " AND ";
+		$query = $query . " schoolZIP = " . $schoolZIP . " AND ";
 	}
 	if(isset($workZIP)){
-		$qstring = $qstring . " workZIP = " . $workZIP . " AND ";
+		$query = $query . " workZIP = " . $workZIP . " AND ";
 	}
 	if(isset($cycling_freq)){
-		$qstring = $qstring . " cycling_freq = " . $cycling_freq . " AND ";
+		$query = $query . " cycling_freq = " . $cycling_freq . " AND ";
 	}
 	if(isset($rider_type)){
-		$qstring = $qstring . " rider_type = " . $rider_type . " AND ";
+		$query = $query . " rider_type = " . $rider_type . " AND ";
 	}	
 
 	//take of the last AND
-	$qstring = substr($qstring, 0, -5);
-	echo $qstring;
+	$query = substr($query, 0, -5);
+	echo $query;
 	echo '<br>';
 	
 	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
-	if(substr($qstring, -1)== 'W'){
-		$qstring = substr($qstring, 0, -1);
+	if(substr($query, -1)== 'W'){
+		$query = substr($query, 0, -1);
 	}
 	//for testing purposes
-	echo $qstring;
+	echo $query;
 
 	try
 	{
-		$result = mysqli_query($con, $qstring);
+		$result = mysqli_query($con, $query);
 	}
 	catch(PDOException $e)
 	{
 		echo'{"error":{"text":'.$e->getMessage().'}}';
 	}
 
-	$count=0;
-	//need to remove this for later TESTING ONLY
-	while($row = mysqli_fetch_array($result)) {
-  		echo $row['id'];
-  		echo "<br>";
-  		$count=$count + 1;
-	}	
-
-	echo "<br>";
-	echo "<br>";
-	echo "Count: " . $count;
-	
 	mysqli_close($con);
+	while($r = mysqli_fetch_assoc($result))
+	{
+		$rows[] = $r;
+	}
+	$response = $app->response();
+   	$response['Content-Type'] = 'application/json';
+   		 
+    $response->body(json_encode($rows));
+    $data = $response->body(json_encode($rows));
+    return $data;
+    exit();	
 
 });
 
@@ -992,72 +1005,72 @@ $app->get('/trips', function() use($app, $con)
 	$stop = $req->get('stop');
 	//$n_coord = $req->get('n_coord');
 	
-	$qstring = 'SELECT * FROM trip WHERE ';
+	$query = 'SELECT * FROM trip WHERE ';
 
 	//if each parameter is set, add it to the query
 	if(isset($id)){
-		$qstring = $qstring . " id = " . $id . " AND ";
+		$query = $query . " id = " . $id . " AND ";
 	}
 	
 	if(isset($user_id)){
-		$qstring = $qstring . " user_id = " . $user_id . " AND ";
+		$query = $query . " user_id = " . $user_id . " AND ";
 	}
 	
 	if(isset($notes)){
-		$qstring = $qstring . " notes = " . $notes . " AND ";
+		$query = $query . " notes = " . $notes . " AND ";
 	}
 
 	if(isset($start)){
-		$qstring = $qstring . " start = " . $start . " AND ";
+		$query = $query . " start = " . $start . " AND ";
 	}
 	if(isset($stop)){
-		$qstring = $qstring . " stop = " . $stop . " AND ";
+		$query = $query . " stop = " . $stop . " AND ";
 	}
 	/**
 	if(isset($n_coord)){
-		$qstring = $qstring . " n_coord = " . $n_coord . " AND ";
+		$query = $query . " n_coord = " . $n_coord . " AND ";
 	}
 	*/
 	
 
 	//take of the last AND
-	$qstring = substr($qstring, 0, -5);
-	echo $qstring;
+	$query = substr($query, 0, -5);
+	echo $query;
 	echo '<br>';
 	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
 	
-	if(substr($qstring, -1)== 'W'){
-		$qstring = substr($qstring, 0, -1);
+	if(substr($query, -1)== 'W'){
+		$query = substr($query, 0, -1);
 	}
 	
 	
 	//for testing purposes
-	echo $qstring;
+	echo $query;
 
 	echo '<br>';
 	
 	try
 	{
-		$result = mysqli_query($con, $qstring);
+		$result = mysqli_query($con, $query);
 	}
 	catch(PDOException $e)
 	{
 		echo'{"error":{"text":'.$e->getMessage().'}}';
 	}
 
-	$count=0;
-	//need to remove this for later TESTING ONLY
-	while($row = mysqli_fetch_array($result)) {
-  		echo $row['user_id'] . " " . $row['id'];
-  		echo "<br>";
-  		$count=$count + 1;
-	}	
-
-	echo "<br>";
-	echo "<br>";
-	echo "Count: " . $count;
-	
 	mysqli_close($con);
+	
+	while($r = mysqli_fetch_assoc($result))
+	{
+		$rows[] = $r;
+	}
+	$response = $app->response();
+   	$response['Content-Type'] = 'application/json';
+   		 
+    $response->body(json_encode($rows));
+    $data = $response->body(json_encode($rows));
+    return $data;
+    exit();	
 
 });
 
@@ -1082,88 +1095,78 @@ $app->get('/notes', function() use($app, $con)
 	$details = $req->get('details');
 	$img_url = $req->get('img_url');
 	
-	$qstring = 'SELECT * FROM note WHERE ';
+	$query = 'SELECT * FROM note WHERE ';
 
 	//if each parameter is set, add it to the query
 	if(isset($id)){
-		$qstring = $qstring . " id = " . $id . " AND ";
+		$query = $query . " id = " . $id . " AND ";
 	}
 	
 	if(isset($user_id)){
-		$qstring = $qstring . " user_id = " . $user_id . " AND ";
+		$query = $query . " user_id = " . $user_id . " AND ";
 	}
 
 	if(isset($trip_id)){
-		$qstring = $qstring . " trip_id = " . $trip_id . " AND ";
+		$query = $query . " trip_id = " . $trip_id . " AND ";
 	}
 	if(isset($recorded)){
-		$qstring = $qstring . " recorded = " . $recorded . " AND ";
+		$query = $query . " recorded = " . $recorded . " AND ";
 	}
 	if(isset($latitude)){
-		$qstring = $qstring . " latitude = " . $latitude . " AND ";
+		$query = $query . " latitude = " . $latitude . " AND ";
 	}
 	if(isset($longitude)){
-		$qstring = $qstring . " longitude = " . $longitude . " AND ";
+		$query = $query . " longitude = " . $longitude . " AND ";
 	}
 	if(isset($altitude)){
-		$qstring = $qstring . " altitude = " . $altitude . " AND ";
+		$query = $query . " altitude = " . $altitude . " AND ";
 	}
 	if(isset($speed)){
-		$qstring = $qstring . " speed = " . $speed . " AND ";
+		$query = $query . " speed = " . $speed . " AND ";
 	}
 	if(isset($hAccuracy)){
-		$qstring = $qstring . " hAccuracy = " . $hAccuracy . " AND ";
+		$query = $query . " hAccuracy = " . $hAccuracy . " AND ";
 	}
 	if(isset($vAccuracy)){
-		$qstring = $qstring . " vAccuracy = " . $vAccuracy . " AND ";
+		$query = $query . " vAccuracy = " . $vAccuracy . " AND ";
 	}
 	if(isset($note_type)){
-		$qstring = $qstring . " note_type = " . $note_type . " AND ";
+		$query = $query . " note_type = " . $note_type . " AND ";
 	}
 	if(isset($details)){
-		$qstring = $qstring . " details = " . $details . " AND ";
+		$query = $query . " details = " . $details . " AND ";
 	}
 	if(isset($img_url)){
-		$qstring = $qstring . " img_url = " . $img_url . " AND ";
+		$query = $query . " img_url = " . $img_url . " AND ";
 	}
 	//take of the last AND
-	$qstring = substr($qstring, 0, -5);
-	echo $qstring;
-	echo '<br>';
-	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
-	
-	if(substr($qstring, -1)== 'W'){
-		$qstring = substr($qstring, 0, -1);
-	}
-	
-	
-	//for testing purposes
-	echo $qstring;
+	$query = substr($query, 0, -5);
 
-	echo '<br>';
+	if(substr($query, -1)== 'W'){
+		$query = substr($query, 0, -1);
+	}
 	
 	try
 	{
-		$result = mysqli_query($con, $qstring);
+		$result = mysqli_query($con, $query);
 	}
 	catch(PDOException $e)
 	{
 		echo'{"error":{"text":'.$e->getMessage().'}}';
 	}
 
-	$count=0;
-	//need to remove this for later TESTING ONLY
-	while($row = mysqli_fetch_array($result)) {
-  		echo $row['user_id'] . " " . $row['id'];
-  		echo "<br>";
-  		$count=$count + 1;
-	}	
-
-	echo "<br>";
-	echo "<br>";
-	echo "Count: " . $count;
-	
 	mysqli_close($con);
+	while($r = mysqli_fetch_assoc($result))
+	{
+		$rows[] = $r;
+	}
+	$response = $app->response();
+   	$response['Content-Type'] = 'application/json';
+   		 
+    $response->body(json_encode($rows));
+    $data = $response->body(json_encode($rows));
+    return $data;
+    exit();	
 
 });
 
