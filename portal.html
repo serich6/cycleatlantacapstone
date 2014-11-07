@@ -50,11 +50,11 @@
 			<h3>Trips</h3>
 			<p>Here we will show the most recent trip, possibly on a map. We will have a dropdown menu to view other recent trips.</p>
 			<div>
-			<strong>Trip Purpose:</strong> <p id="tripPurpose"></p> <br>
-			<strong>Trip Notes:</strong> <p id="tripNotes"></p> <br>
-			<strong>Trip Start:</strong> <p id="tripStart"></p><br>
-			<strong>Trip End:</strong> <p id="tripEnd"></p><br>
-			<strong>Trip Length:</strong> <p id="tripLength"></p> <br>
+			<strong>Trip Purpose:</strong> <p id="tripPurpose">No data available</p> <br>
+			<strong>Trip Notes:</strong> <p id="tripNotes">No data available</p> <br>
+			<strong>Trip Start:</strong> <p id="tripStart">No data available</p><br>
+			<strong>Trip End:</strong> <p id="tripEnd">No data available</p><br>
+			<strong>Trip Length:</strong> <p id="tripLength">No data available</p> <br>
 		</div>
 		</div>
 		<div class="g1">
@@ -66,7 +66,7 @@
 			<strong>Email:</strong> <p id="email"></p> <br>
 			<strong>Home Zipcode:</strong> <p id="hZIP"></p> <br>
 			<strong>Work Zipcode:</strong> <p id="wZIP"></p> <br>
-			<strong>School Zipcode:</strong> <p id="sZIP"></p> <br>
+			<strong>School Zipcode:</strong> <p id="sZIP">No data available</p> <br>
 			<strong>Cycling Frequency:</strong> <p id="cFREQ"></p> <br>
 			<strong>Cycling Confidence:</strong> <p id="cCONF"></p> <br>
 			<button type="button" id="updateButton">Update Profile</button>
@@ -96,7 +96,7 @@
 
 
 <script>
-var user_id = 10;
+var user_id = 1400;
 getUserData(user_id);
 //getHomeZip(user_id);
 //getWorkZip(user_id);
