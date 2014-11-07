@@ -196,8 +196,6 @@ $app->post('/notes/note', function () use($app, $con)
 $app->put('/users/user', function () use($app, $con)
 {
 
-	
-	//	$req = $app->request();
 	$body = $app->request()->getBody();
 	$id='';
 	$age='';
@@ -241,26 +239,8 @@ $app->put('/users/user', function () use($app, $con)
 			$email=$v;
 		}
 		
-	}
-	//set all possible variables...
-	/**
-	$id = $req->put('id');
-	$age = $req->put('age');
-	$gender = $req->put('gender');
-	$income = $req->put('income');
-	$ethnicity = $req->put('ethnicity');
-	$homeZIP = $app->request()->put('homeZIP');
-	$schoolZIP = $req->put('schoolZIP');
-	$workZIP = $req->put('workZIP');
-	$cycling_freq = $req->put('cycling_freq');
-	$rider_type = $req->put('rider_type');
-	*/
-	$qstring = "UPDATE user SET";
-
-	//if each parameter is set, add it to the query
-	//if(isset($id)){
-	//	$qstring = $qstring . " id = " . $id . " AND ";
-	//}
+	}	
+	$qstring = "UPDATE user SET";	
 	
 	//if(isset($age)){
 	if($age!=''){
@@ -317,23 +297,15 @@ $app->put('/users/user', function () use($app, $con)
 	if(substr($qstring, -1)== 'W'){
 		$qstring = substr($qstring, 0, -1);
 	}
-	//for testing purposes
-	//echo $qstring;
-	//$data;
-	//try
-	//{
-		mysqli_query($con, $qstring);
 	
-		$result = array("status" => "success");
-		json_encode($result);
-		$response = $app->response();
-   		$response['Content-Type'] = 'application/json';
-		  $response->body(json_encode($result));
-    	  $data = $response->body(json_encode($result));
-    	  
-		//return(json_encode($result));
-	//}
-	return $data;
+	mysqli_query($con, $qstring);
+	
+	$result = array("status" => "success");
+	json_encode($result);
+	$response = $app->response();
+   	$response['Content-Type'] = 'application/json';
+    $data = $response->body(json_encode($result));
+    return $data;
 });
 
 
@@ -353,10 +325,16 @@ $app->put('/users/user/:id/workZip', function ($id) use($app, $con)
 				}		
        			
 	
-    		}			
+    		}		
 		
 	    	 mysqli_query($con,"UPDATE user SET workZIP = '$workZIP' WHERE id = '$id'");
 	    	 mysqli_close($con);
+	    	 $result = array("status" => "success");
+			 json_encode($result);
+			 $response = $app->response();
+   	         $response['Content-Type'] = 'application/json';
+             $data = $response->body(json_encode($result));
+             return $data;
 
 	
 });    
@@ -381,6 +359,12 @@ $app->put('/users/user/:id/schoolZip', function ($id) use($app, $con)
 		
 	    	 mysqli_query($con,"UPDATE user SET schoolZIP = '$schoolZIP' WHERE id = '$id'");
 	    	 mysqli_close($con);
+	    	 $result = array("status" => "success");
+			 json_encode($result);
+			 $response = $app->response();
+   		 	 $response['Content-Type'] = 'application/json';
+    	 	 $data = $response->body(json_encode($result));
+    		 return $data;
 
 	
 });    
@@ -406,6 +390,12 @@ $app->put('/users/user/:id/email', function ($id) use($app, $con)
 		
 	    	 mysqli_query($con,"UPDATE user SET email = '$email' WHERE id = '$id'");
 	    	 mysqli_close($con);
+	    	 $result = array("status" => "success");
+			 json_encode($result);
+			 $response = $app->response();
+   			 $response['Content-Type'] = 'application/json';
+    		 $data = $response->body(json_encode($result));
+    		 return $data;
 
 	
 });    
@@ -498,7 +488,6 @@ $app->get('/trips/:id/', function ($id) use($app, $con)
     	  $response->body(json_encode($rows));
     	  $data = $response->body(json_encode($rows));
     	  return $data;
-    	//  var_dump($test);
     	  exit();
 
 	
@@ -527,7 +516,6 @@ $app->get('/users/:id/workZIP', function ($id) use($app, $con)
     	  $response->body(json_encode($rows));
     	  $data = $response->body(json_encode($rows));
     	  return $data;
-    	 // var_dump($test);
     	  exit();
 
 	
@@ -557,7 +545,6 @@ $app->get('/users/:id/homeZIP', function ($id) use($app, $con)
     	  $response->body(json_encode($rows));
     	  $data = $response->body(json_encode($rows));
     	  return $data;
-    	  var_dump($test);
     	  exit();
 
 
@@ -584,7 +571,6 @@ $app->get('/users/:id/schoolZIP', function ($id) use($app, $con)
     	  $response->body(json_encode($rows));
     	  $data = $response->body(json_encode($rows));
     	  return $data;
-    	 // var_dump($test);
     	  exit();
 
 	
@@ -610,7 +596,6 @@ $app->get('/users/:id/email', function ($id) use($app, $con)
     	  $response->body(json_encode($rows));
     	  $data = $response->body(json_encode($rows));
     	  return $data;
-    	 // var_dump($test);
     	  exit();
 
 	
@@ -750,7 +735,6 @@ $app->get('/users/:id/cycling_freq', function ($id) use($app, $con)
     	  $response->body(json_encode($rows));
     	  $data = $response->body(json_encode($rows));
     	  return $data;
-    	 // var_dump($test);
     	  exit();
 
 });
@@ -777,7 +761,6 @@ $app->get('/users/:id', function ($id) use($app, $con)
     	  $response->body(json_encode($rows));
     	  $data = $response->body(json_encode($rows));
     	  return $data;
-    	 // var_dump($test);
     	  exit();
 
 

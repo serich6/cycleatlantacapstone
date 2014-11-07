@@ -227,6 +227,99 @@ function getRiderType(id)
 	
 }
 
+function riderType(data)
+{
+	if(data["rider_type"] != null)
+   		{
+   			if(data["rider_type"] == 0)
+   			{
+   				$('#cCONF').replaceWith("No data");	
+   			}
+   			if(data["rider_type"] == 1)
+   			{
+   				$('#cCONF').replaceWith("Strong and fearless");	
+   			}
+   			if(data["rider_type"] == 2)
+   			{
+   				$('#cCONF').replaceWith("Enthused and confident");	
+   			}
+   			if(data["rider_type"] == 3)
+   			{
+   				$('#cCONF').replaceWith("Comfortable, but cautious");	
+   			}
+   			if(data["rider_type"] == 4)
+   			{
+   				$('#cCONF').replaceWith("Interested, but concerned");	
+   			} 		
+      	 
+      	 }
+	
+}
+
+function cycleFrequency(data)
+{
+	
+   		if(data["cycling_freq"] != null)
+   		{
+   			if(data["cycling_freq"] == 0)
+   			{
+   				$('#cFREQ').replaceWith("No data");	
+   			}
+   			if(data["cycling_freq"] == 1)
+   			{
+   				$('#cFREQ').replaceWith("> Once/month");	
+   			}
+   			if(data["cycling_freq"] == 2)
+   			{
+   				$('#cFREQ').replaceWith("Several times/month");	
+   			}
+   			if(data["cycling_freq"] == 3)
+   			{
+   				$('#cFREQ').replaceWith("Several times/week");	
+   			}
+   			if(data["cycling_freq"] == 4)
+   			{
+   				$('#cFREQ').replaceWith("Daily");	
+   			}
+   		
+      	 
+      	 }
+
+}
+
+function schoolZip(data)
+{
+	if(data["schoolZIP"] != null)
+   	{
+   		$('#sZIP').replaceWith(data["schoolZIP"]);
+   	}   		
+}
+
+function workZip(data)
+{
+	if(data["workZIP"] != null)
+   	{
+   		$('#wZIP').replaceWith(data["workZIP"]);
+   	}
+}
+
+function homeZip(data)
+{
+	if(data["homeZIP"] != null)
+   	{
+   		$('#hZIP').replaceWith(data["homeZIP"]);
+   	}	
+}
+function email(data)
+{
+	 if(data["email"] != null)
+   	 {
+   	 	$('#email').replaceWith(data["email"]);
+     }
+}
+      	 
+     
+
 
 function getUserData(id)
 {
@@ -240,84 +333,17 @@ function getUserData(id)
 		
 		success: function(response){
    		console.log(response);
-   		if(response[0]["rider_type"] == null)
-   		{
-   			$('#cCONF').replaceWith("Not applicable");
-   		}
-   		if(response[0]["rider_type"] != null)
-   		{
-   			if(response[0]["rider_type"] == 0)
-   			{
-   				$('#cCONF').replaceWith("No data");	
-   			}
-   			if(response[0]["rider_type"] == 1)
-   			{
-   				$('#cCONF').replaceWith("Strong and fearless");	
-   			}
-   			if(response[0]["rider_type"] == 2)
-   			{
-   				$('#cCONF').replaceWith("Enthused and confident");	
-   			}
-   			if(response[0]["rider_type"] == 3)
-   			{
-   				$('#cCONF').replaceWith("Comfortable, but cautious");	
-   			}
-   			if(response[0]["rider_type"] == 4)
-   			{
-   				$('#cCONF').replaceWith("Interested, but concerned");	
-   			}
    		
+      	
+      
+  		 email(response[0]);
+      	 schoolZip(response[0]);
+      	 workZip(response[0]);
+      	 homeZip(response[0]);
+      	 riderType(response[0]);
+      	 cycleFrequency(response[0]);
       	 
-      	 }
-      	 if(response[0]["cycling_freq"] == null)
-   		{
-   			$('#cFREQ').replaceWith("Not applicable");
-   		}
-   		if(response[0]["cycling_freq"] != null)
-   		{
-   			if(response[0]["cycling_freq"] == 0)
-   			{
-   				$('#cFREQ').replaceWith("No data");	
-   			}
-   			if(response[0]["cycling_freq"] == 1)
-   			{
-   				$('#cFREQ').replaceWith("> Once/month");	
-   			}
-   			if(response[0]["cycling_freq"] == 2)
-   			{
-   				$('#cFREQ').replaceWith("Several times/month");	
-   			}
-   			if(response[0]["cycling_freq"] == 3)
-   			{
-   				$('#cFREQ').replaceWith("Several times/week");	
-   			}
-   			if(response[0]["cycling_freq"] == 4)
-   			{
-   				$('#cFREQ').replaceWith("Daily");	
-   			}
-   		
-      	 
-      	 }
-      	 if(response[0]["email"] == null)
-   		 {
-   			$('#email').replaceWith("Not applicable");
-   		 }
-   		 else
-   		 {
-      	 	$('#email').replaceWith(response[0]["email"]);
-      	 }
-      	 if(response[0]["schoolZIP"] == null)
-   		{
-   			$('#sZIP').replaceWith("Not applicable");
-   		}
-   		else
-   		{
-      	 $('#sZIP').replaceWith(response[0]["schoolZIP"]);
-      	 }
-      	 
-      	 $('#wZIP').replaceWith(response[0]["workZIP"]);
-      	 
-      	  $('#hZIP').replaceWith(response[0]["homeZIP"]);
+      	
     }
 		
 	});
@@ -337,10 +363,31 @@ function getTripData(id)
 		
 		success: function(response){
    		//console.log(response[3]["notes"]);
-   		$('#tripPurpose').replaceWith(response[0]["purpose"]);
-   		$('#tripNotes').replaceWith(response[0]["notes"]);
-   		$('#tripStart').replaceWith(response[0]["start"]);
-   		$('#tripEnd').replaceWith(response[0]["stop"]);
+   		if(response!='')
+   		{
+   			if(response[0]["purpose"]!='')
+   			{
+   				$('#tripPurpose').replaceWith(response[0]["purpose"]);
+   			}
+   			
+   			if(response[0]["notes"]!='')
+   			{
+   				$('#tripNotes').replaceWith(response[0]["notes"]);
+   			}
+   			
+   			if(response[0]["start"]!='')
+   			{
+   				$('#tripStart').replaceWith(response[0]["start"]);
+   			}
+   			
+   			if(response[0]["stop"]!='')
+   			{
+   				$('#tripEnd').replaceWith(response[0]["stop"]);
+   			}
+   			
+   		}
+   		
+   		
    	//	console.log(daysBetween(response[3]["start"], response[3]["end"]));
    		
     	}
