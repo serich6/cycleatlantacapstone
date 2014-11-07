@@ -226,7 +226,7 @@ $app->post('/trips/trip', function () use($app, $con)
     //$query = substr($query, 0, -4);
 	
 	//get the global ID
-// 	echo $query;
+//  echo $query;
 //       try
 //       {    		
 //         $result = mysqli_query($con, $query);
@@ -239,8 +239,8 @@ $app->post('/trips/trip', function () use($app, $con)
     //echo json_encode($result);
     //exit;
 
-	
-	
+
+
     });
 
 
