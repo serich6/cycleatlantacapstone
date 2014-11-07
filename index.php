@@ -34,8 +34,9 @@ $app->post('/register', function () use($app, $con)
 	$keys = '';
 	
 	//the new email that the user just had input
-	$userEmail;
-	$userPassword;
+	$userEmail = '';
+	$userPassword = '';
+	$userId = '';
 	
 	//loop through the JSON data
 	foreach($body as $k=>$v)
@@ -70,7 +71,7 @@ $app->post('/register', function () use($app, $con)
 		}
 	}
 	
-	
+	//go ahead and POST into 'user' table
 	if($invalidEmail == false){
 		//knock off the last comma at the end 
 		$keys = substr($keys, 0, -1);
@@ -81,14 +82,39 @@ $app->post('/register', function () use($app, $con)
 		  try
 		  {    		
 			mysqli_query($con, $query);
+			
 		  } catch(PDOException $e) 
 		  {
 			//echo '{"error":{"text":'. $e->getMessage() .'}}';
 		  }
-				
-		//for debugging purposes, make sure query looks like it should      	
-		//echo $query;
-	}
+		  
+		  
+		$result = mysqli_query($con, "SELECT id,email FROM user");
+		while($row = mysqli_fetch_array($result)) {
+			if($row['email'] == $userEmail){
+				$userId = $row['id'];
+			}
+		}
+		
+		//POST into UserPassword table 	
+		$query = "Insert INTO user_password (user_id, password, email)
+				VALUES ('$userId','$userPassword','$userEmail');";
+	
+		  try
+		  {    		
+			mysqli_query($con, $query);
+			
+		  } catch(PDOException $e) 
+		  {
+			//echo '{"error":{"text":'. $e->getMessage() .'}}';
+		  }
+	
+		
+	}//end post
+	
+		
+	
+	
 	
 	
     }); 
