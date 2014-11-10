@@ -93,6 +93,15 @@ $app->post('/register', function () use($app, $con)
 	
     }); 
  
+/**************
+For some D3 fun, creating some high level end points
+***************/
+
+/************
+Rider History: gets JSON of all users with given rider history 
+*************/
+
+
 
 //kelley: post user
 //kelley's iphone uuid: a0d546c1224dfe5fb192e28837ab0447f01be3d6
@@ -818,15 +827,15 @@ $app->get('/users', function() use($app, $con)
 
 	//take of the last AND
 	$qstring = substr($qstring, 0, -5);
-	echo $qstring;
-	echo '<br>';
+	//echo $qstring;
+	//echo '<br>';
 	
 	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
 	if(substr($qstring, -1)== 'W'){
 		$qstring = substr($qstring, 0, -1);
 	}
 	//for testing purposes
-	echo $qstring;
+	//echo $qstring;
 
 	try
 	{
@@ -839,18 +848,56 @@ $app->get('/users', function() use($app, $con)
 
 	$count=0;
 	//need to remove this for later TESTING ONLY
-	while($row = mysqli_fetch_array($result)) {
-  		echo $row['id'];
-  		echo "<br>";
-  		$count=$count + 1;
-	}	
-
-	echo "<br>";
-	echo "<br>";
-	echo "Count: " . $count;
+	//while($row = mysqli_fetch_array($result)) {
+  	//	echo $row['id'];
+  	//	echo "<br>";
+  	//	$count=$count + 1;
+	//}	
+	mysqli_close($con);
+	while($r = mysqli_fetch_assoc($result))
+	{
+	    $rows[] = $r;
+	    $count=$count + 1;
+	}
+	$response = $app->response();
+   	$response['Content-Type'] = 'application/json';
+   		 
+    $response->body(json_encode($rows));
+    $data = $response->body(json_encode($rows));
+    return $data;
+    // var_dump($test);
+    exit();
+	
 	
 	mysqli_close($con);
 
+});
+
+
+$app->get('/users/:id/rider_type', function ($id) use($app, $con) 
+{
+
+	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['rider_type'];
+  		//			echo "<br>";
+		//		}	
+	    	mysqli_close($con);
+	    	 	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	 // var_dump($test);
+    	  exit();
+
+
+	
 });
 
 //TRIPS filtering URI
@@ -898,8 +945,8 @@ $app->get('/trips', function() use($app, $con)
 
 	//take of the last AND
 	$qstring = substr($qstring, 0, -5);
-	echo $qstring;
-	echo '<br>';
+	//echo $qstring;
+	//echo '<br>';
 	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
 	
 	if(substr($qstring, -1)== 'W'){
@@ -908,9 +955,9 @@ $app->get('/trips', function() use($app, $con)
 	
 	
 	//for testing purposes
-	echo $qstring;
+	//echo $qstring;
 
-	echo '<br>';
+	//echo '<br>';
 	
 	try
 	{
@@ -923,17 +970,21 @@ $app->get('/trips', function() use($app, $con)
 
 	$count=0;
 	//need to remove this for later TESTING ONLY
-	while($row = mysqli_fetch_array($result)) {
-  		echo $row['user_id'] . " " . $row['id'];
-  		echo "<br>";
-  		$count=$count + 1;
-	}	
-
-	echo "<br>";
-	echo "<br>";
-	echo "Count: " . $count;
+	
 	
 	mysqli_close($con);
+	   	 	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	 // var_dump($test);
+    	  exit();
 
 });
 

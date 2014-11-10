@@ -318,7 +318,40 @@ function email(data)
      }
 }
       	 
-     
+      	 
+/*************************************
+function getAllRiderType(type)
+{
+
+	
+		$.ajax({
+		type: 'GET',
+		contentType: 'application/json',
+		url: "index.php/users/?rider_type=" + type ,
+		dataType: "json",
+		
+		success: function(response){
+   		console.log(response);
+   		
+      	
+      
+  		 email(response[0]);
+      	 schoolZip(response[0]);
+      	 workZip(response[0]);
+      	 homeZip(response[0]);
+      	 riderType(response[0]);
+      	 cycleFrequency(response[0]);
+      	 
+      	
+    }
+		
+	});
+		
+
+
+}
+*******************************************/
+
 
 
 function getUserData(id)
@@ -351,9 +384,10 @@ function getUserData(id)
 
 
 }
-
+var length;
 function getTripData(id)
 {
+
 	
 		$.ajax({
 		type: 'GET',
@@ -362,28 +396,41 @@ function getTripData(id)
 		dataType: "json",
 		
 		success: function(response){
-   		//console.log(response[3]["notes"]);
+   		console.log(response[3]);
    		if(response!='')
    		{
+   			var tripNames = "";
+   			for(var i = 0; i<response.length;i++)
+   			{
+   				tripNames+="<option value='" + response[i]["user_id"] + "'>" + response[i]["start"] + "</option>";
+   			}
+   			$("#tripList").html(tripNames);
    			if(response[0]["purpose"]!='')
    			{
-   				$('#tripPurpose').replaceWith(response[0]["purpose"]);
+   				$('#tripPurpose').html(response[0]["purpose"]);
    			}
    			
    			if(response[0]["notes"]!='')
    			{
-   				$('#tripNotes').replaceWith(response[0]["notes"]);
+   				$('#tripNotes').html(response[0]["notes"]);
    			}
    			
    			if(response[0]["start"]!='')
    			{
-   				$('#tripStart').replaceWith(response[0]["start"]);
+   				$('#tripStart').html(response[0]["start"]);
    			}
    			
    			if(response[0]["stop"]!='')
    			{
-   				$('#tripEnd').replaceWith(response[0]["stop"]);
+   				$('#tripEnd').html(response[0]["stop"]);
    			}
+   			if(response[0]["n_coord"]!='')
+   			{
+   				length = (parseInt(response[0]["n_coord"]))/60;
+   				console.log(length);
+   				$('#tripLength').html((parseInt(response[0]["n_coord"]))/60 + '' +" minutes");
+   			}
+   				
    			
    		}
    		
@@ -395,6 +442,57 @@ function getTripData(id)
 	});
 	
 }
+
+
+
+function changeTripDetails()
+{
+   
+	var tripSelect = document.getElementById("tripList");
+	var uID = document.getElementById("tripList").value;
+	var trip = tripSelect.options[tripSelect.selectedIndex].text;
+	var curTrip;
+	console.log(uID);
+	console.log(trip);
+		$.ajax({
+		type: 'GET',
+		contentType: 'application/json',
+		url: "index.php/trips/"+ uID,
+		dataType: "json",
+		
+		success: function(response){
+   		
+   			for(var i = 0; i < response.length; i++)
+   			{
+   				
+   				if(response[i]["id"] == trip)
+   				{
+   					curTrip = response[i];
+   				
+   				}
+   			}
+   		
+   			$('#tripPurpose').empty().html(curTrip.purpose);
+  
+   			$('#tripNotes').empty().html(curTrip.notes);   		
+   			
+   			$('#tripStart').empty().html(curTrip.start + '');   
+   			//$('#tripStart').html((parseInt(curTrip.n_coord))/60 + '' +" minutes");				
+   		
+   			$('#tripEnd').html(curTrip.stop);   				
+   				
+   			$('#tripLength').html((parseInt(curTrip.n_coord))/60 + '' +" minutes");
+   			
+   				
+   			
+ 
+   		
+    	}
+		
+	});
+}
+
+
 
 function daysBetween(date1String, date2String){
   var d1 = new Date(date1String);
