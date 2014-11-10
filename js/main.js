@@ -465,14 +465,17 @@ function changeTripDetails()
    			for(var i = 0; i < response.length; i++)
    			{
    				
-   				if(response[i]["id"] == trip)
+   				if(response[i]["start"] == trip)
    				{
    					curTrip = response[i];
    				
    				}
    			}
-   		
-   			$('#tripPurpose').empty().html(curTrip.purpose);
+   			console.log(curTrip);
+   		//	if(curTrip.purpose!=0)
+   		//	{
+   		//		$('#tripPurpose').empty().html(curTrip.purpose);
+   		//	}
   
    			$('#tripNotes').empty().html(curTrip.notes);   		
    			
