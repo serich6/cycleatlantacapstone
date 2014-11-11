@@ -48,13 +48,14 @@
 		</div>
 		<div class="g1">
 			<h3>Trips</h3>
+			<select id="tripList" onchange="changeTripDetails(this)">
+      		</select>
 			<p>Here we will show the most recent trip, possibly on a map. We will have a dropdown menu to view other recent trips.</p>
 			<div>
-			<strong>Trip Purpose:</strong> <p id="tripPurpose">No data available</p> <br>
-			<strong>Trip Notes:</strong> <p id="tripNotes">No data available</p> <br>
-			<strong>Trip Start:</strong> <p id="tripStart">No data available</p><br>
-			<strong>Trip End:</strong> <p id="tripEnd">No data available</p><br>
-			<strong>Trip Length:</strong> <p id="tripLength">No data available</p> <br>
+			<strong>Trip Purpose:</strong> <p id="tripPurpose">No data available</p> <strong>Trip Notes:</strong> <p id="tripNotes">No data available</p> 
+			<strong>Trip Start:</strong> <p id="tripStart"></p>
+			<strong>Trip End:</strong> <p id="tripEnd">No data available</p>
+			<strong>Trip Length:</strong> <p id="tripLength"></p> 
 		</div>
 		</div>
 		<div class="g1">
@@ -96,16 +97,12 @@
 
 
 <script>
-var user_id = 1400;
+var user_id = 10;
 getUserData(user_id);
-//getHomeZip(user_id);
-//getWorkZip(user_id);
-//getSchoolZip(user_id);
-//getEmail(user_id);
-//getCycleFreq(user_id);
-//getRiderType(user_id);
+
 
 getTripData(user_id);
+
 
 //var data = JSON.parse(user);
 
