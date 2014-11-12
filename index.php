@@ -1236,51 +1236,50 @@ $app->get('/users', function() use($app, $con)
 	$query = 'SELECT * FROM user WHERE ';
 
 	//if each parameter is set, add it to the query
-	if(isset($id)){
+	if(isset($id) && filter_var($id, FILTER_VALIDATE_INT)){
 		$query = $query . " id = " . $id . " AND ";
 	}
+// 	else if (isset($id) && !filter_var($id, FILTER_VALIDATE_INT)){
+// 		trigger_error("user id must be an int value");
+// 	}
 	
-	if(isset($age)){
+	if(isset($age) && filter_var($age, FILTER_VALIDATE_INT)){
 		$query = $query . " age = " . $age . " AND ";
 	}
 	
-	if(isset($gender)){
+	if(isset($gender) && filter_var($gender, FILTER_VALIDATE_INT)){
 		$query = $query . " gender = " . $gender . " AND ";
 	}
 
-	if(isset($income)){
+	if(isset($income) && filter_var($income, FILTER_VALIDATE_INT)){
 		$query = $query . " income = " . $income . " AND ";
 	}
-	if(isset($ethnicity)){
+	if(isset($ethnicity) && filter_var($ethnicity, FILTER_VALIDATE_INT)){
 		$query = $query . " ethnicity = " . $ethnicity . " AND ";
 	}
-	if(isset($homeZIP)){
+	if(isset($homeZIP) && filter_var($homeZIP, FILTER_VALIDATE_INT)){
 		$query = $query . " homeZIP = " . $homeZIP . " AND ";
 	}
-	if(isset($schoolZIP)){
+	if(isset($schoolZIP) && filter_var($schoolZIP, FILTER_VALIDATE_INT)){
 		$query = $query . " schoolZIP = " . $schoolZIP . " AND ";
 	}
-	if(isset($workZIP)){
+	if(isset($workZIP) && filter_var($workZIP, FILTER_VALIDATE_INT)){
 		$query = $query . " workZIP = " . $workZIP . " AND ";
 	}
-	if(isset($cycling_freq)){
+	if(isset($cycling_freq) && filter_var($cycling_freq, FILTER_VALIDATE_INT)){
 		$query = $query . " cycling_freq = " . $cycling_freq . " AND ";
 	}
-	if(isset($rider_type)){
+	if(isset($rider_type) && filter_var($rider_type, FILTER_VALIDATE_INT)){
 		$query = $query . " rider_type = " . $rider_type . " AND ";
 	}	
 
 	//take of the last AND
 	$query = substr($query, 0, -5);
-	echo $query;
-	echo '<br>';
 	
 	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
 	if(substr($query, -1)== 'W'){
 		$query = substr($query, 0, -1);
 	}
-	//for testing purposes
-	echo $query;
 
 	try
 	{
@@ -1324,11 +1323,11 @@ $app->get('/trips', function() use($app, $con)
 	$query = 'SELECT * FROM trip WHERE ';
 
 	//if each parameter is set, add it to the query
-	if(isset($id)){
+	if(isset($id) && filter_var($id, FILTER_VALIDATE_INT)){
 		$query = $query . " id = " . $id . " AND ";
 	}
 	
-	if(isset($user_id)){
+	if(isset($user_id) && filter_var($user_id, FILTER_VALIDATE_INT)){
 		$query = $query . " user_id = " . $user_id . " AND ";
 	}
 	
@@ -1342,28 +1341,19 @@ $app->get('/trips', function() use($app, $con)
 	if(isset($stop)){
 		$query = $query . " stop = " . $stop . " AND ";
 	}
-	/**
-	if(isset($n_coord)){
+	if(isset($n_coord) && filter_var($n_coord, FILTER_VALIDATE_INT)){
 		$query = $query . " n_coord = " . $n_coord . " AND ";
 	}
-	*/
+	
 	
 
 	//take of the last AND
 	$query = substr($query, 0, -5);
-	//echo $query;
-	//echo '<br>';
-	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
-	
+
+	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string	
 	if(substr($query, -1)== 'W'){
 		$query = substr($query, 0, -1);
 	}
-	
-	
-	//for testing purposes
-	//echo $query;
-
-	//echo '<br>';
 	
 	try
 	{
@@ -1418,11 +1408,11 @@ $app->get('/notes', function() use($app, $con)
 		$query = $query . " id = " . $id . " AND ";
 	}
 	
-	if(isset($user_id)){
+	if(isset($user_id) && filter_var($user_id, FILTER_VALIDATE_INT)){
 		$query = $query . " user_id = " . $user_id . " AND ";
 	}
 
-	if(isset($trip_id)){
+	if(isset($trip_id) && filter_var($trip_id, FILTER_VALIDATE_INT)){
 		$query = $query . " trip_id = " . $trip_id . " AND ";
 	}
 	if(isset($recorded)){
@@ -1446,13 +1436,13 @@ $app->get('/notes', function() use($app, $con)
 	if(isset($vAccuracy)){
 		$query = $query . " vAccuracy = " . $vAccuracy . " AND ";
 	}
-	if(isset($note_type)){
+	if(isset($note_type) && filter_var($note_type,FILTER_VALIDATE_INT)){
 		$query = $query . " note_type = " . $note_type . " AND ";
 	}
 	if(isset($details)){
 		$query = $query . " details = " . $details . " AND ";
 	}
-	if(isset($img_url)){
+	if(isset($img_url) && filter_var($img_url, FILTER_VALIDATE_URL)){
 		$query = $query . " img_url = " . $img_url . " AND ";
 	}
 	//take of the last AND
