@@ -716,7 +716,7 @@ $app->get('/trips/:id/', function ($id) use($app, $con)
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
 		//	var_dump($user);
 	
-	    	$result = mysqli_query($con,"SELECT * FROM trip WHERE user_id = '$id' ORDER BY stop DESC");
+	    	$result = mysqli_query($con,"SELECT * FROM trip WHERE user_id = '$id'  ORDER BY stop DESC");
 	    
 	    //		while($row = mysqli_fetch_array($result)) {
   		//			echo $row['id'] . " " . $row['workZIP'];
@@ -726,6 +726,7 @@ $app->get('/trips/:id/', function ($id) use($app, $con)
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
 	    	{
+	    	
 	    		$rows[] = $r;
 	    	}
 	      	$response = $app->response();
@@ -1033,6 +1034,7 @@ $app->get('/users/:id/gender', function ($id) use($app, $con)
 	    	
 	    	mysqli_close($con);
 	    	
+	    	
 	    	while($r = mysqli_fetch_assoc($result))
 	    	{
 	    		$rows[] = $r;
@@ -1046,6 +1048,173 @@ $app->get('/users/:id/gender', function ($id) use($app, $con)
     	  exit();
 
 });
+
+
+
+
+$app->get('/rides',function() use($app, $con)
+{
+	$req = $app->request();
+	$start_date = $req->get('start_date');
+	$end_date = $req->get('end_date');
+	$week_day = $req->get('week_day');
+	$hour = $req->get('hour');
+	$week = $req->get('week');
+	$month = $req->get('month');	
+	
+	$purposeCounts='';
+	$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip GROUP BY purpose";
+	//for making the big 'ol json output
+	/**
+	$combined = array(
+  		["week_start" => 'weekdate',
+  		"purpose" => $purposeCounts,
+  		"otherTest" => 'otherTesting'],
+  		"weeklyData" => 'weeklyData'
+		);
+
+		echo json_encode($combined, JSON_PRETTY_PRINT); 
+
+**/
+//for basic date range, purposeCounts
+//for week_day param, weekdayCounts
+//for hour param, hourCounts
+//for week param, weekCounts
+//for month param, monthCounts 
+/**
+JSON for date range
+{weekstart:<date>
+	{purpose:errand, count:91}
+JSON for week_day
+{weekstart:<date>
+	{sunday{purpose:errand,count:91},
+	 monday{purpose:social,count:20}
+	}
+}
+JSON for hour
+{weekstart:<date>
+	"sunday"
+		"1"
+			{purpose:errand, count:20}
+		
+		"2"
+			{purpose,count}
+		
+	
+	"monday"
+		"1"
+		`	{purpose}
+		
+	}
+}
+for month, just add a month by month total at bottom
+for week, just add a week by week total at bottom
+**/
+	
+	if(isset($start_date) && IS_NULL($end_date))
+	{
+		$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") GROUP BY purpose";
+				
+	}
+	if(isset($start_date) && isset($end_date))
+	{
+		$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY purpose";
+	}
+	
+	if(isset($week_date))
+	{
+		//if($count_by == "weekdate")
+		//{
+			
+			
+			//all trips, regardless of start or end date
+			
+			$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip GROUP BY purpose";
+			
+			$min_date = mysqli_query($con, "SELECT *, MIN(start) AS min_date FROM trip");
+		
+			if(isset($start_date) && IS_NULL($end_date))
+			{
+				$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
+				GROUP BY purpose";
+				
+			}
+			if(isset($start_date) && isset($end_date))
+			{
+				$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
+				AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY purpose";
+			}
+			
+			/**For time params
+			SELECT start, DAYOFWEEK(start) as day, HOUR(start) as hour,  purpose, COUNT(HOUR(start)) as hourCount  
+			FROM trip WHERE DATE(start) >= DATE('2012-12-01 01:10:01')  AND DATE(start) <= DATE('2012-12-09 18:48:00') 
+			GROUP BY DAYOFWEEK(start), HOUR(start), purpose;
+			**/
+
+			//SELECT DAYOFWEEK(start), purpose, COUNT(*)  FROM trip  GROUP BY DAYOFWEEK(start), purpose
+			//for ALL dates
+			$dayOfWeekPurposeCount = "SELECT DAYOFWEEK(start) as day, purpose, COUNT(*) as total  FROM trip  GROUP BY DAYOFWEEK(start), purpose";
+			$dayResult = mysqli_query($con, $dayOfWeekPurposeCount);
+			while($row = mysqli_fetch_assoc($dayResult))
+			{
+				var_dump($row);
+			}
+			
+			/*****for end and start date
+			**
+			**	SELECT DAYOFWEEK(start), purpose, COUNT(*)  FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .")  
+			AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY DAYOFWEEK(start), purpose
+			**/
+			/*****for just start date
+			**
+			**	SELECT DAYOFWEEK(start), purpose, COUNT(*)  FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
+			GROUP BY DAYOFWEEK(start), purpose
+			**/
+	
+		
+	}
+		
+	
+	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
+	//if(substr($query, -1)== 'W'){
+	//	$query = substr($query, 0, -1);
+	//}	
+	$result = mysqli_query($con, $purposeCounts);
+		mysqli_close($con);	
+		
+	while($r = mysqli_fetch_assoc($result))
+	{
+		$rows[] = $r;
+	}
+	$response = $app->response();
+	$response['Content-Type'] = 'application/json';
+   	$response->body(json_encode($rows));
+    $data = $response->body(json_encode($rows));
+    /**
+    $combined = array(
+  		["week_start" => 'weekdate'],
+  		[
+  		"purpose" => $data,
+  		"otherTest" => 'otherTesting'],
+  		"weeklyData" => 'weeklyData'
+		);
+
+		$newData= json_encode($combined, JSON_PRETTY_PRINT); 
+    	var_dump($newData);
+    **/
+   return $data;
+    exit();
+	
+
+
+});
+
+
+
+
+
+
+
 
 //USERS filtering URI
 $app->get('/users', function() use($app, $con)
@@ -1182,8 +1351,8 @@ $app->get('/trips', function() use($app, $con)
 
 	//take of the last AND
 	$query = substr($query, 0, -5);
-	echo $query;
-	echo '<br>';
+	//echo $query;
+	//echo '<br>';
 	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
 	
 	if(substr($query, -1)== 'W'){
@@ -1192,9 +1361,9 @@ $app->get('/trips', function() use($app, $con)
 	
 	
 	//for testing purposes
-	echo $query;
+	//echo $query;
 
-	echo '<br>';
+	//echo '<br>';
 	
 	try
 	{
