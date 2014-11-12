@@ -138,6 +138,37 @@ function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output =
         return bin2hex(substr($output, 0, $key_length));
 }
 
+//Yan: Login
+$app->post('/login', function () use($app, $con) 
+{
+	//get the parameters sent over as JSON 
+    $body = $app->request()->params();
+    //initialize key value variables   
+	$values = '';
+	$keys = '';
+	
+	$emailInput = '';
+	$passwordInput = '';
+	
+	//loop through the JSON data
+	foreach($body as $k=>$v)
+	{	
+		if($k == 'password'){
+			$passwordInput = $v;
+		}
+		if($k == 'email'){
+			$emailInput = $v;
+		}
+		
+    }
+	
+	
+	
+	
+	
+}); 
+ 
+
 
 //Yan: register new user
 $app->post('/register', function () use($app, $con) 
