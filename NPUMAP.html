@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #map_canvas {
+        width: 1400px;
+        height: 900px;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script>
+      function initialize() {
+        var mapCanvas = document.getElementById('map_canvas');
+        var mapOptions = {
+          center: new google.maps.LatLng(33.780639, -84.386609),
+          zoom: 12,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        var map = new google.maps.Map(mapCanvas, mapOptions);
+		
+		var npuLayer = new google.maps.KmlLayer({
+    url: 'https://mapsengine.google.com/map/kml?mid=zj7qW_woy4WY.kAJuzF0TMUf8&lid=zj7qW_woy4WY.kvPsmTvy2rNY'
+  });;
+		npuLayer.setMap(map);
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+  </head>
+  <body>
+    <div id="map_canvas"></div>
+  </body>
+</html>
