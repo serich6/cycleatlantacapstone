@@ -163,8 +163,39 @@ $app->post('/login', function () use($app, $con)
     }
 	
 	
+	//echo $emailInput;
+	//echo '<br>';
+	//echo $passwordInput;
 	
+	$emailExists = false;
+	$retrievedSalt = '';
+	$retrievedPassword = '';
 	
+	$result = mysqli_query($con, "SELECT email,salt,password FROM user_password");
+	while($row = mysqli_fetch_array($result)) {
+		if($row['email'] == $emailInput){
+			$retrievedSalt = $row['salt'];
+			$retrievedPassword = $row['password'];
+			//echo $retrievedPassword;
+			//echo $retrievedSalt;
+			$emailExists = true; 
+		}
+	}
+	
+
+	if($emailExists == true){
+		$hash = create_hash($passwordInput, $retrievedSalt);
+		//echo $hash;
+		if($hash == $retrievedPassword){
+			echo 'Login success!';
+		}
+		else{
+			echo 'Incorrect email or password';
+		}
+	}
+	else{
+		echo 'Incorrect email or password';
+	}
 	
 }); 
  
@@ -243,6 +274,7 @@ $app->post('/register', function () use($app, $con)
 			}
 		}
 		
+		//encrypt their password
 		$salt = create_salt();
 		$hash = create_hash($userPassword, $salt);
 		//echo $hash;
