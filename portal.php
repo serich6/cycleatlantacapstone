@@ -34,7 +34,7 @@ session_start();
 	
 	<header>
 		<div class="g1">
-			<h2>Welcome!</h5> <!--figure out way to get user name in here -->
+			<h2>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h5> <!--figure out way to get user name in here -->
 			<!-- This will be a header menu, with options: update profile, maps, logout -->
 		</div>
 		<nav class ="g2">

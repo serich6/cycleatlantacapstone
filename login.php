@@ -44,7 +44,7 @@ session_start();
 				Email:
 				<input name="email" value="none" /> <br>
 				Password:
-				<input name="password" value="password" /> <br>
+				<input name="password" input type= "password" value="password" /> <br>
 				<input type="submit" value="Submit">
 
 			</form>

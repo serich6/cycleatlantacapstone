@@ -46,9 +46,20 @@ session_start();
 			</ul>
 		</nav>
 	</header>
+	<div class="cf"></div>
+		<div id="content">
+			<table id="myTable"></table>
+			<br>
+		</div>
+	</div>
 	
-	
-	
+	<div id="dom-target" style="display: none;">
+    <?php 
+        $user = $_SESSION['uID']; //Again, do some operation, get the output.
+        echo htmlspecialchars($user); /* You have to escape because the result
+                                       will not be valid HTML otherwise. */
+    ?>
+	</div>
 
 	<footer class="g3 cf">
 		<small>2011 <span class="license">Created by <a href="http://twitter.com/thedayhascome">Josh Hopkins</a> <span class="amp">&amp;</span> <a href="http://40horse.com">40 Horse</a></span>. Released under <a href="http://unlicense.org">Unlicense</a>. </small>
@@ -71,3 +82,10 @@ session_start();
 	
 </body>
 </html>
+<script>
+	var div = document.getElementById("dom-target");
+	var user_id = div.textContent;
+	
+	populateTripTable(user_id);
+</script>	
+

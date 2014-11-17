@@ -180,6 +180,7 @@ $app->post('/login', function () use($app, $con)
 			$retrievedPassword = $row['password'];
 			$userID = $row['user_id'];
 			$_SESSION["uID"] = $row['user_id'];
+			$_SESSION["username"] = $row['email'];
 			session_write_close();
 			//echo $retrievedPassword;
 			//echo $retrievedSalt;
@@ -196,12 +197,14 @@ $app->post('/login', function () use($app, $con)
 			//echo $userID;
 			
 			//echo $_SESSION["uID"];
+			
 			header('Location:../portal.php');
 			exit();
 			
 			
 		}
 		else{
+			
 			header('Location:../badLogin.html');
 			exit();
 		}

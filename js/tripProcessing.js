@@ -103,3 +103,56 @@ function changeTripDetails()
 		
 	});
 }
+
+
+
+function populateTripTable(id)
+{
+
+	$.ajax({
+		type: 'GET',
+		contentType: 'application/json',
+		url: "index.php/trips/"+id,
+		dataType: "json",
+		
+		success: function(response){
+   		console.log(response[3]);
+   		if(response!='')
+   		{
+   		
+   			
+   			for(var i = 0; i < response.length; i++)
+   			{
+   				var table = document.getElementById("myTable");
+				
+    			var row = table.insertRow(0);
+    			var start = row.insertCell(0);
+    			
+    			var note = row.insertCell(1);
+    			var purpose = row.insertCell(2);
+   				start.innerHTML = response[i]["start"];
+    			
+    			note.innerHTML = response[i]["notes"];
+    			purpose.innerHTML = response[i]["purpose"];
+    		}
+    	}
+    }
+    });
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
