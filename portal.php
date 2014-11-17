@@ -1,6 +1,10 @@
 <?php
 //session_cache_limiter(false);
 session_start();
+if(!isset($_SESSION['uID'])) {
+    header("Location: login.php");
+    die;
+}
 
 ?>
 
@@ -39,10 +43,10 @@ session_start();
 		</div>
 		<nav class ="g2">
 			<ul class="nav">
-				<ul><a href="portal.html">Home</a></ul>
+				<ul><a href="portal.php">Home</a></ul>
 				<ul><a href="updateProfile">Update Profile</a></ul>
 				<ul><a href="#Maps">View Your Maps</a></ul>
-				<ul><a href="#Logout">Log Out</a></ul>
+				<ul><a href="logout.php">Log Out</a></ul>
 			</ul>
 		</nav>
 	</header>
@@ -50,7 +54,7 @@ session_start();
 	<div id="content">
 		<div class="g1">
 			<h3>Notes</h3>
-			<p>Here we will display the most recent note a user posted, and a drop down to view other recent notes.</p>
+			<button type="button" id="noteInfoButton">Notes Main View</button>
 		</div>
 		<div class="g1">
 			<h3>Trips</h3>
@@ -128,6 +132,10 @@ getTripData(user_id);
     
      document.getElementById("tripInfoButton").onclick = function () {
         location.href = "tripMainView";
+    };
+    
+     document.getElementById("noteInfoButton").onclick = function () {
+        location.href = "noteMainView";
     };
 
 

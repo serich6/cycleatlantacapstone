@@ -1,6 +1,11 @@
 <?php
 //session_cache_limiter(false);
 session_start();
+if(!isset($_SESSION['uID'])) {
+    header("Location: login.php");
+    die;
+}
+
 
 ?>
 
@@ -39,7 +44,7 @@ session_start();
 		</div>
 		<nav class ="g2">
 			<ul class="nav">
-				<ul><a href="portal.html">Home</a></ul>
+				<ul><a href="portal.php">Home</a></ul>
 				<ul><a href="updateProfile">Update Profile</a></ul>
 				<ul><a href="#Maps">View Your Maps</a></ul>
 				<ul><a href="#Logout">Log Out</a></ul>
