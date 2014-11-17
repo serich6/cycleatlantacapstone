@@ -1096,23 +1096,14 @@ $app->get('/rides',function() use($app, $con)
 	
 	$purposeCounts='';
 	$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip GROUP BY purpose";
-	//for making the big 'ol json output
-	/**
-	$combined = array(
-  		["week_start" => 'weekdate',
-  		"purpose" => $purposeCounts,
-  		"otherTest" => 'otherTesting'],
-  		"weeklyData" => 'weeklyData'
-		);
+	$weekDayCounts = "SELECT DAYOFWEEK(start) as day, purpose, COUNT(*) as total  FROM trip  GROUP BY DAYOFWEEK(start), purpose";
+	$hourCounts = "SELECT DAYOFWEEK(start) as day, HOUR(start) as hour,  purpose, COUNT(HOUR(start)) as hourCount  
+						FROM trip GROUP BY DAYOFWEEK(start), HOUR(start), purpose";
+	$weekCounts = "SELECT start, WEEK(start) as week, purpose FROM trip GROUP BY WEEK(start), purpose";
+	$monthCounts = "SELECT MONTH(start) as month, purpose, COUNT(*) as total  FROM trip  GROUP BY MONTH(start), purpose";
+	
 
-		echo json_encode($combined, JSON_PRETTY_PRINT); 
-
-**/
-//for basic date range, purposeCounts
-//for week_day param, weekdayCounts
-//for hour param, hourCounts
-//for week param, weekCounts
-//for month param, monthCounts 
+ 
 /**
 JSON for date range
 {weekstart:<date>
@@ -1143,110 +1134,297 @@ for month, just add a month by month total at bottom
 for week, just add a week by week total at bottom
 **/
 	
-	if(isset($start_date) && IS_NULL($end_date))
+	if(isset($start_date))
 	{
 		$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") GROUP BY purpose";
+		if(isset($week_day))
+		{
+			$weekDayCounts = "SELECT DAYOFWEEK(start) as day, purpose, COUNT(*) as total  FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
+						GROUP BY DAYOFWEEK(start), purpose";
+		}
+		if(isset($hour))
+		{
+			$hourCounts = "SELECT DAYOFWEEK(start) as day, HOUR(start) as hour,  purpose, COUNT(HOUR(start)) as hourCount  
+			FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .")  
+			GROUP BY DAYOFWEEK(start), HOUR(start), purpose";
+		}
+		if(isset($month))
+		{
+			$monthCounts = "SELECT MONTH(start) as month, purpose, COUNT(*) as total  FROM trip WHERE MONTH(start) >= MONTH(".'"'.$start_date.'"'.") 
+			GROUP BY MONTH(start), purpose";
+		}
+		if(isset($week))
+		{
+			$weekCounts = "SELECT start, WEEK(start) as week, purpose FROM trip WHERE WEEK(start) >= WEEK(".'"'.$start_date.'"'.") 
+			GROUP BY WEEK(start), purpose";
+		}
+		if(isset($end_date))
+		{
+			$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
+			AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY purpose";
+			if(isset($week_day))
+			{
+				$weekDayCounts = "SELECT DAYOFWEEK(start) as day, purpose, COUNT(*) as total  FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .")  
+				AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY DAYOFWEEK(start), purpose";
+			}	
+			if(isset($hour))
+			{
+				$hourCounts = "SELECT start, DAYOFWEEK(start) as day, HOUR(start) as hour,  purpose, COUNT(HOUR(start)) as hourCount  
+				FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .")  AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .")
+				GROUP BY DAYOFWEEK(start), HOUR(start), purpose";	
+			}
+			if(isset($month))
+			{
+				$monthCounts = "SELECT MONTH(start) as month, purpose, COUNT(*) as total  FROM trip WHERE MONTH(start) >= MONTH(". ' " ' . $start_date . '"' .") 
+				AND MONTH(start) <= MONTH (".'"'.$end_date.'"'.") GROUP BY MONTH(start), purpose";
+			}
+			if(isset($week))
+			{
+				$weekCounts = "SELECT start, WEEK(start) as week, purpose FROM trip WHERE WEEK(start) >= WEEK(".'"'.$start_date.'"'.")
+				AND WEEK(start) <= WEEK(". ' " ' . $end_date . '"' .") GROUP BY WEEK(start), purpose";
+			}
+		}
 				
 	}
-	if(isset($start_date) && isset($end_date))
+	if(isset($end_date) && IS_NULL($start_date))
 	{
-		$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY purpose";
+		$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip WHERE DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY purpose";
+		if(isset($week_day))
+		{
+			"SELECT DAYOFWEEK(start) as day, purpose, COUNT(*) as total  FROM trip WHERE DATE(start) <= DATE(". ' " ' . $end_date . '"' .") 
+						GROUP BY DAYOFWEEK(start), purpose";
+		}
+		if(isset($hour))
+		{
+			$hourCounts = "SELECT start, DAYOFWEEK(start) as day, HOUR(start) as hour,  purpose, COUNT(HOUR(start)) as hourCount  
+			FROM trip WHERE DATE(start) DATE(start) <= DATE(". ' " ' . $end_date . '"' .")
+			GROUP BY DAYOFWEEK(start), HOUR(start), purpose";
+		}
+		if(isset($month))
+		{
+			$monthCounts = "SELECT MONTH(start) as month, purpose, COUNT(*) as total  FROM trip WHERE MONTH(start) <= MONTH(". ' " ' . $end_date . '"' .") 
+			GROUP BY MONTH(start), purpose";
+		}
+		if(isset($week))
+		{
+			$weekCounts = "SELECT start, WEEK(start) as week, purpose FROM trip WHERE 
+			AND WEEK(start) <= WEEK(". ' " ' . $end_date . '"' .") GROUP BY WEEK(start), purpose";
+		}	
 	}
 	
-	if(isset($week_date))
-	{
-		//if($count_by == "weekdate")
-		//{
-			
-			
-			//all trips, regardless of start or end date
-			
-			$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip GROUP BY purpose";
-			
-			$min_date = mysqli_query($con, "SELECT *, MIN(start) AS min_date FROM trip");
-		
-			if(isset($start_date) && IS_NULL($end_date))
-			{
-				$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
-				GROUP BY purpose";
-				
-			}
-			if(isset($start_date) && isset($end_date))
-			{
-				$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
-				AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY purpose";
-			}
-			
-			/**For time params
-			SELECT start, DAYOFWEEK(start) as day, HOUR(start) as hour,  purpose, COUNT(HOUR(start)) as hourCount  
-			FROM trip WHERE DATE(start) >= DATE('2012-12-01 01:10:01')  AND DATE(start) <= DATE('2012-12-09 18:48:00') 
-			GROUP BY DAYOFWEEK(start), HOUR(start), purpose;
-			**/
-
-			//SELECT DAYOFWEEK(start), purpose, COUNT(*)  FROM trip  GROUP BY DAYOFWEEK(start), purpose
-			//for ALL dates
-			$dayOfWeekPurposeCount = "SELECT DAYOFWEEK(start) as day, purpose, COUNT(*) as total  FROM trip  GROUP BY DAYOFWEEK(start), purpose";
-			$dayResult = mysqli_query($con, $dayOfWeekPurposeCount);
-			while($row = mysqli_fetch_assoc($dayResult))
-			{
-				var_dump($row);
-			}
-			
-			/*****for end and start date
-			**
-			**	SELECT DAYOFWEEK(start), purpose, COUNT(*)  FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .")  
-			AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY DAYOFWEEK(start), purpose
-			**/
-			/*****for just start date
-			**
-			**	SELECT DAYOFWEEK(start), purpose, COUNT(*)  FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
-			GROUP BY DAYOFWEEK(start), purpose
-			**/
+	$returnData = array();
 	
+	if(isset($start_date) || isset($end_date))
+	{
+		$purposeCount = mysqli_query($con, $purposeCounts);
+		while($r = mysqli_fetch_assoc($purposeCount))
+		{
+			$pRows[] = $r;
+		}
 		
+		$returnData = array(
+				"weekstart" => $start_date,
+				"purpose" => $pRows
+				);
+	}
+	if(isset($week_day))
+	{
+		$weekDayCount = mysqli_query($con, $weekDayCounts);
+	
+		while($r = mysqli_fetch_assoc($weekDayCount))
+		{
+			if($r['day']=="1")
+			{
+				$r['day']="Sunday";
+			}
+			if($r['day']=="2")
+			{
+				$r['day']="Monday";
+			}
+			if($r['day']=="3")
+			{
+				$r['day']="Tuesday";
+			}
+			if($r['day']=="4")
+			{
+				$r['day']="Wednesday";
+			}
+			if($r['day']=="5")
+			{
+				$r['day']="Thursday";
+			}
+			if($r['day']=="6")
+			{
+				$r['day']="Friday";
+			}
+			if($r['day']=="7")
+			{
+				$r['day']="Saturday";
+			}
+			$wRows[] = $r;
+		}
+		
+		$returnData = array(
+				"weekstart" => $start_date,
+				"purpose" => $wRows
+				);
+	}
+	if(isset($hour))
+	{
+		$dayRow = array("day");
+		$hourCount = mysqli_query($con, $hourCounts);
+		while($r = mysqli_fetch_assoc($hourCount))
+		{
+			if($r['day']=="1")
+			{
+				$r['day']="Sunday";
+				$dayRow[] =array($r["day"], array($r["hour"]=>$r["purpose"]),$r["hourCount"]);
+			}
+			if($r['day']=="2")
+			{
+				$r['day']="Monday";
+				$dayRow[] =array($r["day"], array($r["hour"]=>$r["purpose"]),"total"=>$r["hourCount"]);
+			}
+			if($r['day']=="3")
+			{
+				$r['day']="Tuesday";
+				$dayRow[] =array($r["day"], array($r["hour"]=>$r["purpose"]),$r["hourCount"]);
+			}
+			if($r['day']=="4")
+			{
+				$r['day']="Wednesday";
+				$dayRow[] =array($r["day"], array($r["hour"]=>$r["purpose"]),$r["hourCount"]);
+			}
+			if($r['day']=="5")
+			{
+				$r['day']="Thursday";
+				$dayRow[] =array($r["day"], array($r["hour"]=>$r["purpose"]),$r["hourCount"]);
+			}
+			if($r['day']=="6")
+			{
+				$r['day']="Friday";
+				$dayRow[] =array($r["day"], array($r["hour"]=>$r["purpose"]),$r["hourCount"]);
+			}
+			if($r['day']=="7")
+			{
+				$r['day']="Saturday";
+				$dayRow[] =array($r["day"], array($r["hour"]=>$r["purpose"]),$r["hourCount"]);
+			}
+	
+			//$dayRow[] = array($r["day"]);
+			//$dayRow[] =array(($r["day"]), array(array($r["hour"]=>$r["purpose"])));
+			
+			
+			
+		
+			
+		}
+		
+		$returnData = array(
+				$start_date=>
+				$dayRow
+				);
+			
+	}
+	if(isset($month))
+	{
+		$monthCount=mysqli_query($con, $monthCounts);
+		while($r = mysqli_fetch_assoc($monthCount))
+		{
+			if($r['month']=="1")
+			{
+				$r['month']="January";
+			}
+			if($r['month']=="2")
+			{
+				$r['month']="February";
+			}
+			if($r['month']=="3")
+			{
+				$r['month']="March";
+			}
+			if($r['month']=="4")
+			{
+				$r['month']="April";
+			}
+			if($r['month']=="5")
+			{
+				$r['month']="May";
+			}
+			if($r['month']=="6")
+			{
+				$r['month']="June";
+			}
+			if($r['month']=="7")
+			{
+				$r['month']="July";
+			}
+			if($r['month']=="8")
+			{
+				$r['month']="August";
+			}
+			if($r['month']=="9")
+			{
+				$r['month']="September";
+			}
+			if($r['month']=="10")
+			{
+				$r['month']="October";
+			}
+			if($r['month']=="11")
+			{
+				$r['month']="November";
+			}
+			if($r['month']=="12")
+			{
+				$r['month']="December";
+			}
+			$mRows[] = $r;
+		}
+	}
+	if(isset($week))
+	{
+		$weekCount = mysqli_query($con, $weekCounts);
+		while($r = mysqli_fetch_assoc($weekCount))
+		{
+			$weekRows[] = $r;
+		}
 	}
 		
+	mysqli_close($con);		
 	
-	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
-	//if(substr($query, -1)== 'W'){
-	//	$query = substr($query, 0, -1);
-	//}	
-	$result = mysqli_query($con, $purposeCounts);
-		mysqli_close($con);	
-		
-	while($r = mysqli_fetch_assoc($result))
-	{
-		$rows[] = $r;
-	}
 	$response = $app->response();
 	$response['Content-Type'] = 'application/json';
-   	$response->body(json_encode($rows));
-    $data = $response->body(json_encode($rows));
-    /**
-    $combined = array(
-  		["week_start" => 'weekdate'],
-  		[
-  		"purpose" => $data,
-  		"otherTest" => 'otherTesting'],
-  		"weeklyData" => 'weeklyData'
-		);
+   //$response->body(json_encode($pRows));
+   //$data = $response->body(json_encode($pRows));
+   $combined = array();
+   $combined = array(
+    			"purpose"=>$pRows,
+    			["weekday"=>$wRows,
+    				//"hour"=>$hRows
+    			]
+    
+    );
+    //$combined['weekstart'] = "weekdata";//json_encode(["weekdata"]);
+    //$combined['weekday'] = $wRows;
+    //$combined['weekday']['hour']= $hRows;//json_encode($rows);
+    //$combined['weekday']['purpose'] = $pRows;//json_encode($rows);   
+    
+    //$combined = array(
+  	//["week_start" => $weekSt],  		
+  	//["purpose" => $purData]
+  	//"otherTest" => 'otherTesting',
+  	//"weeklyData" => 'weeklyData'
+	//);
 
-		$newData= json_encode($combined, JSON_PRETTY_PRINT); 
-    	var_dump($newData);
-    **/
-   return $data;
+	$newData= json_encode($returnData, JSON_PRETTY_PRINT); 
+	echo $newData;
+    // var_dump($newData);
+   	// return $newData;
+   	//return $data;
     exit();
-	
-
 
 });
-
-
-
-
-
-
-
 
 //USERS filtering URI
 $app->get('/users', function() use($app, $con)
