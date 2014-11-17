@@ -1,13 +1,12 @@
 <?php
 //session_cache_limiter(false);
 session_start();
-//print_r($_SESSION['uID']);
-?>
 
+?>
 <!DOCTYPE html>
 
 <html>
-<head>
+	<head>
 	<!--
 	*****************************************************************
 	Fluid Baseline Grid v1.0.0
@@ -28,28 +27,28 @@ session_start();
 	<!-- Place favicon.ico and apple-touch-icon.png in root directory -->
 		
 	<link href="css/style.css" rel="stylesheet" />
-</head>
+	</head>
 <!-- use g3 to span across entire page, g2 to span across two columns, g1 to span one column -->
-<body>
-	
-	<header>
-		<div class="g1">
-			<h2>Trip View</h5> <!--figure out way to get user name in here -->
-			<!-- This will be a header menu, with options: update profile, maps, logout -->
-		</div>
-		<nav class ="g2">
-			<ul class="nav">
-				<ul><a href="portal.html">Home</a></ul>
-				<ul><a href="updateProfile">Update Profile</a></ul>
-				<ul><a href="#Maps">View Your Maps</a></ul>
-				<ul><a href="#Logout">Log Out</a></ul>
-			</ul>
-		</nav>
-	</header>
-	
-	
-	
+		<body>
+			<header>
+				<div class="g1">
+					<h2>User Login</h5> 
+					<p id="incorrect"></p>
+				</div>
+			</header>
+			
+			<div class="cf"></div>
+			
+			<div id="content">
+				<form action="index.php/login" method="post" name="myform">
+				Email:
+				<input name="email" value="none" /> <br>
+				Password:
+				<input name="password" value="password" /> <br>
+				<input type="submit" value="Submit">
 
+			</form>
+			</div>
 	<footer class="g3 cf">
 		<small>2011 <span class="license">Created by <a href="http://twitter.com/thedayhascome">Josh Hopkins</a> <span class="amp">&amp;</span> <a href="http://40horse.com">40 Horse</a></span>. Released under <a href="http://unlicense.org">Unlicense</a>. </small>
 	</footer>
@@ -71,3 +70,5 @@ session_start();
 	
 </body>
 </html>
+
+

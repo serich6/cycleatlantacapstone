@@ -1,3 +1,4 @@
+
 // The root URL for the RESTful services
 //code courtesy (but refactored) of : https://github.com/ccoenraets/wine-cellar-php
 var rootURL = "index.php/users/user";

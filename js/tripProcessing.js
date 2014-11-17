@@ -1,3 +1,4 @@
+
 var length;
 /******
 Called on page load of the portal.html

@@ -1,4 +1,6 @@
 <?php
+//session_cache_limiter(false);
+session_start();
 //echo "Page loaded: good";
 //echo "<br>";
  $con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
@@ -170,12 +172,15 @@ $app->post('/login', function () use($app, $con)
 	$emailExists = false;
 	$retrievedSalt = '';
 	$retrievedPassword = '';
-	
-	$result = mysqli_query($con, "SELECT email,salt,password FROM user_password");
+	//$userID = '';
+	$result = mysqli_query($con, "SELECT email,salt,password, user_id FROM user_password");
 	while($row = mysqli_fetch_array($result)) {
 		if($row['email'] == $emailInput){
 			$retrievedSalt = $row['salt'];
 			$retrievedPassword = $row['password'];
+			$userID = $row['user_id'];
+			$_SESSION["uID"] = $row['user_id'];
+			session_write_close();
 			//echo $retrievedPassword;
 			//echo $retrievedSalt;
 			$emailExists = true; 
@@ -187,15 +192,25 @@ $app->post('/login', function () use($app, $con)
 		$hash = create_hash($passwordInput, $retrievedSalt);
 		//echo $hash;
 		if($hash == $retrievedPassword){
-			echo 'Login success!';
+			//echo 'Login success!';
+			//echo $userID;
+			
+			//echo $_SESSION["uID"];
+			header('Location:../portal.php');
+			exit();
+			
+			
 		}
 		else{
-			echo 'Incorrect email or password';
+			header('Location:../badLogin.html');
+			exit();
 		}
 	}
 	else{
-		echo 'Incorrect email or password';
+		header('Location:../badLogin.html');
+		exit();
 	}
+	exit();
 	
 }); 
  

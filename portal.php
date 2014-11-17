@@ -1,3 +1,9 @@
+<?php
+//session_cache_limiter(false);
+session_start();
+
+?>
+
 <!DOCTYPE html>
 
 <html>
@@ -72,6 +78,13 @@
 		</div>
 		</div>			
 	</div>
+	<div id="dom-target" style="display: none;">
+    <?php 
+        $user = $_SESSION['uID']; //Again, do some operation, get the output.
+        echo htmlspecialchars($user); /* You have to escape because the result
+                                       will not be valid HTML otherwise. */
+    ?>
+</div>
 	<footer class="g3 cf">
 		<small>2011 <span class="license">Created by <a href="http://twitter.com/thedayhascome">Josh Hopkins</a> <span class="amp">&amp;</span> <a href="http://40horse.com">40 Horse</a></span>. Released under <a href="http://unlicense.org">Unlicense</a>. </small>
 	</footer>
@@ -96,7 +109,10 @@
 
 
 <script>
-var user_id = 10;
+var div = document.getElementById("dom-target");
+var user_id = div.textContent;
+
+console.log(user_id);
 getUserData(user_id);
 
 
