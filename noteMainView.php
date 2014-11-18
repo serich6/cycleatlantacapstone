@@ -50,12 +50,15 @@ if(!isset($_SESSION['uID'])) {
 				<ul><a href="#Logout">Log Out</a></ul>
 			</ul>
 		</nav>
+		
+
 	</header>
 	<div class="cf"></div>
 		<div id="content">
 			<table id="myTable"></table>
 			<br>
 		</div>
+		<div id="chart"></div>
 	</div>
 	
 	<div id="dom-target" style="display: none;">
@@ -83,6 +86,7 @@ if(!isset($_SESSION['uID'])) {
 	<script src="js/main.js"></script>
 	<script src="js/tripProcessing.js"></script>
 	<script src="js/noteProcessing.js"></script>
+	<script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
 
 	
 	

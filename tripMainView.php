@@ -12,7 +12,34 @@ if(!isset($_SESSION['uID'])) {
 <!DOCTYPE html>
 
 <html>
+
 <head>
+<style>
+.bar {
+  fill: steelblue;
+}
+.bar:hover {
+  fill: turquoise;
+}
+
+.chart text {
+  font: 10px sans-serif;
+}
+.chart .title {
+  font: 15px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+ </style>
 	<!--
 	*****************************************************************
 	Fluid Baseline Grid v1.0.0
@@ -47,9 +74,11 @@ if(!isset($_SESSION['uID'])) {
 				<ul><a href="portal.php">Home</a></ul>
 				<ul><a href="updateProfile">Update Profile</a></ul>
 				<ul><a href="#Maps">View Your Maps</a></ul>
-				<ul><a href="#Logout">Log Out</a></ul>
+				<ul><a href="logout.php">Log Out</a></ul>
 			</ul>
 		</nav>
+		
+		
 	</header>
 	<div class="cf"></div>
 		<div id="content">
@@ -58,6 +87,8 @@ if(!isset($_SESSION['uID'])) {
 		</div>
 	</div>
 	
+	<div class = "g3" id="yearChart"> <br></div>
+	<svg class = "chart"></svg>
 	<div id="dom-target" style="display: none;">
     <?php 
         $user = $_SESSION['uID']; //Again, do some operation, get the output.
@@ -66,9 +97,7 @@ if(!isset($_SESSION['uID'])) {
     ?>
 	</div>
 
-	<footer class="g3 cf">
-		<small>2011 <span class="license">Created by <a href="http://twitter.com/thedayhascome">Josh Hopkins</a> <span class="amp">&amp;</span> <a href="http://40horse.com">40 Horse</a></span>. Released under <a href="http://unlicense.org">Unlicense</a>. </small>
-	</footer>
+
 
 	<!-- JavaScript at the bottom for fast page loading -->
 
@@ -82,6 +111,8 @@ if(!isset($_SESSION['uID'])) {
 	<script src="js/respond.min.js"></script>
 	<script src="js/main.js"></script>
 	<script src="js/tripProcessing.js"></script>
+	<script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
+	<script type="text/javascript" src="js/chartData.js"></script>
 
 	
 	
@@ -93,4 +124,87 @@ if(!isset($_SESSION['uID'])) {
 	
 	populateTripTable(user_id);
 </script>	
+<script type="text/javascript">
+	var data = testTrips();
+	//var dataset = Object.keys(arr).map(function(k) { return arr[k] });
+	
+	//console.log(dataset);
+		
+			
+			
+			
+			
+			
+			
+			
+
+
+var margin = {top: 20, right: 30, bottom: 40, left: 40},
+    width = 480 - margin.left - margin.right,
+    height = 250 - margin.top - margin.bottom;
+
+var x = d3.scale.ordinal()
+    .domain(data.map(function(d) { return d.year; }))
+    .rangeRoundBands([0, width], .1);
+
+var y = d3.scale.linear()
+    .domain([0, d3.max(data, function(d) { return d.total; })])
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var chart = d3.select(".chart")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// Add data
+chart.selectAll(".bar")
+      .data(data)
+      .enter()
+      .append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.year); })
+      .attr("y", function(d) { return y(d.total); })
+      .attr("height", function(d) { return height - y(d.total); })
+      .attr("width", x.rangeBand());
+
+// y axis and label
+chart.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+  .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -height/2)
+    .attr("y", -margin.bottom)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("YAxis");
+// x axis and label
+chart.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
+  .append("text")
+    .attr("x", width / 2)
+    .attr("y", margin.bottom - 10)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("XAxis");
+// chart title
+chart.append("text")
+  .text("Yearly Trip Totals")
+  .attr("x", width / 2)
+  .attr("class","title");
+			
+	
+		
+	</script>
 

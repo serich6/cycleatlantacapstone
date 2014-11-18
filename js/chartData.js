@@ -41,8 +41,8 @@ $.ajax({
    				}
 			}
 		}
-    //datesTrips = [["2013",twenty13],["2012",twenty12],["2011",twenty11],["2010",twenty10]];
-    datesTrips=[twenty13, twenty12, twenty11, twenty10];
+    datesTrips = [{year:"2013",total:twenty13},{year:"2012",total:twenty12},{year:"2011",total:twenty11},{year:"2010",total:twenty10}];
+    //datesTrips=[twenty13, twenty12, twenty11, twenty10];
     console.log(datesTrips);
    
  }

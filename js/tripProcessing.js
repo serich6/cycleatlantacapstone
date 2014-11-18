@@ -119,22 +119,36 @@ function populateTripTable(id)
    		console.log(response[3]);
    		if(response!='')
    		{
-   		
+   					var table = document.getElementById("myTable");
    			
-   			for(var i = 0; i < response.length; i++)
+   			
+   			for(var i = response.length-1; i > 0; i=i-1)
    			{
-   				var table = document.getElementById("myTable");
+   	
 				
-    			var row = table.insertRow(0);
-    			var start = row.insertCell(0);
+    			var row = table.insertRow();
+    			var start = row.insertCell();
     			
-    			var note = row.insertCell(1);
-    			var purpose = row.insertCell(2);
+    			var note = row.insertCell();
+    			var purpose = row.insertCell();
    				start.innerHTML = response[i]["start"];
     			
     			note.innerHTML = response[i]["notes"];
     			purpose.innerHTML = response[i]["purpose"];
     		}
+    			var header = table.createTHead();
+
+				// Create an empty <tr> element and add it to the first position of <thead>:
+				var headRow = header.insertRow(0);     
+
+				// Insert a new cell (<td>) at the first position of the "new" <tr> element:
+				var sCell = headRow.insertCell(0);
+				var nCell = headRow.insertCell(0);
+				var pCell = headRow.insertCell(0);
+				sCell.innerHTML = "<strong>Start Date & Time</strong>";
+				nCell.innerHTML = "<strong>Notes</strong>";
+				pCell.innerHTML = "<strong>Purpose</strong>";
+				
     	}
     }
     });

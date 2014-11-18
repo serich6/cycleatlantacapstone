@@ -6,6 +6,8 @@
 	Base stylesheet with CSS normalization, typographic baseline grid and progressive responsiveness
 */
 
+
+
 /* HTML5 DECLARATIONS */
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, dialog {display: block}
 audio[controls],canvas,video {display: inline-block; *display: inline; zoom: 1}
@@ -37,9 +39,9 @@ pre {white-space: pre; white-space: pre-wrap; word-wrap: break-word} /* Allow li
 pre, code, kbd, samp {font-size: 1em; line-height: 1.5em; margin-bottom: 1.5em; font-family: Menlo, Consolas, 'DejaVu Sans Mono', Monaco, monospace}
 
 /* TABLES */
-table {border-collapse: collapse; border-spacing: 0; margin-bottom: .5 em}
-th {text-align: left}
-tr, th, td {border-bottom: 0 solid #333}
+//table {border-collapse: collapse; border-spacing: 0; margin-bottom: .5 em}
+//th {text-align: left}
+tr, th, td {border: 1 solid #333}
 
 /* FORMS */
 form {margin: 0}
@@ -110,6 +112,10 @@ body {width: 92%; margin: 0 auto} /* Center page without wrapper */
 .g1,.g2,.g3{display:block; position: relative; margin-left: 1%; margin-right: 1%}
 /* 1 column grid */
 .g1,.g2,.g3{width:98.0%}
+
+
+
+
 
 
 /* media Queries
