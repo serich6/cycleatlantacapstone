@@ -1,3 +1,12 @@
+<?php
+//session_cache_limiter(false);
+session_start();
+if(!isset($_SESSION['uID'])) {
+    header("Location: login.php");
+    die;
+}
+?>
+
 <!DOCTYPE html>
 
 <html>
@@ -33,10 +42,10 @@
 		</div>
 		<nav class ="g2">
 			<ul class="nav">
-				<ul><a href="portal.html">Home</a></ul>
-				<ul><a href="updateProfile.html">Update Profile</a></ul>
+				<ul><a href="portal.php">Home</a></ul>
+				<ul><a href="updateProfile.php">Update Profile</a></ul>
 				<ul><a href="#Maps">View Your Maps</a></ul>
-				<ul><a href="#Logout">Log Out</a></ul>
+				<ul><a href="logout.php">Log Out</a></ul>
 			</ul>
 		</nav>
 	</header>
@@ -45,7 +54,7 @@
 		<div id="proForm" class="g3">
 			<form id="updateForm">
 				<br>
-				<label><strong>User Id (for testing/demo purposes):</strong></label><br> <input id="updateId" name="updateId" type="text"  /><br>
+				<label></label><br> <input id="updateId" input type="hidden" name="updateId" type="text" value=<?php  echo $_SESSION['uID']?>  /><br>
 				<br>
 				<label><strong>Email:</strong></label> <input id="updateEmail" name="updateEmail" type="text"  /><br>
 				<label><strong>Home Zip:</strong></label><input type="text" id="updateHomeZip" name="updateHomeZip" /><br>

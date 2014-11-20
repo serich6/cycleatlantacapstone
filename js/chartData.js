@@ -2,10 +2,14 @@
 
 function testTrips()
 {
-var twenty13=0;
+	var twenty13=0;
 	var twenty12=0;
 	var twenty11=0;
 	var twenty10=0;
+	
+
+	
+	
 $.ajax({
      type: "GET",
      url: "index.php/trips/10",
@@ -23,9 +27,9 @@ $.ajax({
 			if(myData[i]["start"])
 			{
 				if(myData[i]["start"].match(/2013/g))
-   				{
-   				console.log(myData[i]["start"]);
-       			twenty13=twenty13+1;
+   				{   				
+       				twenty13++;
+       			
    				}
    				if(myData[i]["start"].match(/2012/g))
    				{
@@ -49,6 +53,50 @@ $.ajax({
 });
  return datesTrips;
 }
+
+
+
+function yearFreq()
+{
+var freq = new Array();	
+	
+	
+$.ajax({
+     type: "GET",
+     url: "index.php/rides/10",
+     async: false,
+    
+ 
+ dataType: "json",
+ success: function(trips){
+    //do your stuff with the JSON data
+    var myData = trips;
+		console.log(myData.length);
+		for(var i = 0; i<myData.length;i++)
+		{
+		
+	
+	
+				freq.push({year:myData[i]["year"], commute:myData[i]["commute"], social:myData[i]["social"],
+				errand:myData[i]["errand"], work:myData[i]["workRelated"], school:myData[i]["school"],
+				exercise:myData[i]["exercise"], shopping:myData[i]["shopping"], other:myData[i]["other"], total:myData[i]["total"]});
+	
+		}
+   
+    console.log(freq);
+    
+   // data = trips;
+   
+ }
+});
+ return freq;
+}
+
+
+
+
+
+
 //datesTrips = [["2013",twenty13],["2012",twenty12],["2011",twenty11],["2010",twenty10]];
 
 /**

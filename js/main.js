@@ -400,7 +400,7 @@ function updateUser() {
 		success: function(data){
 			if(data["status"]=="success")
 			{
-				location.href = "success.html"
+				location.href = "success.php"
 			//	console.log(data["status"]);
 			}
 		}

@@ -149,6 +149,21 @@ function populateTripTable(id)
 				nCell.innerHTML = "<strong>Notes</strong>";
 				pCell.innerHTML = "<strong>Purpose</strong>";
 				
+				
+				var rows = table.getElementsByTagName("tr");
+				
+				for(var i = 0; i < rows.length; i++)
+				{
+					if(i%2 == 0)
+					{
+						rows[i].className = "even";
+					}
+					else
+					{
+						rows[i].className = "odd";
+					}
+				}
+				
     	}
     }
     });

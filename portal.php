@@ -59,9 +59,10 @@ if(!isset($_SESSION['uID'])) {
 		<div class="g1">
 			<h3>Trips</h3>
 			<div>
-			<strong>Trip Purpose:</strong> <p id="tripPurpose">No data available</p> <strong>Trip Notes:</strong> <p id="tripNotes">No data available</p> 
+			<strong>Trip Purpose:</strong> <p id="tripPurpose"></p> 
+			<strong>Trip Notes:</strong> <p id="tripNotes"></p> 
 			<strong>Trip Start:</strong> <p id="tripStart"></p>
-			<strong>Trip End:</strong> <p id="tripEnd">No data available</p>
+			<strong>Trip End:</strong> <p id="tripEnd"></p>
 			<strong>Trip Length:</strong> <p id="tripLength"></p> 
 			<strong>Select a different trip:</strong>
 			<select id="tripList" onchange="changeTripDetails(this)"></select><br>
