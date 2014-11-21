@@ -17,7 +17,7 @@ function getTripData(id)
 		dataType: "json",
 		
 		success: function(response){
-   		console.log(response[3]);
+   		
    		if(response!='')
    		{
    			var tripNames = "";
@@ -52,7 +52,7 @@ function getTripData(id)
    			if(response[0]["n_coord"]!='')
    			{
    				length = (parseInt(response[0]["n_coord"]))/60;
-   				console.log(length);
+   				
    				$('#tripLength').html((parseInt(response[0]["n_coord"]))/60 + '' +" minutes");
    			}
    				
@@ -116,7 +116,7 @@ function populateTripTable(id)
 		dataType: "json",
 		
 		success: function(response){
-   		console.log(response[3]);
+   		
    		if(response!='')
    		{
    					var table = document.getElementById("myTable");

@@ -304,11 +304,13 @@ $app->post('/register', function () use($app, $con)
 		  {    		
 			mysqli_query($con, $query);
 			
+			
 		  } catch(PDOException $e) 
 		  {
 			//echo '{"error":{"text":'. $e->getMessage() .'}}';
 		  }
-	
+		header('Location:../userCreated.php');
+		exit();
 		
 	}//end post
 
