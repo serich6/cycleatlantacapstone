@@ -173,9 +173,9 @@ if(!isset($_SESSION['uID'])) {
 </script>	
 <script type="text/javascript">
 	//the data
-	var data = yearFreq();
+	var data = yearFreq(user_id);
 	
-	var data = data;
+	//var data = data;
 	
 	/*******
 	BAR CHART

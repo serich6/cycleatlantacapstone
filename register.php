@@ -1,13 +1,4 @@
-<?php
-//session_cache_limiter(false);
-session_start();
-if(!isset($_SESSION['uID'])) {
-    header("Location: login.php");
-    die;
-}
 
-
-?>
 
 <!DOCTYPE html>
 
@@ -59,7 +50,7 @@ if(!isset($_SESSION['uID'])) {
 		Email:
 		<input name="email" value="none" /> <br>
 		Password:
-		<input name="password" value="password" /> <br>
+		<input name="password" input type="password" value="password" /> <br>
 		Gender:
 		<input name="gender" value="1" /> <br>
 		Income:
@@ -80,7 +71,7 @@ if(!isset($_SESSION['uID'])) {
 		<input name="rider_type" value="1" /> <br>
 		App Version:
 		<input name="app_version" value="1.0" /> <br>
-		<input type="submit" value="submit" onclick="javascript:document.myform.submit()">
+		<input type="submit" value="Submit">
 		</form>
 		<br>
 		</form>

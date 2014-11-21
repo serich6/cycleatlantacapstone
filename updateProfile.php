@@ -62,16 +62,16 @@ if(!isset($_SESSION['uID'])) {
 				<label><strong>School Zip:</strong></label><input type="text" id="updateSchoolZip" name="updateSchoolZip" /><br>
 				<br>
 				<label><strong>Cycling Frequency:</strong><br>
-				<input type="radio" id="updateCycleFreq" name="updateCycleFreq" value="1">Less than once a month<br>
-				<input type="radio" id="updateCycleFreq" name="updateCycleFreq" value="2">Several times per month<br>
-				<input type="radio" id="updateCycleFreq" name="updateCycleFreq" value="3">Several times per week<br>
-				<input type="radio" id="updateCycleFreq" name="updateCycleFreq" value="4">Daily<br>
+				<input type="radio" id="updateCycleFreq1" name="updateCycleFreq" value="1">Less than once a month<br>
+				<input type="radio" id="updateCycleFreq2" name="updateCycleFreq" value="2">Several times per month<br>
+				<input type="radio" id="updateCycleFreq3" name="updateCycleFreq" value="3">Several times per week<br>
+				<input type="radio" id="updateCycleFreq4" name="updateCycleFreq" value="4">Daily<br>
 				<br>
 				<label><strong>Cycling Confidence:</strong><br>
-				<input type="radio" id="updateCycleConf" name="updateCycleConf" value="1">Strong and fearless<br>
-				<input type="radio" id="updateCycleConf" name="updateCycleConf" value="2">Enthused and confident<br>
-				<input type="radio" id="updateCycleConf" name="updateCycleConf" value="3">Comfortable, but cautious<br>
-				<input type="radio" id="updateCycleConf" name="updateCycleConf" value="4">Interested, but concerned<br>
+				<input type="radio" id="updateCycleConf1" name="updateCycleConf" value="1">Strong and fearless<br>
+				<input type="radio" id="updateCycleConf2" name="updateCycleConf" value="2">Enthused and confident<br>
+				<input type="radio" id="updateCycleConf3" name="updateCycleConf" value="3">Comfortable, but cautious<br>
+				<input type="radio" id="updateCycleConf4" name="updateCycleConf" value="4">Interested, but concerned<br>
 				<br>
 				<button id="submitUpdates">Submit Changes</button>
 			</form>

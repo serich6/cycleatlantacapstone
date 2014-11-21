@@ -24,6 +24,13 @@ $('#postButton').click(function() {
 	return false;
 });
 
+$('#postTripButton').click(function() {
+	
+	addTrip();
+	return false;
+});
+
+
 function addUser() {
 	
 	$.ajax({
@@ -43,6 +50,23 @@ function addUser() {
 }
 
 
+function addTrip() {
+	
+	$.ajax({
+		type: 'POST',
+		contentType: 'application/json',
+		url: "index.php/trips/trip",
+		dataType: "json",
+		data: postTripFormToJSON(),
+		success: function(data, textStatus, jqXHR){
+			alert('Trip added successfully');
+		},
+// 		error: function(jqXHR, textStatus, errorThrown){
+// 			alert('addTrip error: ' + textStatus);
+// 		}
+		
+	});
+}
 function getHomeZip(id)
 {
 	
@@ -439,5 +463,16 @@ function postFormToJSON() {
 		"rider_history": $('#rider_history').val(), 
 		"rider_type": $('#rider_type').val(),
 		"app_version": $('#app_version').val()
+		});
+}
+
+function postTripFormToJSON() {
+	return JSON.stringify({
+		"user_id": $('#user_id').val(), 
+		"purpose": $('#purpose').val(),
+		//"notes": $('#notes').val(), 
+		"start": $('#start').val(),
+		"stop": $('#stop').val(), 
+		"n_coord": $('#n_coord').val()
 		});
 }

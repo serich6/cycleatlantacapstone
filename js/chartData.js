@@ -1,6 +1,6 @@
 
 
-function testTrips()
+function testTrips(id)
 {
 	var twenty13=0;
 	var twenty12=0;
@@ -12,7 +12,7 @@ function testTrips()
 	
 $.ajax({
      type: "GET",
-     url: "index.php/trips/10",
+     url: "index.php/trips/"+id,
      async: false,
     
  
@@ -20,7 +20,7 @@ $.ajax({
  success: function(trips){
     //do your stuff with the JSON data
     var myData = trips;
-		console.log(myData);
+		
 		for(var i = 0; i<myData.length;i++)
 		{
 		
@@ -47,7 +47,7 @@ $.ajax({
 		}
     datesTrips = [{year:"2013",total:twenty13},{year:"2012",total:twenty12},{year:"2011",total:twenty11},{year:"2010",total:twenty10}];
     //datesTrips=[twenty13, twenty12, twenty11, twenty10];
-    console.log(datesTrips);
+   
    
  }
 });
@@ -56,14 +56,14 @@ $.ajax({
 
 
 
-function yearFreq()
+function yearFreq(id)
 {
 var freq = new Array();	
 	
 	
 $.ajax({
      type: "GET",
-     url: "index.php/rides/10",
+     url: "index.php/rides/"+id,
      async: false,
     
  
@@ -71,7 +71,7 @@ $.ajax({
  success: function(trips){
     //do your stuff with the JSON data
     var myData = trips;
-		console.log(myData.length);
+		
 		for(var i = 0; i<myData.length;i++)
 		{
 		
@@ -83,7 +83,7 @@ $.ajax({
 	
 		}
    
-    console.log(freq);
+   
     
    // data = trips;
    

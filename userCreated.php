@@ -1,12 +1,9 @@
-<?php
-//session_cache_limiter(false);
-session_start();
 
-?>
+
 <!DOCTYPE html>
 
 <html>
-	<head>
+<head>
 	<!--
 	*****************************************************************
 	Fluid Baseline Grid v1.0.0
@@ -27,36 +24,41 @@ session_start();
 	<!-- Place favicon.ico and apple-touch-icon.png in root directory -->
 		
 	<link href="css/style.css" rel="stylesheet" />
-	</head>
+</head>
 <!-- use g3 to span across entire page, g2 to span across two columns, g1 to span one column -->
-		<body>
-			<header>
-				<div class="g1">
-					<h2>User Login</h5> 
-					<p id="incorrect"></p>
-				</div>
-			</header>
+<body>
+	
+	<header>
+		<div class="g1">
+			<h2>Success</h5> <!--figure out way to get user name in here -->
+			<!-- This will be a header menu, with options: update profile, maps, logout -->
+		</div>
+		<nav class ="g2">
+			<ul class="nav">
+				<ul><a href="portal.php">Home</a></ul>
+				<ul><a href="updateProfile">Update Profile</a></ul>
+				<ul><a href="#Maps">View Your Maps</a></ul>
+				<ul><a href="logout.php">Log Out</a></ul>
+			</ul>
+		</nav>
+	</header>
+	<div class="cf"></div>
+	<div id="content">
+		<div class="g3">
+			<h5>Account created successfully!</h5>
+			Login <a href="login.php">here</a>
 			
-			<div class="cf"></div>
-			
-			<div id="content">
-				<form action="index.php/login" method="post" name="myform">
-				Email:
-				<input name="email" value="none" /> <br>
-				Password:
-				<input name="password" input type= "password" value="password" /> <br>
-				<input type="submit" value="Submit">
+		</div>
+	</div>
+	</div>
 
-			</form>
-			<p>Or register <a href="register.php">here</a></p>
-			</div>
-	<footer class="g3 cf">
-		<small>2011 <span class="license">Created by <a href="http://twitter.com/thedayhascome">Josh Hopkins</a> <span class="amp">&amp;</span> <a href="http://40horse.com">40 Horse</a></span>. Released under <a href="http://unlicense.org">Unlicense</a>. </small>
-	</footer>
 
-	<!-- JavaScript at the bottom for fast page loading -->
+</body>
+</html>
 
-	<!-- Minimized jQuery from Google CDN -->
+
+	<script src="js/jquery-1.7.1.min.js"></script>
+	<script src="js/main.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 
 	<!-- HTML5 IE Enabling Script -->
@@ -64,12 +66,3 @@ session_start();
 	
 	<!-- CSS3 Media Queries -->
 	<script src="js/respond.min.js"></script>
-	<script src="js/main.js"></script>
-	<script src="js/tripProcessing.js"></script>
-
-	
-	
-</body>
-</html>
-
-

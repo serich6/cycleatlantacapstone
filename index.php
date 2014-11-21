@@ -304,11 +304,13 @@ $app->post('/register', function () use($app, $con)
 		  {    		
 			mysqli_query($con, $query);
 			
+			
 		  } catch(PDOException $e) 
 		  {
 			//echo '{"error":{"text":'. $e->getMessage() .'}}';
 		  }
-	
+		header('Location:../userCreated.php');
+		exit();
 		
 	}//end post
 
@@ -384,13 +386,19 @@ $app->post('/notes/note', function () use($app, $con)
 
     });
 
-//Sam POST trip
+//Sam POST trip (need to work on getting back the global ID
+
 $app->post('/trips/trip', function () use($app, $con) 
 {
-    
+	//get the parameters sent over as JSON 
     $body = $app->request()->getBody();
+    //for testing purposes only
+    echo $body;
+    //initialize key value variables   
 	$values = '';
 	$keys = '';
+	//loop through the JSON data
+
 	foreach($body as $k=>$v)
 	{	
 		//create a comma separated string of keys and values to pass to SQL
@@ -398,48 +406,26 @@ $app->post('/trips/trip', function () use($app, $con)
         $values .= '"'.$v.'"'.",";
 	
     }
+    //knock off the last comma at the end 
     $keys = substr($keys, 0, -1);
     $values = substr($values, 0, -1);
+    //build the query, we're adding to the user table for this POST    
     $query = "Insert INTO trip (".$keys.") VALUES (".$values.")";
-    
-    //add the trip to the 
-    //echo $query;
+    //try-catch block, make sure we can try to insert and not break things      		
       try
       {    		
         mysqli_query($con, $query);
       } catch(PDOException $e) 
       {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
-      }    	
-    //echo $query;
+      }
+	    	
+    //for debugging purposes, make sure query looks like it should      	
+    echo $query;
 
-	//trying to handle the query to get the global id
-	//$query = "SELECT id  FROM trip WHERE "
-		//foreach($body as $k=>$v){
-		// $query = $k. " = ".$v. " AND "		
-		//}
-	//get rid of the last AND
-	//there should always be a last "AND" since you're never posting a blank trip...	    
-    //$query = substr($query, 0, -4);
+	//NEED TO GET THE GLOBAL TRIP ID BACK
 	
-	//get the global ID
-//  echo $query;
-//       try
-//       {    		
-//         $result = mysqli_query($con, $query);
-//       } catch(PDOException $e) 
-//       {
-//         echo '{"error":{"text":'. $e->getMessage() .'}}';
-//       }    	
-//     echo $query;
-    
-    //header("Content-Type: application/json");
-    //echo json_encode($result);
-    //exit;
-
-
-
-    });
+	});
 
 
 
