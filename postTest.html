@@ -1,35 +1,24 @@
 
-POST Test (for user):<br>
 
-<br>
+Post Trip Form <br>
 
-<form id="postForm">
+<form id="postTripForm" action="index.php/trips/trip" method="post" >
 
-<label>Email:</label>
-<input id="email" name="email" type="text"  /><br>
-<label>Gender:</label>
-<input type="text" id="gender" name="gender" /><br>
-<label>Income:</label>
-<input type="text" id="income" name="income" /> <br>
-<label>Ethnicity:</label>
-<input type="text" id="ethnicity" name="ethnicity" /> <br>
-<label>Home Zip:</label>
-<input type="text" id="homeZIP" name="homeZIP" /> <br>
-<label>School Zip:</label>
-<input type="text" id="schoolZIP" name="schoolZIP" /> <br>
-<label>Work Zip:</label>
-<input type="text" id="workZIP" name="workZIP" /> <br>
-<label>Cycling Frequency:</label>
-<input type="text" id="cycling_freq" name="cycling_freq" /> <br>
-<label>Rider History:</label>
-<input type="text" id="rider_history" name="rider_history" /> <br>
-<label>Rider Type:</label>
-<input type="text" id="rider_type" name="rider_type" /> <br>
-<label>App Version:</label>
-<input type="text" id="app_version" name="app_version" /> <br>
+<label>user_id:</label>
+<input id="user_id" name="user_id" type="text" value="10" /><br>
+<label>purpose:</label>
+<input type="text" id="purpose" name="purpose" value="Commute" /><br>
+<!-- <label>notes:</label>
+<input type="text" id="notes" name="notes" value="Test"/> <br>//-->
+<label>start:</label> 
+<input type="text" id="start" name="start" value="2014-11-15 14:26:10"/> <br>
+<label>stop:</label>
+<input type="text" id="stop" name="stop" value="2014-11-15 14:45:12"/> <br> 
+<label>n_coord:</label>
+<input type="text" id="n_coord" name="n_coord" value="1180"/> <br>
+<input type="submit" value="Submit">
 
 
-<button id="postButton">POST</button>
 
 
 
@@ -37,23 +26,6 @@ POST Test (for user):<br>
 
 
 
-
-POST/PUT Test :<br>
-
-<form id="putForm">
-
-<label>Id:</label>
-<input id="id" name="id" type="text"  />
-
-<label>Work Zip:</label>
-<input type="text" id="putWorkZip" name="putWorkZip" />
-
-
-<button id="putButton">PUT</button>
-
-
-
-</form>
 
 <script src="js/jquery-1.7.1.min.js"></script>
 <script src="js/main.js"></script>
