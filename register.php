@@ -45,9 +45,9 @@ if(!isset($_SESSION['uID'])) {
 		<nav class ="g2">
 			<ul class="nav">
 				<ul><a href="portal.php">Home</a></ul>
-				<ul><a href="updateProfile">Update Profile</a></ul>
+				<ul><a href="updateProfile.php">Update Profile</a></ul>
 				<ul><a href="#Maps">View Your Maps</a></ul>
-				<ul><a href="#Logout">Log Out</a></ul>
+				<ul><a href="#logout.php">Log Out</a></ul>
 			</ul>
 		</nav>
 	</header>
@@ -67,11 +67,11 @@ if(!isset($_SESSION['uID'])) {
 		Ethnicity:
 		<input name="ethnicity" value="1" /> <br>
 		Home Zip:
-		<input name="homeZIP" value="30032" /> <br>
+		<input name="homeZIP" value="" /> <br>
 		School Zip:
-		<input name="schoolZIP" value="30032" /> <br>
+		<input name="schoolZIP" value="" /> <br>
 		Work Zip:
-		<input name="workZIP" value="30032" /> <br>
+		<input name="workZIP" value="" /> <br>
 		Cycling Frequency:
 		<input name="cycling_freq" value="1" /> <br>
 		Rider History:

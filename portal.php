@@ -44,7 +44,7 @@ if(!isset($_SESSION['uID'])) {
 		<nav class ="g2">
 			<ul class="nav">
 				<ul><a href="portal.php">Home</a></ul>
-				<ul><a href="updateProfile">Update Profile</a></ul>
+				<ul><a href="updateProfile.php">Update Profile</a></ul>
 				<ul><a href="#Maps">View Your Maps</a></ul>
 				<ul><a href="logout.php">Log Out</a></ul>
 			</ul>
@@ -128,15 +128,15 @@ getTripData(user_id);
 
 
   document.getElementById("updateButton").onclick = function () {
-        location.href = "updateProfile";
+        location.href = "updateProfile.php";
     };
     
      document.getElementById("tripInfoButton").onclick = function () {
-        location.href = "tripMainView";
+        location.href = "tripMainView.php";
     };
     
      document.getElementById("noteInfoButton").onclick = function () {
-        location.href = "noteMainView";
+        location.href = "noteMainView.php";
     };
 
 

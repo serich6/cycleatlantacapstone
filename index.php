@@ -620,7 +620,7 @@ $app->put('/users/user/:id/schoolZip', function ($id) use($app, $con)
    		 	 $response['Content-Type'] = 'application/json';
     	 	 $data = $response->body(json_encode($result));
     		 return $data;
-
+			
 	
 });    
 
