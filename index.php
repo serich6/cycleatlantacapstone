@@ -905,35 +905,42 @@ $app->get('/users/:id/email', function ($id) use($app, $con)
 $app->get('/users/:id/ethnicity', function ($id) use($app, $con) 
 {
 
+	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-			$ethnicityID;
-			
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['ethnicity'];
-					$ethnicityID = $row['ethnicity'];
-				}	
-				
-			$result = mysqli_query($con,"SELECT * FROM ethnicity WHERE id = '$ethnicityID'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo " (" . $row['text'] . ") ";
-				}
-			mysqli_close($con);
+	    		
+	    	mysqli_close($con);
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
 });				
 
 
 $app->get('/users/:id/device', function ($id) use($app, $con) 
 {
 
+	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-		
-			
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['device'];
-					echo "<br>";
-				}	
-				
-			
+	    		
 	    	mysqli_close($con);
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
 
 	
 });
@@ -941,16 +948,21 @@ $app->get('/users/:id/device', function ($id) use($app, $con)
 $app->get('/users/:id/created', function ($id) use($app, $con) 
 {
 
+	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-		
-			
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['created'];
-					echo "<br>";
-				}	
-				
-			
+	    		
 	    	mysqli_close($con);
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
 
 	
 });
@@ -960,12 +972,21 @@ $app->get('/users/:id/created', function ($id) use($app, $con)
 $app->get('/users/:id/income', function ($id) use($app, $con) 
 {
 
+	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['income'];
-  					echo "<br>";
-				}	
+	    		
 	    	mysqli_close($con);
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
 });
 
 $app->get('/users/:id/rider_type', function ($id) use($app, $con) 
@@ -1003,12 +1024,21 @@ $app->get('/users/:id/rider_type', function ($id) use($app, $con)
 $app->get('/users/:id/rider_history', function ($id) use($app, $con) 
 {
 
+	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
 	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
-	    		while($row = mysqli_fetch_array($result)) {
-  					echo $row['id'] . " " . $row['rider_history'];
-  					echo "<br>";
-				}	
+	    		
 	    	mysqli_close($con);
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
 
 });
 
