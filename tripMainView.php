@@ -122,16 +122,35 @@ if(!isset($_SESSION['uID'])) {
 	</header>
 	<div class="cf"></div>
 		<div id="content">
+			 <button>Add New Trip</button>
+				<form action="index.php/trips/trip" method="post" >
+
+				user_id:
+				<input name="user_id" value=<?php echo $_SESSION['uID']?> /><br>
+				purpose:
+				<input   name="purpose"  /><br>
+				notes:
+				<input type="text" id="notes" name="notes" /> <br>
+				start date:
+				<input name="start" id="start" type="datetime-local" /> <br>
+
+				stop:
+				<input name="stop" id="end" type="datetime-local"/> <br> 
+				n_coord:
+				<input  name="n_coord" /> <br>
+				<input type="submit" value="Submit" >
+				</form>
+				
 			<table id="myTable"></table>
 			<br>
 		</div>
 	</div>
 	
-	<div class="g1" id="yearChart"><svg class = "chart"></svg></div>
+	<div id="yearChart"><svg class = "chart"></svg></div></br></br>
 	
 	
-	<div class="g3" id ="pieChart">
-		<strong>2012 Breakdown by Purpose &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2013 Breakdown by Purpose  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2014 Breakdown by Purpose </strong>
+	<div id ="pieChart">
+		
 		
 	</div>
 	<div id="dom-target" style="display: none;">
@@ -156,9 +175,11 @@ if(!isset($_SESSION['uID'])) {
 	<script src="js/respond.min.js"></script>
 	<script src="js/main.js"></script>
 	<script src="js/tripProcessing.js"></script>
+	<script src="js/dateFormat.js"></script>
 	<script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
 	<script type="text/javascript" src="js/chartData.js"></script>
 	<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	
 
 	
@@ -172,6 +193,17 @@ if(!isset($_SESSION['uID'])) {
 	populateTripTable(user_id);
 </script>	
 <script type="text/javascript">
+	
+	$(document).ready(function(){
+  		$("button").click(function(){
+    		$("form").toggle(1000);
+  		});
+	});
+	$("form").hide();
+	
+	
+	//document.getElementById('start').value = (new Date()).format("mm-dd-yyyy HH:MM:ss");
+	//document.getElementById('end').value = (new Date()).format("mm-dd-yyyy HH:MM:ss");
 	//the data
 	var data = yearFreq(user_id);
 	
@@ -180,7 +212,7 @@ if(!isset($_SESSION['uID'])) {
 	/*******
 	BAR CHART
 	********/
-	var margin = {top: 20, right: 30, bottom: 40, left: 40},
+	var margin = {top: 20, right: 15, bottom: 40, left: 20},
 		width = 900 - margin.left - margin.right,
 		height = 400 - margin.top - margin.bottom;
 
@@ -284,7 +316,7 @@ if(!isset($_SESSION['uID'])) {
  	var color = d3.scale.ordinal()
            .range(["#e53517","#6b486b","#ffbb78","#7ab51d","#6b486b",
                   "#e53517","#7ab51d","#ff7f0e","#ffc400"]);  
-	var width = 420,
+	var width = 320,
 		height = 300,
 		radius = Math.min(width, height) / 2;
 
@@ -364,6 +396,13 @@ if(!isset($_SESSION['uID'])) {
                   return d.data.total;
                 });
                 
+      pieChart.append("text")
+      .attr("x", (0-60))
+      .attr("y", 0-120)    
+	  .attr("text-anchor", "middle")
+	  .text("2012 Trip Breakdown");
+	            
+                
                 
     var g = otherPieChart.selectAll(".arc")
     	.data(pie(d2013))
@@ -398,7 +437,13 @@ if(!isset($_SESSION['uID'])) {
 
                 .text(function(d){
                   return d.data.total;
-                });    
+                });  
+                
+    otherPieChart.append("text")
+      .attr("x", (0-60))
+      .attr("y", 0-120)    
+	  .attr("text-anchor", "middle")
+	  .text("2013 Trip Breakdown");  
                 
 	 var g = thirdPieChart.selectAll(".arc")
     	.data(pie(d2014))
@@ -433,7 +478,13 @@ if(!isset($_SESSION['uID'])) {
 
                 .text(function(d){
                   return d.data.total;
-                });            
+                });    
+                
+   thirdPieChart.append("text")
+      .attr("x", (0-60))
+      .attr("y", 0-120)    
+	  .attr("text-anchor", "middle")
+	  .text("2014 Trip Breakdown");        
         
 
 		

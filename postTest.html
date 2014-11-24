@@ -1,21 +1,23 @@
 
+<!DOCTYPE html>
 
+<html>
 Post Trip Form <br>
 
-<form id="postTripForm" action="index.php/trips/trip" method="post" >
+<form action="index.php/trips/trip" method="post" >
 
-<label>user_id:</label>
-<input id="user_id" name="user_id" type="text" value="10" /><br>
-<label>purpose:</label>
-<input type="text" id="purpose" name="purpose" value="Commute" /><br>
+user_id:
+<input name="user_id" value="10" /><br>
+purpose:
+<input   name="purpose" value="Commute" /><br>
 <!-- <label>notes:</label>
 <input type="text" id="notes" name="notes" value="Test"/> <br>//-->
-<label>start:</label> 
-<input type="text" id="start" name="start" value="2014-11-15 14:26:10"/> <br>
-<label>stop:</label>
-<input type="text" id="stop" name="stop" value="2014-11-15 14:45:12"/> <br> 
-<label>n_coord:</label>
-<input type="text" id="n_coord" name="n_coord" value="1180"/> <br>
+start:
+<input name="start" value="2014"/> <br>
+stop:
+<input name="stop" value="2014"/> <br> 
+n_coord:
+<input  name="n_coord" value="1180"/> <br>
 <input type="submit" value="Submit">
 
 
@@ -26,7 +28,7 @@ Post Trip Form <br>
 
 
 
-
+</html>
 <script src="js/jquery-1.7.1.min.js"></script>
 <script src="js/main.js"></script>
 

@@ -56,7 +56,7 @@ function getTripData(id)
    				$('#tripLength').html((parseInt(response[0]["n_coord"]))/60 + '' +" minutes");
    			}
    				
-   			
+   			 $('#tJSON').text(JSON.stringify(response[0], null, 4));
    		}
    		
     	}
@@ -98,7 +98,8 @@ function changeTripDetails()
    		    $('#tripNotes').empty().html(curTrip.notes);   			
    			$('#tripStart').html(curTrip.start);      		
    			$('#tripEnd').html(curTrip.stop);   				
-   			$('#tripLength').html((parseInt(curTrip.n_coord))/60 + '' +" minutes");   		
+   			$('#tripLength').html((parseInt(curTrip.n_coord))/60 + '' +" minutes"); 
+   			 $('#tJSON').text(JSON.stringify(curTrip, null, 4));  		
     	}
 		
 	});
@@ -142,12 +143,16 @@ function populateTripTable(id)
 				var headRow = header.insertRow(0);     
 
 				// Insert a new cell (<td>) at the first position of the "new" <tr> element:
-				var sCell = headRow.insertCell(0);
 				var nCell = headRow.insertCell(0);
 				var pCell = headRow.insertCell(0);
-				sCell.innerHTML = "<strong>Start Date & Time</strong>";
-				nCell.innerHTML = "<strong>Notes</strong>";
+				var sCell = headRow.insertCell(0);
+				
+				
 				pCell.innerHTML = "<strong>Purpose</strong>";
+				nCell.innerHTML = "<strong>Notes</strong>";
+				sCell.innerHTML = "<strong>Start Date & Time</strong>";
+				
+				
 				
 				
 				var rows = table.getElementsByTagName("tr");

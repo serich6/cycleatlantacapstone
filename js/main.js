@@ -30,6 +30,38 @@ $('#postTripButton').click(function() {
 	return false;
 });
 
+var div = document.getElementById("dom-target");
+var user_id = div.textContent;
+
+$('#showJSONuser').click(function() {
+	
+	showJSONuser(user_id);
+	return false;
+});
+
+
+
+function showJSONuser(id)
+{
+	
+	$.ajax({
+		type: 'GET',
+		contentType: 'application/json',
+		url: "index.php/users/"+id,
+		dataType: "json",
+		
+		success: function(response){
+   		console.log(response);
+   		
+   		
+      	 $('#uJSON').text(JSON.stringify(response[0], null, 4));
+      	 
+    }
+		
+	});
+	
+	
+}
 
 function addUser() {
 	

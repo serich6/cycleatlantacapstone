@@ -66,19 +66,32 @@ if(!isset($_SESSION['uID'])) {
 			<strong>Trip Length:</strong> <p id="tripLength"></p> 
 			<strong>Select a different trip:</strong>
 			<select id="tripList" onchange="changeTripDetails(this)"></select><br>
+			<button type="button" id="showJSONtrip">Show JSON</button>
+				<div id="tJSON">
+					 <code class="displayWrapper">
+           			 	<pre id="codeAndPre"></pre>
+       					</code>
+				</div></br> 
+		
 			<button type="button" id="tripInfoButton">Trips Main View</button>
 		</div>
 		</div>
 		<div class="g1">
 			<h3>User Data</h3>
 		<div>
-			<strong>Name:</strong> Chris <br>
-			<strong>Email:</strong> <p id="email"></p> <br>
+			<strong>Name:</strong> Chris  <br>
+			<strong>Email:</strong> <p id="email"></p><br>
 			<strong>Home Zipcode:</strong> <p id="hZIP"></p> <br>
 			<strong>Work Zipcode:</strong> <p id="wZIP"></p> <br>
 			<strong>School Zipcode:</strong> <p id="sZIP">No data available</p> <br>
 			<strong>Cycling Frequency:</strong> <p id="cFREQ"></p> <br>
 			<strong>Cycling Confidence:</strong> <p id="cCONF"></p> <br>
+			<button type="button" id="showJSONuser">Show JSON</button>
+				<div id="uJSON">
+					 <code class="displayWrapper">
+           			 	<pre id="codeAndPre"></pre>
+       					</code>
+				</div></br> 
 			<button type="button" id="updateButton">Update Profile</button>
 		</div>
 		</div>			
@@ -126,10 +139,24 @@ getTripData(user_id);
 
 //var data = JSON.parse(user);
 
+$(document).ready(function(){
+  		$("#showJSONuser").click(function(){
+    		$("#uJSON").toggle(800);
+  		});
+	});
+	
+$(document).ready(function(){
+  		$("#showJSONtrip").click(function(){
+    		$("#tJSON").toggle(800);
+  		});
+	});
+
 
   document.getElementById("updateButton").onclick = function () {
         location.href = "updateProfile.php";
     };
+    
+   
     
      document.getElementById("tripInfoButton").onclick = function () {
         location.href = "tripMainView.php";

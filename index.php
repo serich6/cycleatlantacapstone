@@ -328,7 +328,7 @@ $app->post('/register', function () use($app, $con)
 $app->post('/users/user', function () use($app, $con) 
 {
 	//get the parameters sent over as JSON 
-    $body = $app->request()->getBody();
+    $body = $app->request()->params();
     //initialize key value variables   
 	$values = '';
 	$keys = '';
@@ -361,12 +361,13 @@ $app->post('/users/user', function () use($app, $con)
 //dhruv POST notes
 $app->post('/notes/note', function () use($app, $con) 
 {
-    $body = $app->request()->getBody();
+    $body = $app->request()->params();
 	$values = '';
 	$keys = '';
 	foreach($body as $k=>$v)
 	{	
 		//create a comma separated string of keys and values to pass to SQL
+		
 		$keys .= $k.",";
         $values .= '"'.$v.'"'.",";
 	
@@ -391,9 +392,9 @@ $app->post('/notes/note', function () use($app, $con)
 $app->post('/trips/trip', function () use($app, $con) 
 {
 	//get the parameters sent over as JSON 
-    $body = $app->request()->getBody();
+    $body = $app->request()->params();
     //for testing purposes only
-    echo $body;
+    var_dump($body);
     //initialize key value variables   
 	$values = '';
 	$keys = '';
@@ -402,6 +403,7 @@ $app->post('/trips/trip', function () use($app, $con)
 	foreach($body as $k=>$v)
 	{	
 		//create a comma separated string of keys and values to pass to SQL
+		
 		$keys .= $k.",";
         $values .= '"'.$v.'"'.",";
 	
@@ -421,7 +423,8 @@ $app->post('/trips/trip', function () use($app, $con)
       }
 	    	
     //for debugging purposes, make sure query looks like it should      	
-    echo $query;
+    header('Location:../../tripMainView.php');
+    exit();
 
 	//NEED TO GET THE GLOBAL TRIP ID BACK
 	
