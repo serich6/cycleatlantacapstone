@@ -32,28 +32,28 @@ function getTripData(id)
    			$("#tripList").html(tripNames);
    			if(response[0]["purpose"]!='')
    			{
-   				$('#tripPurpose').html(response[0]["purpose"]);
+   				$('#tripPurpose').replaceWith(response[0]["purpose"]);
    			}
    			
    			if(typeof response[0]["notes"]!= undefined)
    			{
-   				$('#tripNotes').html(response[0]["notes"]);
+   				$('#tripNotes').replaceWith(response[0]["notes"]);
    			}
    			
    			if(response[0]["start"]!='')
    			{
-   				$('#tripStart').html(response[0]["start"]);
+   				$('#tripStart').replaceWith(response[0]["start"]);
    			}
    			
    			if(response[0]["stop"]!='')
    			{
-   				$('#tripEnd').html(response[0]["stop"]);
+   				$('#tripEnd').replaceWith(response[0]["stop"]);
    			}
    			if(response[0]["n_coord"]!='')
    			{
    				length = (parseInt(response[0]["n_coord"]))/60;
    				
-   				$('#tripLength').html((parseInt(response[0]["n_coord"]))/60 + '' +" minutes");
+   				$('#tripLength').replaceWith((parseInt(response[0]["n_coord"]))/60 + '' +" minutes");
    			}
    				
    			 $('#tJSON').text(JSON.stringify(response[0], null, 4));
@@ -94,11 +94,11 @@ function changeTripDetails()
    				
    				}
    			}
-   			$('#tripPurpose').empty().html(curTrip.purpose);
-   		    $('#tripNotes').empty().html(curTrip.notes);   			
-   			$('#tripStart').html(curTrip.start);      		
-   			$('#tripEnd').html(curTrip.stop);   				
-   			$('#tripLength').html((parseInt(curTrip.n_coord))/60 + '' +" minutes"); 
+   			$('#tripPurpose').empty().replaceWith(curTrip.purpose);
+   		    $('#tripNotes').empty().replaceWith(curTrip.notes);   			
+   			$('#tripStart').replaceWith(curTrip.start);      		
+   			$('#tripEnd').replaceWith(curTrip.stop);   				
+   			$('#tripLength').replaceWith((parseInt(curTrip.n_coord))/60 + '' +" minutes"); 
    			 $('#tJSON').text(JSON.stringify(curTrip, null, 4));  		
     	}
 		

@@ -55,7 +55,7 @@ if(!isset($_SESSION['uID'])) {
 	</header>
 	<div class="cf"></div>
 		<div id="content">
-			<table id="myTable"></table>
+			<table id="noteTable"></table>
 			<br>
 		</div>
 		<div id="chart"></div>
@@ -87,7 +87,9 @@ if(!isset($_SESSION['uID'])) {
 	<script src="js/tripProcessing.js"></script>
 	<script src="js/noteProcessing.js"></script>
 	<script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
-
+	<script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTdZVYi0cOEJDw-FGYGCTfFz-0DleGyzE">
+    </script>
 	
 	
 </body>
@@ -96,6 +98,6 @@ if(!isset($_SESSION['uID'])) {
 	var div = document.getElementById("dom-target");
 	var user_id = div.textContent;
 	
-	
+	populateNoteTable(user_id);
 </script>	
 

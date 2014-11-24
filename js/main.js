@@ -439,6 +439,66 @@ function getUserData(id)
 
 }
 
+function getNoteData(id)
+{
+
+	//can honestly just use one ajax call to users/:id and parse the json response as needed
+		$.ajax({
+		type: 'GET',
+		contentType: 'application/json',
+		url: "index.php/notes/" + id ,
+		dataType: "json",
+		
+		success: function(response){
+   		console.log(response);
+   		
+      	$('#noteDate').replaceWith(response[0]["recorded"]);
+      	$('#noteDetails').replaceWith(response[0]["details"]);
+      	$(document).ready(function() {
+ 
+ 		 //I'm not doing anything else, so just leave
+		if(!navigator.geolocation) return;
+	
+		//navigator.geolocation.getCurrentPosition(function(pos) {
+			geocoder = new google.maps.Geocoder();
+			var latlng = new google.maps.LatLng(response[0]["latitude"],response[0]["longitude"]);
+		//	console.log(latlng);
+			geocoder.geocode({'latLng': latlng}, function(results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				//Check result 0
+				var result = results[0];
+				//look for locality tag and administrative_area_level_1
+				var city = "";
+				var state = "";
+				//console.log(result.address_components);
+				for(var i=0, len=result.address_components.length; i<len; i++) {
+					var ac = result.address_components[i];
+					if(ac.types.indexOf("neighborhood") >= 0) city = ac.long_name;
+					//if(ac.types.indexOf("administrative_area_level_1") >= 0) state = ac.long_name;
+				}
+				//only report if we got Good Stuff
+				if(city != '') {
+					$("#noteLocation").replaceWith(city);
+				}
+				} 
+			//});
+		
+	
+		});
+		});	
+      
+  		
+     // 	  $('#uJSON').text(JSON.stringify(response[0], null, 4));  
+      	 
+      	
+    }
+		
+	});
+		
+
+
+}
+
 
 
 

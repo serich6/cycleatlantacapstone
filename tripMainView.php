@@ -180,7 +180,9 @@ if(!isset($_SESSION['uID'])) {
 	<script type="text/javascript" src="js/chartData.js"></script>
 	<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	
+		<script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTdZVYi0cOEJDw-FGYGCTfFz-0DleGyzE">
+    </script>
 
 	
 	

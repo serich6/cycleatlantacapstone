@@ -751,6 +751,29 @@ $app->put('/users/user/:id/ethnicity', function ($id) use($app, $con)
 
 //kelley: users/<id>/homeZIP, users/<id>/workZIP, users/<id>/schoolZIP, users/<id>/email
 
+
+$app->get('/notes/:id', function ($id) use($app, $con) 
+{
+
+	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
+	    	$result = mysqli_query($con,"SELECT * FROM note WHERE user_id = '$id'");
+	    		
+	    	mysqli_close($con);
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
+});				
+
+
+
 $app->get('/trips/:id/', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
@@ -1725,7 +1748,7 @@ $app->get('/notes', function() use($app, $con)
 	if(substr($query, -1)== 'W'){
 		$query = substr($query, 0, -1);
 	}
-	
+
 	try
 	{
 		$result = mysqli_query($con, $query);

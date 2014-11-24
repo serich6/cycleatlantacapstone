@@ -54,6 +54,11 @@ if(!isset($_SESSION['uID'])) {
 	<div id="content">
 		<div class="g1">
 			<h3>Notes</h3>
+			<strong>Date:</strong> <p id="noteDate"></p> <br>
+			<strong>Details:</strong> <p id="noteDetails"></p> <br>
+			<strong>Neighborhood:</strong> <p id="noteLocation"></p><br>
+			<div id="result">
+			</div>
 			<button type="button" id="noteInfoButton">Notes Main View</button>
 		</div>
 		<div class="g1">
@@ -120,7 +125,10 @@ if(!isset($_SESSION['uID'])) {
 	<script src="js/main.js"></script>
 	<script src="js/tripProcessing.js"></script>
 
-	
+	<script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTdZVYi0cOEJDw-FGYGCTfFz-0DleGyzE">
+    </script>
+
 	
 </body>
 </html>
@@ -132,8 +140,7 @@ var user_id = div.textContent;
 
 console.log(user_id);
 getUserData(user_id);
-
-
+getNoteData(user_id);
 getTripData(user_id);
 
 
@@ -167,6 +174,23 @@ $(document).ready(function(){
      document.getElementById("noteInfoButton").onclick = function () {
         location.href = "noteMainView";
     };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 </script>
