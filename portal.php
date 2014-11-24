@@ -44,7 +44,7 @@ if(!isset($_SESSION['uID'])) {
 		<nav class ="g2">
 			<ul class="nav">
 				<ul><a href="portal.php">Home</a></ul>
-				<ul><a href="updateProfile.php">Update Profile</a></ul>
+				<ul><a href="updateProfile">Update Profile</a></ul>
 				<ul><a href="#Maps">View Your Maps</a></ul>
 				<ul><a href="logout.php">Log Out</a></ul>
 			</ul>
@@ -138,6 +138,8 @@ getTripData(user_id);
 
 
 //var data = JSON.parse(user);
+$("#uJSON").hide();
+$("#tJSON").hide();
 
 $(document).ready(function(){
   		$("#showJSONuser").click(function(){
@@ -153,17 +155,17 @@ $(document).ready(function(){
 
 
   document.getElementById("updateButton").onclick = function () {
-        location.href = "updateProfile.php";
+        location.href = "updateProfile";
     };
     
    
     
      document.getElementById("tripInfoButton").onclick = function () {
-        location.href = "tripMainView.php";
+        location.href = "tripMainView";
     };
     
      document.getElementById("noteInfoButton").onclick = function () {
-        location.href = "noteMainView.php";
+        location.href = "noteMainView";
     };
 
 

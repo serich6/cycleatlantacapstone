@@ -24,7 +24,7 @@ function getTripData(id)
    			for(var i = 0; i<response.length;i++)
    			{
    				var myDateArray = (response[i]["start"]).split("-");
-				var theDate = new Date(myDateArray[0], myDateArray[1]-1, myDateArray[2].substring(0, 1) );
+				var theDate = new Date(myDateArray[0], myDateArray[1]-1, myDateArray[2].substring(0, 2) );
    				d = ((theDate.getMonth()+1)+'/'+theDate.getDate()+'/'+theDate.getFullYear());
    				tripNames+="<option value='" + response[i]["id"] + "'>" + d + "</option>";
    			}

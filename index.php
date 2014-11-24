@@ -441,6 +441,7 @@ $app->put('/users/user', function () use($app, $con)
 {
 
 	$body = $app->request()->getBody();
+	$_SESSION['userPutJSON'] = $body;
 	$id='';
 	$age='';
 	$email='';
@@ -484,9 +485,7 @@ $app->put('/users/user', function () use($app, $con)
 		}
 		
 	}	
-	
 	$query = "UPDATE user SET";	
-	
 	
 	//if(isset($age)){
 	if($age!=''){
@@ -528,29 +527,23 @@ $app->put('/users/user', function () use($app, $con)
 	}	
 	if($email!=''){
 		$query = $query . " email = " . "'".$email."'"." ,";
-		//$query2 = " email = " . "'".$email."'";
-		$query2 = "UPDATE user_password SET email = '$email' WHERE user_id = '$id'";//need to also update the user_password table
 	}	
 
 	//take of the last AND
 	$query = substr($query, 0, -1);
 	if(isset($id)){
 		$query = $query . "WHERE" . " id = " . $id ;
-		//$query2 = $query2 . "WHERE" . " user_id = " . $id ;
 	}
-		
-	//echo $query2;
+	
+	//echo $query;
 	//echo '<br>';
 	
 	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
 	if(substr($query, -1)== 'W'){
 		$query = substr($query, 0, -1);
-		//$query2 = substr($query2, 0, -1);
 	}
 	
-	mysqli_query($con, $query2);
 	mysqli_query($con, $query);
-	
 	
 	$result = array("status" => "success");
 	json_encode($result);
@@ -617,7 +610,7 @@ $app->put('/users/user/:id/schoolZip', function ($id) use($app, $con)
    		 	 $response['Content-Type'] = 'application/json';
     	 	 $data = $response->body(json_encode($result));
     		 return $data;
-			
+
 	
 });    
 

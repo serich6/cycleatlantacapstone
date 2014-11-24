@@ -53,9 +53,26 @@ if(!isset($_SESSION['uID'])) {
 	<div id="content">
 		<div class="g3">
 			<h5>Profile updated successfully</h5>
+			<button type="button" id="showUserPutData">Show Submitted JSON</button>
+			<div id="putUserData">
+			<?php 
+        
+   				print_r( $_SESSION['userPutJSON'] ); 
+    
+			?>
+			</div></br>
 			<a href="portal.php">Return home</a>
+					
 			
 		</div>
+	
+			<div id="dom-target" style="display: none;">
+   				 <?php 
+        		$user = $_SESSION['uID']; //Again, do some operation, get the output.
+        		echo htmlspecialchars($user); /* You have to escape because the result
+                                       will not be valid HTML otherwise. */
+    		?>
+			</div>
 	</div>
 	</div>
 
@@ -73,3 +90,12 @@ if(!isset($_SESSION['uID'])) {
 	
 	<!-- CSS3 Media Queries -->
 	<script src="js/respond.min.js"></script>
+	
+<script>
+$("#putUserData").hide();
+$(document).ready(function(){
+  		$("#showUserPutData").click(function(){
+    		$("#putUserData").toggle(800);
+  		});
+	});
+</script>

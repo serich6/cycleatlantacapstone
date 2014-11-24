@@ -33,11 +33,7 @@ $('#postTripButton').click(function() {
 var div = document.getElementById("dom-target");
 var user_id = div.textContent;
 
-$('#showJSONuser').click(function() {
-	
-	showJSONuser(user_id);
-	return false;
-});
+
 
 
 
@@ -432,6 +428,7 @@ function getUserData(id)
       	 homeZip(response[0]);
       	 riderType(response[0]);
       	 cycleFrequency(response[0]);
+      	  $('#uJSON').text(JSON.stringify(response[0], null, 4));  
       	 
       	
     }
@@ -454,11 +451,14 @@ function updateUser() {
 		dataType: "json",
 		data: userFormToJSON(),
 		success: function(data){
+	
 			if(data["status"]=="success")
 			{
 				location.href = "success.php"
+				
 			//	console.log(data["status"]);
 			}
+			
 		}
 		
 	});
