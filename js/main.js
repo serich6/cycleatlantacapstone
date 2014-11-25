@@ -340,6 +340,13 @@ function cycleFrequency(data)
 
 }
 
+function created(data){
+	if(data["created"] != null)
+   	{
+   		$('#created').replaceWith(data["created"]);
+   	}   		
+}
+
 function schoolZip(data)
 {
 	if(data["schoolZIP"] != null)

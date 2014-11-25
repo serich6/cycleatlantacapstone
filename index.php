@@ -1534,6 +1534,7 @@ $app->get('/users', function() use($app, $con)
 	$rider_type = $req->get('rider_type');
 	$email = $req->get('email');
 	$device=$req->get('device');
+	$created = $req->get('created');
 
 	$query = 'SELECT * FROM user WHERE ';
 
@@ -1640,7 +1641,14 @@ $app->get('/users', function() use($app, $con)
 			array_push($bad_request, "device = ". $device);
 		}
 	}
-	
+	if(isset($created)){
+		if(strpos($created, ';') == FALSE){
+			$query = $query . " created = '" . $created . "' AND ";
+		}
+		else{
+			array_push($bad_request, "created = ". $created);
+		}
+	}
 	if(count($bad_request)!=0){
 		//for testing
 		echo implode(", ", $bad_request);
