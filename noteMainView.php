@@ -13,6 +13,12 @@ if(!isset($_SESSION['uID'])) {
 
 <html>
 <head>
+<style>
+
+  .odd{background-color: white;} 
+
+  .even{background-color: rgba(70,130,180, .50);} 
+  </style>
 	<!--
 	*****************************************************************
 	Fluid Baseline Grid v1.0.0
@@ -55,8 +61,10 @@ if(!isset($_SESSION['uID'])) {
 	</header>
 	<div class="cf"></div>
 		<div id="content">
+			<div class="g3">
 			<table id="noteTable"></table>
 			<br>
+			</div>
 		</div>
 		<div id="chart"></div>
 	</div>

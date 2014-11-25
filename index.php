@@ -804,6 +804,36 @@ $app->get('/trips/:id/', function ($id) use($app, $con)
 });
 
 
+$app->get('/trips/:id/purpose', function ($id) use($app, $con) 
+{
+		//	$user = UserFactory::getUser($id); //how to access methods in factory files
+		//	var_dump($user);
+	
+	    	$result = mysqli_query($con,"SELECT purpose FROM trip WHERE id = '$id' ");
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
+	    	mysqli_close($con);
+	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    	
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
+
+	
+});
+
+
 $app->get('/users/:id/workZIP', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files

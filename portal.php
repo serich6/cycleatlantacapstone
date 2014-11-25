@@ -64,11 +64,11 @@ if(!isset($_SESSION['uID'])) {
 		<div class="g1">
 			<h3>Trips</h3>
 			<div>
-			<strong>Trip Purpose:</strong> <p id="tripPurpose"></p> 
-			<strong>Trip Notes:</strong> <p id="tripNotes"></p> 
-			<strong>Trip Start:</strong> <p id="tripStart"></p>
-			<strong>Trip End:</strong> <p id="tripEnd"></p>
-			<strong>Trip Length:</strong> <p id="tripLength"></p> 
+			<strong>Trip Purpose:</strong> <p id="tripPurpose"></p> <br>
+			<strong>Trip Notes:</strong> <p id="tripNotes"></p> <br>
+			<strong>Trip Start:</strong> <p id="tripStart"></p> <br>
+			<strong>Trip End:</strong> <p id="tripEnd"></p> <br>
+			<strong>Trip Length:</strong> <p id="tripLength"></p> <br>
 			<strong>Select a different trip:</strong>
 			<select id="tripList" onchange="changeTripDetails(this)"></select><br>
 			<button type="button" id="showJSONtrip">Show JSON</button>
