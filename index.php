@@ -1689,7 +1689,7 @@ $app->get('/trips', function() use($app, $con)
  {
 
 	$req = $app->request();
-
+	$bad_params = array();
 	//set all possible variables...
 	$id = $req->get('id');
 	$user_id = $req->get('user_id');
@@ -1697,17 +1697,27 @@ $app->get('/trips', function() use($app, $con)
 	$notes = $req->get('notes');
 	$start = $req->get('start');
 	$stop = $req->get('stop');
-	//$n_coord = $req->get('n_coord');
+	$n_coord = $req->get('n_coord');
 	
 	$query = 'SELECT * FROM trip WHERE ';
 
 	//if each parameter is set, add it to the query
-	if(isset($id) && filter_var($id, FILTER_VALIDATE_INT)){
-		$query = $query . " id = " . $id . " AND ";
+	if(isset($id)){
+		if(filter_var($id, FILTER_VALIDATE_INT)){
+			$query = $query . " id = " . $id . " AND ";
+		}
+		else{
+			array_push($bad_params, "id = ". $id);
+		}
 	}
 	
-	if(isset($user_id) && filter_var($user_id, FILTER_VALIDATE_INT)){
-		$query = $query . " user_id = " . $user_id . " AND ";
+	if(isset($user_id)){
+		if(filter_var($user_id, FILTER_VALIDATE_INT)){
+			$query = $query . " user_id = " . $user_id . " AND ";
+		}
+		else{
+			array_push($bad_params, "user_id = ". $user_id);
+		}
 	}
 	
 	if(isset($notes)){
@@ -1720,41 +1730,53 @@ $app->get('/trips', function() use($app, $con)
 	if(isset($stop)){
 		$query = $query . " stop = " . $stop . " AND ";
 	}
-	if(isset($n_coord) && filter_var($n_coord, FILTER_VALIDATE_INT)){
-		$query = $query . " n_coord = " . $n_coord . " AND ";
+	if(isset($n_coord)){
+		if(filter_var($n_coord, FILTER_VALIDATE_INT)){
+			$query = $query . " n_coord = " . $n_coord . " AND ";
+		}
+		else{
+			array_push($bad_params, "n_coord = ". $n_coord);
+		}
 	}
 	
-	
-
-	//take of the last AND
-	$query = substr($query, 0, -5);
-
-	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string	
-	if(substr($query, -1)== 'W'){
-		$query = substr($query, 0, -1);
-	}
-	
-	try
-	{
-		$result = mysqli_query($con, $query);
-	}
-	catch(PDOException $e)
-	{
-		echo'{"error":{"text":'.$e->getMessage().'}}';
+	if(count($bad_params)!=0){
+		//for testing
+		echo implode(", ", $bad_params);
+		
+		//SHOULD LOG TO FILE INSTEAD
 	}
 
-	mysqli_close($con);
+	else{
+		//take of the last AND
+		$query = substr($query, 0, -5);
+
+		//need to check to see if there are NO parameters, the "w" character needs to be taken from the string	
+		if(substr($query, -1)== 'W'){
+			$query = substr($query, 0, -1);
+		}
 	
-	while($r = mysqli_fetch_assoc($result))
-	{
-		$rows[] = $r;
-	}
-	$response = $app->response();
-   	$response['Content-Type'] = 'application/json';
+		try
+		{
+			$result = mysqli_query($con, $query);
+		}
+		catch(PDOException $e)
+		{
+			echo'{"error":{"text":'.$e->getMessage().'}}';
+		}
+
+		mysqli_close($con);
+	
+		while($r = mysqli_fetch_assoc($result))
+		{
+			$rows[] = $r;
+		}
+		$response = $app->response();
+   		$response['Content-Type'] = 'application/json';
    		 
-    $response->body(json_encode($rows));
-    $data = $response->body(json_encode($rows));
-    return $data;
+    	$response->body(json_encode($rows));
+    	$data = $response->body(json_encode($rows));
+    	return $data;
+    }
     exit();	
 
 });
