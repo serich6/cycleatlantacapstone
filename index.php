@@ -1517,7 +1517,10 @@ for week, just add a week by week total at bottom
 $app->get('/users', function() use($app, $con)
  {
 	$req = $app->request();
-
+	//for error logging
+	$bad_request = array();
+	
+		
 	//set all possible variables...
 	$id = $req->get('id');
 	$age = $req->get('age');
@@ -1529,75 +1532,154 @@ $app->get('/users', function() use($app, $con)
 	$workZIP = $req->get('workZIP');
 	$cycling_freq = $req->get('cycling_freq');
 	$rider_type = $req->get('rider_type');
+	$email = $req->get('email');
+	$device=$req->get('device');
 
 	$query = 'SELECT * FROM user WHERE ';
 
 	//if each parameter is set, add it to the query
-	if(isset($id) && filter_var($id, FILTER_VALIDATE_INT)){
-		$query = $query . " id = " . $id . " AND ";
-	}
-// 	else if (isset($id) && !filter_var($id, FILTER_VALIDATE_INT)){
-// 		trigger_error("user id must be an int value");
-// 	}
-	
-	if(isset($age) && filter_var($age, FILTER_VALIDATE_INT)){
-		$query = $query . " age = " . $age . " AND ";
-	}
-	
-	if(isset($gender) && filter_var($gender, FILTER_VALIDATE_INT)){
-		$query = $query . " gender = " . $gender . " AND ";
+	if(isset($id)){
+		if(filter_var($id, FILTER_VALIDATE_INT)){
+			$query = $query . " id = " . $id . " AND ";
+		}
+		else{
+			array_push($bad_request, "id = ". $id);
+			
+		}
 	}
 
-	if(isset($income) && filter_var($income, FILTER_VALIDATE_INT)){
-		$query = $query . " income = " . $income . " AND ";
+	
+	if(isset($age)){
+		if(filter_var($age, FILTER_VALIDATE_INT)){
+			$query = $query . " age = " . $age . " AND ";
+		}
+		else{
+			array_push($bad_request, "age = ". $age);
+		}
 	}
-	if(isset($ethnicity) && filter_var($ethnicity, FILTER_VALIDATE_INT)){
-		$query = $query . " ethnicity = " . $ethnicity . " AND ";
+	
+	if(isset($gender)){
+		if(filter_var($gender, FILTER_VALIDATE_INT)){
+			$query = $query . " gender = " . $gender . " AND ";
+		}
+		else{
+			array_push($bad_request, "gender = ". $gender);
+		}
+		
 	}
-	if(isset($homeZIP) && filter_var($homeZIP, FILTER_VALIDATE_INT)){
-		$query = $query . " homeZIP = " . $homeZIP . " AND ";
+
+	if(isset($income)){
+		if(filter_var($income, FILTER_VALIDATE_INT)){
+			$query = $query . " income = " . $income . " AND ";
+		}
+		else{
+			array_push($bad_request, "income = ". $income);
+		}
 	}
-	if(isset($schoolZIP) && filter_var($schoolZIP, FILTER_VALIDATE_INT)){
-		$query = $query . " schoolZIP = " . $schoolZIP . " AND ";
+	if(isset($ethnicity)){
+		if(filter_var($ethnicity, FILTER_VALIDATE_INT)){
+			$query = $query . " ethnicity = " . $ethnicity . " AND ";
+		}
+		else{
+			array_push($bad_request, "ethnicity = ". $ethnicity);
+		}
 	}
-	if(isset($workZIP) && filter_var($workZIP, FILTER_VALIDATE_INT)){
-		$query = $query . " workZIP = " . $workZIP . " AND ";
+	if(isset($homeZIP)){
+		if(filter_var($homeZIP, FILTER_VALIDATE_INT)){
+			$query = $query . " homeZIP = " . $homeZIP . " AND ";
+		}
+		else{
+			array_push($bad_request, "homeZIP = ". $homeZIP);
+		}
 	}
-	if(isset($cycling_freq) && filter_var($cycling_freq, FILTER_VALIDATE_INT)){
-		$query = $query . " cycling_freq = " . $cycling_freq . " AND ";
+	if(isset($schoolZIP)){
+		if(filter_var($schoolZIP, FILTER_VALIDATE_INT)){
+			$query = $query . " schoolZIP = " . $schoolZIP . " AND ";
+		}
+		else{
+			array_push($bad_request, "schoolZIP = ". $schoolZIP);
+		}
 	}
-	if(isset($rider_type) && filter_var($rider_type, FILTER_VALIDATE_INT)){
-		$query = $query . " rider_type = " . $rider_type . " AND ";
+	if(isset($workZIP)){
+		if(filter_var($workZIP, FILTER_VALIDATE_INT)){
+			$query = $query . " workZIP = " . $workZIP . " AND ";
+		}
+		else{
+			array_push($bad_request, "workZIP = ". $workZIP);
+		}
+	}
+	if(isset($cycling_freq)){
+		if(filter_var($cycling_freq, FILTER_VALIDATE_INT)){
+			$query = $query . " cycling_freq = " . $cycling_freq . " AND ";
+		}
+		else{
+			array_push($bad_request, "cycling_freq = ". $cycling_freq);
+		}
+	}
+	if(isset($rider_type)){
+		if(filter_var($rider_type, FILTER_VALIDATE_INT)){
+			$query = $query . " rider_type = " . $rider_type . " AND ";
+		}
+		else{
+			array_push($bad_request, "rider_type = ". $rider_type);
+		}	
+	}
+	if(isset($email)){
+		if(filter_var($email, FILTER_VALIDATE_EMAIL)){
+				$query = $query . " email = '" . $email . "' AND ";
+		}
+		else{
+			array_push($bad_request, "email = ". $email);
+		}
 	}	
-
-	//take of the last AND
-	$query = substr($query, 0, -5);
+	if(isset($device)){
+		if(strpos($device, ';') == FALSE && strpos($device, ' ') == FALSE){
+			$query = $query . " device = '" . $device . "' AND ";
+		}
+		else{
+			array_push($bad_request, "device = ". $device);
+		}
+	}
 	
-	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
-	if(substr($query, -1)== 'W'){
-		$query = substr($query, 0, -1);
+	if(count($bad_request)!=0){
+		//for testing
+		echo implode(", ", $bad_request);
+		
+		//SHOULD LOG TO FILE INSTEAD
 	}
+	
+	else{
+		//take of the last AND
+		$query = substr($query, 0, -5);
+	
+		//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
+		if(substr($query, -1)== 'W'){
+			$query = substr($query, 0, -1);
+		}
 
-	try
-	{
-		$result = mysqli_query($con, $query);
-	}
-	catch(PDOException $e)
-	{
-		echo'{"error":{"text":'.$e->getMessage().'}}';
-	}
+		try
+		{
+			$result = mysqli_query($con, $query);
+		}
+		catch(PDOException $e)
+		{
+			echo'{"error":{"text":'.$e->getMessage().'}}';
+		}
 
-	mysqli_close($con);
-	while($r = mysqli_fetch_assoc($result))
-	{
-		$rows[] = $r;
-	}
-	$response = $app->response();
-   	$response['Content-Type'] = 'application/json';
+		mysqli_close($con);
+		
+		while($r = mysqli_fetch_assoc($result))
+		{
+			$rows[] = $r;
+		}
+
+		$response = $app->response();
+   		$response['Content-Type'] = 'application/json';
    		 
-    $response->body(json_encode($rows));
-    $data = $response->body(json_encode($rows));
-    return $data;
+    	$response->body(json_encode($rows));
+    	$data = $response->body(json_encode($rows));
+    	return $data;
+    }
     exit();	
 
 });
