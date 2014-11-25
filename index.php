@@ -1786,7 +1786,7 @@ $app->get('/notes', function() use($app, $con)
  {
 
 	$req = $app->request();
-
+	$bad_params = array();
 	//set all possible variables...
 	$id = $req->get('id');
 	$user_id = $req->get('user_id');
@@ -1806,11 +1806,21 @@ $app->get('/notes', function() use($app, $con)
 
 	//if each parameter is set, add it to the query
 	if(isset($id)){
-		$query = $query . " id = " . $id . " AND ";
+		if(filter_var($id, FILTER_VALIDATE_INT)){
+			$query = $query . " id = " . $id . " AND ";
+		}
+		else{
+			array_push($bad_params, "id = ". $id);
+		}
 	}
 	
-	if(isset($user_id) && filter_var($user_id, FILTER_VALIDATE_INT)){
-		$query = $query . " user_id = " . $user_id . " AND ";
+	if(isset($user_id)){
+		if(filter_var($user_id, FILTER_VALIDATE_INT)){
+			$query = $query . " user_id = " . $user_id . " AND ";
+		}
+		else{
+			array_push($bad_params, "user_id = ". $user_id);
+		}
 	}
 
 	if(isset($trip_id) && filter_var($trip_id, FILTER_VALIDATE_INT)){
@@ -1837,42 +1847,61 @@ $app->get('/notes', function() use($app, $con)
 	if(isset($vAccuracy)){
 		$query = $query . " vAccuracy = " . $vAccuracy . " AND ";
 	}
-	if(isset($note_type) && filter_var($note_type,FILTER_VALIDATE_INT)){
-		$query = $query . " note_type = " . $note_type . " AND ";
+	if(isset($note_type)){
+		if(filter_var($note_type,FILTER_VALIDATE_INT)){
+			$query = $query . " note_type = " . $note_type . " AND ";
+		}
+		else{
+			array_push($bad_params, "note_type = ". $note_type);
+		}
 	}
 	if(isset($details)){
 		$query = $query . " details = " . $details . " AND ";
 	}
-	if(isset($img_url) && filter_var($img_url, FILTER_VALIDATE_URL)){
-		$query = $query . " img_url = " . $img_url . " AND ";
+	if(isset($img_url)){
+		if(filter_var($img_url, FILTER_VALIDATE_URL)){
+			$query = $query . " img_url = " . $img_url . " AND ";
+		}
+		else{
+			array_push($bad_params, "img_url = ". $img_url);
+		}
 	}
-	//take of the last AND
-	$query = substr($query, 0, -5);
+	
+	if(count($bad_params)!=0){
+		//for testing
+		echo implode(", ", $bad_params);
+		
+		//SHOULD LOG TO FILE INSTEAD
+	}
+	else{
+		//take of the last AND
+		$query = substr($query, 0, -5);
 
-	if(substr($query, -1)== 'W'){
-		$query = substr($query, 0, -1);
-	}
+		if(substr($query, -1)== 'W'){
+			$query = substr($query, 0, -1);
+		}
 
-	try
-	{
-		$result = mysqli_query($con, $query);
-	}
-	catch(PDOException $e)
-	{
-		echo'{"error":{"text":'.$e->getMessage().'}}';
-	}
+		try
+		{
+			$result = mysqli_query($con, $query);
+		}
+		catch(PDOException $e)
+		{
+			echo'{"error":{"text":'.$e->getMessage().'}}';
+		}
 
-	mysqli_close($con);
-	while($r = mysqli_fetch_assoc($result))
-	{
-		$rows[] = $r;
-	}
-	$response = $app->response();
-   	$response['Content-Type'] = 'application/json';
+		mysqli_close($con);
+		while($r = mysqli_fetch_assoc($result))
+		{
+			$rows[] = $r;
+		}
+		$response = $app->response();
+   		$response['Content-Type'] = 'application/json';
    		 
-    $response->body(json_encode($rows));
-    $data = $response->body(json_encode($rows));
-    return $data;
+    	$response->body(json_encode($rows));
+    	$data = $response->body(json_encode($rows));
+    	return $data;
+    }
     exit();	
 
 });
