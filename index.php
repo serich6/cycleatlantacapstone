@@ -445,6 +445,7 @@ $app->put('/users/user', function () use($app, $con)
 	$id='';
 	$age='';
 	$email='';
+	$password='';
 	$gender='';
 	$income='';
 	$ethnicity='';
@@ -483,10 +484,14 @@ $app->put('/users/user', function () use($app, $con)
 		{
 			$email=$v;
 		}
+		if($k=="password"){
+			$password=$v;
+		}
 		
 	}	
 	$query = "UPDATE user SET";	
 	$query2 = "UPDATE user_password SET";
+	$query3 = "UPDATE user_password SET";
 	
 	//if(isset($age)){
 	if($age!=''){
@@ -530,11 +535,17 @@ $app->put('/users/user', function () use($app, $con)
 		$query = $query . " email = " . "'".$email."'"." ,";
 		$query2 = $query2 . " email = '$email'"; 
 	}	
+	if($password!=''){
+		$newSalt = create_salt();
+		$newHash = create_hash($password, $newSalt);
+		$query3 = $query3 . " password = '$newHash'"; 
+	}
 	//take of the last AND
 	$query = substr($query, 0, -1);
 	if(isset($id)){
 		$query = $query . "WHERE" . " id = " . $id ;
 		$query2 = $query2 . "WHERE" . " user_id = '$id'"; 
+		$query3 = $query3 . "WHERE" . " user_id = '$id'"; 
 	}
 	
 	//echo $query;
@@ -545,7 +556,9 @@ $app->put('/users/user', function () use($app, $con)
 		$query = substr($query, 0, -1);
 	}
 	
+	
 	mysqli_query($con, $query2);
+	mysqli_query($con, $query3);
 	mysqli_query($con, $query);
 	
 	$result = array("status" => "success");
