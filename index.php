@@ -528,13 +528,13 @@ $app->put('/users/user', function () use($app, $con)
 	}	
 	if($email!=''){
 		$query = $query . " email = " . "'".$email."'"." ,";
-		$query2 = $query2 . " email = '$email' WHERE user_id = '$id'"; 
+		$query2 = $query2 . " email = '$email'"; 
 	}	
 	//take of the last AND
 	$query = substr($query, 0, -1);
 	if(isset($id)){
 		$query = $query . "WHERE" . " id = " . $id ;
-		//$query2 = $query2 . "WHERE" . " user_id = " .$id ; 
+		$query2 = $query2 . "WHERE" . " user_id = '$id'"; 
 	}
 	
 	//echo $query;
