@@ -43,7 +43,7 @@ if(!isset($_SESSION['uID'])) {
 		<nav class ="g2">
 			<ul class="nav">
 				<ul><a href="portal.php">Home</a></ul>
-				<ul><a href="updateProfile">Update Profile</a></ul>
+				<ul><a href="updateProfile.php">Update Profile</a></ul>
 				<ul><a href="#Maps">View Your Maps</a></ul>
 				<ul><a href="logout.php">Log Out</a></ul>
 			</ul>
