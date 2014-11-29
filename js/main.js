@@ -537,6 +537,7 @@ function userFormToJSON() {
 	return JSON.stringify({
 		"id": $('#updateId').val(), 
 		"email": $('#updateEmail').val(),
+		"password": $('#updatePassword').val(),
 		"homeZIP": $('#updateHomeZip').val(),
 		"workZIP": $('#updateWorkZip').val(),
 		"schoolZIP": $('#updateSchoolZip').val(),

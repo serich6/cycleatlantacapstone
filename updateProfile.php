@@ -57,6 +57,7 @@ if(!isset($_SESSION['uID'])) {
 				<label></label><br> <input id="updateId" input type="hidden" name="updateId" type="text" value=<?php  echo $_SESSION['uID']?>  /><br>
 				<br>
 				<label><strong>Email:</strong></label> <input id="updateEmail" name="updateEmail" type="text"  /><br>
+				<label><strong>Password:</strong></label> <input id="updatePassword" name="updatePassword" type="text"  /><br>
 				<label><strong>Home Zip:</strong></label><input type="text" id="updateHomeZip" name="updateHomeZip" /><br>
 				<label><strong>Work Zip:</strong></label><input type="text" id="updateWorkZip" name="updateWorkZip" /><br>
 				<label><strong>School Zip:</strong></label><input type="text" id="updateSchoolZip" name="updateSchoolZip" /><br>
