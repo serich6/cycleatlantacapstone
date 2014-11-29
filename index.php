@@ -490,8 +490,10 @@ $app->put('/users/user', function () use($app, $con)
 		
 	}	
 	$query = "UPDATE user SET";	
-	$query2 = "UPDATE user_password SET";
-	$query3 = "UPDATE user_password SET";
+	//will fix/clean up later, I was in a hurry to get this to work :p
+	$query2 = "UPDATE user_password SET";//email
+	$query3 = "UPDATE user_password SET";//password
+	$query4 = "UPDATE user_password SET";//salt
 	
 	//if(isset($age)){
 	if($age!=''){
@@ -539,6 +541,8 @@ $app->put('/users/user', function () use($app, $con)
 		$newSalt = create_salt();
 		$newHash = create_hash($password, $newSalt);
 		$query3 = $query3 . " password = '$newHash'"; 
+		$query4 = $query4 . " salt = '$newSalt'"; 
+
 	}
 	//take of the last AND
 	$query = substr($query, 0, -1);
@@ -546,6 +550,7 @@ $app->put('/users/user', function () use($app, $con)
 		$query = $query . "WHERE" . " id = " . $id ;
 		$query2 = $query2 . "WHERE" . " user_id = '$id'"; 
 		$query3 = $query3 . "WHERE" . " user_id = '$id'"; 
+		$query4 = $query4 . "WHERE" . " user_id = '$id'"; 
 	}
 	
 	//echo $query;
@@ -556,10 +561,11 @@ $app->put('/users/user', function () use($app, $con)
 		$query = substr($query, 0, -1);
 	}
 	
-	
+	mysqli_query($con, $query);
 	mysqli_query($con, $query2);
 	mysqli_query($con, $query3);
-	mysqli_query($con, $query);
+	mysqli_query($con, $query4);
+	
 	
 	$result = array("status" => "success");
 	json_encode($result);
