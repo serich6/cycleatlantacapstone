@@ -486,6 +486,7 @@ $app->put('/users/user', function () use($app, $con)
 		
 	}	
 	$query = "UPDATE user SET";	
+	$query2 = "UPDATE user_password SET";
 	
 	//if(isset($age)){
 	if($age!=''){
@@ -527,12 +528,13 @@ $app->put('/users/user', function () use($app, $con)
 	}	
 	if($email!=''){
 		$query = $query . " email = " . "'".$email."'"." ,";
+		$query2 = $query2 . " email = '$email' WHERE user_id = '$id'"; 
 	}	
-
 	//take of the last AND
 	$query = substr($query, 0, -1);
 	if(isset($id)){
 		$query = $query . "WHERE" . " id = " . $id ;
+		//$query2 = $query2 . "WHERE" . " user_id = " .$id ; 
 	}
 	
 	//echo $query;
@@ -543,6 +545,7 @@ $app->put('/users/user', function () use($app, $con)
 		$query = substr($query, 0, -1);
 	}
 	
+	mysqli_query($con, $query2);
 	mysqli_query($con, $query);
 	
 	$result = array("status" => "success");
