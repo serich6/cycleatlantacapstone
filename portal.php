@@ -167,12 +167,12 @@ $(document).ready(function(){
     
    
     
-     document.getElementById("tripInfoButton.php").onclick = function () {
-        location.href = "tripMainView";
+     document.getElementById("tripInfoButton").onclick = function () {
+        location.href = "tripMainView.php";
     };
     
-     document.getElementById("noteInfoButton.php").onclick = function () {
-        location.href = "noteMainView";
+     document.getElementById("noteInfoButton").onclick = function () {
+        location.href = "noteMainView.php";
     };
 
 
