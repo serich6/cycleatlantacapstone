@@ -2007,7 +2007,7 @@ $app->get('/trips', function() use($app, $con)
 	}
 	
 	if(isset($notes)){
-		$query = $query . " notes = " . $notes . " AND ";
+		$query = $query . " notes = '" . $notes . "' AND ";
 	}
 
 	if(isset($start)){
