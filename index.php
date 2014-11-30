@@ -2011,10 +2011,10 @@ $app->get('/trips', function() use($app, $con)
 	}
 
 	if(isset($start)){
-		$query = $query . " start = " .  $start . " AND ";
+		$query = $query . " start = '" . $start . "' AND ";
 	}
 	if(isset($stop)){
-		$query = $query . " stop = " . $stop . " AND ";
+		$query = $query . " stop = '" . $stop . "' AND ";
 	}
 	if(isset($n_coord)){
 		if(filter_var($n_coord, FILTER_VALIDATE_INT)){
@@ -2113,7 +2113,7 @@ $app->get('/notes', function() use($app, $con)
 		$query = $query . " trip_id = " . $trip_id . " AND ";
 	}
 	if(isset($recorded)){
-		$query = $query . " recorded = " . $recorded . " AND ";
+		$query = $query . " recorded = '" . $recorded . "' AND ";
 	}
 	if(isset($latitude)){
 		$query = $query . " latitude = " . $latitude . " AND ";
