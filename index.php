@@ -1677,7 +1677,7 @@ for week, just add a week by week total at bottom
 			
 			$hourRows[] = $r;
 			
-			if(!array_key_exists($r['day'], $prettyHour)
+			if(!array_key_exists($r['day'], $prettyHour))
 			{
 				array_push($prettyHour, $r['day']);
 			}
