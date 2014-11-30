@@ -2011,7 +2011,7 @@ $app->get('/trips', function() use($app, $con)
 	}
 
 	if(isset($start)){
-		$query = $query . " start = " . $start . " AND ";
+		$query = $query . " start = " .  $start . " AND ";
 	}
 	if(isset($stop)){
 		$query = $query . " stop = " . $stop . " AND ";
