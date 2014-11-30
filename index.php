@@ -861,7 +861,7 @@ $app->get('/users/:id/workZIP', function ($id) use($app, $con)
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
 		//	var_dump($user);
 	
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    	$result = mysqli_query($con,"SELECT workZIP FROM user WHERE id = '$id'");
 	    //		while($row = mysqli_fetch_array($result)) {
   		//			echo $row['id'] . " " . $row['workZIP'];
   		//			echo "<br>";
@@ -890,7 +890,7 @@ $app->get('/users/:id/workZIP', function ($id) use($app, $con)
 $app->get('/users/:id/homeZIP', function ($id) use($app, $con) 
 {
 
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    	$result = mysqli_query($con,"SELECT homeZIP FROM user WHERE id = '$id'");
 	    	//	while($row = mysqli_fetch_array($result)) {
   			//		echo $row['id'] . " " . $row['homeZIP'];
   			//		echo "<br>";
@@ -916,7 +916,7 @@ $app->get('/users/:id/homeZIP', function ($id) use($app, $con)
 $app->get('/users/:id/schoolZIP', function ($id) use($app, $con) 
 {
 
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    	$result = mysqli_query($con,"SELECT schoolZIP FROM user WHERE id = '$id'");
 	    	//	while($row = mysqli_fetch_array($result)) {
   			//		echo $row['id'] . " " . $row['schoolZIP'];
   			//		echo "<br>";
@@ -941,7 +941,7 @@ $app->get('/users/:id/schoolZIP', function ($id) use($app, $con)
 $app->get('/users/:id/email', function ($id) use($app, $con) 
 {
 
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    	$result = mysqli_query($con,"SELECT email FROM user WHERE id = '$id'");
 	    //		while($row = mysqli_fetch_array($result)) {
   		//			echo $row['id'] . " " . $row['email'];
   		//			echo "<br>";
@@ -971,7 +971,7 @@ $app->get('/users/:id/ethnicity', function ($id) use($app, $con)
 {
 
 	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    	$result = mysqli_query($con,"SELECT ethnicity FROM user WHERE id = '$id'");
 	    		
 	    	mysqli_close($con);
 	    	while($r = mysqli_fetch_assoc($result))
@@ -992,7 +992,7 @@ $app->get('/users/:id/device', function ($id) use($app, $con)
 {
 
 	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    	$result = mysqli_query($con,"SELECT device FROM user WHERE id = '$id'");
 	    		
 	    	mysqli_close($con);
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1014,7 +1014,7 @@ $app->get('/users/:id/created', function ($id) use($app, $con)
 {
 
 	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    	$result = mysqli_query($con,"SELECT created FROM user WHERE id = '$id'");
 	    		
 	    	mysqli_close($con);
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1038,7 +1038,7 @@ $app->get('/users/:id/income', function ($id) use($app, $con)
 {
 
 	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    	$result = mysqli_query($con,"SELECT income FROM user WHERE id = '$id'");
 	    		
 	    	mysqli_close($con);
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1057,7 +1057,7 @@ $app->get('/users/:id/income', function ($id) use($app, $con)
 $app->get('/users/:id/rider_type', function ($id) use($app, $con) 
 {
 
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    	$result = mysqli_query($con,"SELECT rider_type FROM user WHERE id = '$id'");
 	    //		while($row = mysqli_fetch_array($result)) {
   		//			echo $row['id'] . " " . $row['rider_type'];
   		//			echo "<br>";
@@ -1090,7 +1090,7 @@ $app->get('/users/:id/rider_history', function ($id) use($app, $con)
 {
 
 	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    	$result = mysqli_query($con,"SELECT rider_history FROM user WHERE id = '$id'");
 	    		
 	    	mysqli_close($con);
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1110,7 +1110,7 @@ $app->get('/users/:id/rider_history', function ($id) use($app, $con)
 $app->get('/users/:id/cycling_freq', function ($id) use($app, $con) 
 {
 
-	    	$result = mysqli_query($con,"SELECT * FROM user WHERE id = '$id'");
+	    	$result = mysqli_query($con,"SELECT cycling_freq FROM user WHERE id = '$id'");
 	    	//	while($row = mysqli_fetch_array($result)) {
   			//		echo $row['id'] . " " . $row['cycling_freq'];
   			//		echo "<br>";
@@ -1237,12 +1237,52 @@ $app->get('/rides',function() use($app, $con)
 	$month = $req->get('month');	
 	
 	$purposeCounts='';
-	$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip GROUP BY purpose";
-	$weekDayCounts = "SELECT DAYOFWEEK(start) as day, purpose, COUNT(*) as total  FROM trip  GROUP BY WEEK(start), DAYOFWEEK(start), purpose";
-	$hourCounts = "SELECT DAYOFWEEK(start) as day, HOUR(start) as hour,  purpose, COUNT(HOUR(start)) as hourCount  
-						FROM trip GROUP BY WEEK(start), DAYOFWEEK(start), HOUR(start), purpose";
-	$weekCounts = "SELECT start, WEEK(start) as week, purpose FROM trip GROUP BY WEEK(start), purpose";
-	$monthCounts = "SELECT MONTH(start) as month, purpose, COUNT(*) as total  FROM trip  GROUP BY MONTH(start), purpose";
+	$purposeCounts = "SELECT SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total FROM trip";
+	$weekDayCounts = "SELECT DAYOFWEEK(start) as day, SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total FROM trip  GROUP BY WEEK(start), DAYOFWEEK(start)";
+	$hourCounts = "SELECT DAYOFWEEK(start) as day, HOUR(start) as hour,  SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total 
+						FROM trip GROUP BY WEEK(start), DAYOFWEEK(start), HOUR(start)";
+	$weekCounts = "SELECT start, WEEK(start) as week, SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total FROM trip GROUP BY WEEK(start)";
+	$monthCounts = "SELECT MONTH(start) as month, SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total  FROM trip  GROUP BY MONTH(start)";
 	
 
  
@@ -1278,79 +1318,255 @@ for week, just add a week by week total at bottom
 	
 	if(isset($start_date))
 	{
-		$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") GROUP BY purpose";
+		$purposeCounts = "SELECT SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total
+		
+								FROM trip 
+		
+								WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .")";
+		
+		
 		if(isset($week_day))
 		{
-			$weekDayCounts = "SELECT DAYOFWEEK(start) as day, purpose, COUNT(*) as total  FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
-						GROUP BY WEEK(start), DAYOFWEEK(start), purpose";
+			$weekDayCounts = "SELECT DAYOFWEEK(start) as day, 
+						SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total  
+			
+						FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
+						GROUP BY WEEK(start), DAYOFWEEK(start)";
 		}
 		if(isset($hour))
 		{
-			$hourCounts = "SELECT DAYOFWEEK(start) as day, HOUR(start) as hour,  purpose, COUNT(HOUR(start)) as hourCount  
+			$hourCounts = "SELECT DAYOFWEEK(start) as day, HOUR(start) as hour,  
+			
+			SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total 
+			
+			
 			FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .")  
-			GROUP BY WEEK(start), DAYOFWEEK(start), HOUR(start), purpose";
+			GROUP BY WEEK(start), DAYOFWEEK(start), HOUR(start)";
 		}
 		if(isset($month))
 		{
-			$monthCounts = "SELECT MONTH(start) as month, purpose, COUNT(*) as total  FROM trip WHERE MONTH(start) >= MONTH(".'"'.$start_date.'"'.") 
-			GROUP BY MONTH(start), purpose";
+			$monthCounts = "SELECT MONTH(start) as month, 
+			
+			SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total  
+			
+			FROM trip WHERE MONTH(start) >= MONTH(".'"'.$start_date.'"'.") 
+			GROUP BY MONTH(start)";
 		}
 		if(isset($week))
 		{
-			$weekCounts = "SELECT start, WEEK(start) as week, purpose FROM trip WHERE WEEK(start) >= WEEK(".'"'.$start_date.'"'.") 
-			GROUP BY WEEK(start), purpose";
+			$weekCounts = "SELECT start, WEEK(start) as week, 
+			
+			SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total 
+			
+			FROM trip WHERE WEEK(start) >= WEEK(".'"'.$start_date.'"'.") 
+			GROUP BY WEEK(start)";
 		}
 		if(isset($end_date))
 		{
-			$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
-			AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY purpose";
+			$purposeCounts = "SELECT 
+			
+			SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total
+			
+			FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
+			AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .")";
 			if(isset($week_day))
 			{
-				$weekDayCounts = "SELECT DAYOFWEEK(start) as day, purpose, COUNT(*) as total  FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .")  
-				AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY WEEK(start), DAYOFWEEK(start), purpose";
+				$weekDayCounts = "SELECT DAYOFWEEK(start) as day,   
+				
+				SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total
+				
+				FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .")  
+				
+				
+				AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY WEEK(start), DAYOFWEEK(start)";
 			}	
 			if(isset($hour))
 			{
-				$hourCounts = "SELECT start, DAYOFWEEK(start) as day, HOUR(start) as hour,  purpose, COUNT(HOUR(start)) as hourCount  
+				$hourCounts = "SELECT start, DAYOFWEEK(start) as day, HOUR(start) as hour,  
+				
+				
+				SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total  
+				
+				
 				FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .")  AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .")
-				GROUP BY WEEK(start), DAYOFWEEK(start), HOUR(start), purpose";	
+				GROUP BY WEEK(start), DAYOFWEEK(start), HOUR(start)";	
 			}
 			if(isset($month))
 			{
-				$monthCounts = "SELECT MONTH(start) as month, purpose, COUNT(*) as total  FROM trip WHERE MONTH(start) >= MONTH(". ' " ' . $start_date . '"' .") 
-				AND MONTH(start) <= MONTH (".'"'.$end_date.'"'.") GROUP BY MONTH(start), purpose";
+				$monthCounts = "SELECT MONTH(start) as month, 
+				
+				SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total  
+				
+				
+				FROM trip WHERE MONTH(start) >= MONTH(". ' " ' . $start_date . '"' .") 
+				AND MONTH(start) <= MONTH (".'"'.$end_date.'"'.") GROUP BY MONTH(start)";
 			}
 			if(isset($week))
 			{
-				$weekCounts = "SELECT start, WEEK(start) as week, purpose FROM trip WHERE WEEK(start) >= WEEK(".'"'.$start_date.'"'.")
-				AND WEEK(start) <= WEEK(". ' " ' . $end_date . '"' .") GROUP BY WEEK(start), purpose";
+				$weekCounts = "SELECT start, WEEK(start) as week, 
+				
+				SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total 
+				
+				FROM trip WHERE WEEK(start) >= WEEK(".'"'.$start_date.'"'.")
+				AND WEEK(start) <= WEEK(". ' " ' . $end_date . '"' .") GROUP BY WEEK(start)";
 			}
 		}
 				
 	}
 	if(isset($end_date) && IS_NULL($start_date))
 	{
-		$purposeCounts = "SELECT purpose, COUNT(purpose) as total FROM trip WHERE DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY purpose";
+		$purposeCounts = "SELECT
+		
+		 SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total 
+		
+		
+		FROM trip WHERE DATE(start) <= DATE(". ' " ' . $end_date . '"' .")";
 		if(isset($week_day))
 		{
 			"SELECT DAYOFWEEK(start) as day, purpose, COUNT(*) as total  FROM trip WHERE DATE(start) <= DATE(". ' " ' . $end_date . '"' .") 
-						GROUP BY WEEK(start), DAYOFWEEK(start), purpose";
+						GROUP BY WEEK(start), DAYOFWEEK(start)";
 		}
 		if(isset($hour))
 		{
-			$hourCounts = "SELECT start, DAYOFWEEK(start) as day, HOUR(start) as hour,  purpose, COUNT(HOUR(start)) as hourCount  
+			$hourCounts = "SELECT start, DAYOFWEEK(start) as day, HOUR(start) as hour, 
+			
+			 SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total  
+			
+			
 			FROM trip WHERE DATE(start) DATE(start) <= DATE(". ' " ' . $end_date . '"' .")
-			GROUP BY WEEK(start), DAYOFWEEK(start), HOUR(start), purpose";
+			GROUP BY WEEK(start), DAYOFWEEK(start), HOUR(start)";
 		}
 		if(isset($month))
 		{
-			$monthCounts = "SELECT MONTH(start) as month, purpose, COUNT(*) as total  FROM trip WHERE MONTH(start) <= MONTH(". ' " ' . $end_date . '"' .") 
-			GROUP BY MONTH(start), purpose";
+			$monthCounts = "SELECT MONTH(start) as month, 
+			
+			SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total  
+			
+			
+			FROM trip WHERE MONTH(start) <= MONTH(". ' " ' . $end_date . '"' .") 
+			GROUP BY MONTH(start)";
 		}
 		if(isset($week))
 		{
-			$weekCounts = "SELECT start, WEEK(start) as week, purpose FROM trip WHERE 
-			AND WEEK(start) <= WEEK(". ' " ' . $end_date . '"' .") GROUP BY WEEK(start), purpose";
+			$weekCounts = "SELECT start, WEEK(start) as week, 
+			
+			SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total
+			
+			
+			 FROM trip WHERE 
+			AND WEEK(start) <= WEEK(". ' " ' . $end_date . '"' .") GROUP BY WEEK(start)";
 		}	
 	}
 	
@@ -1405,7 +1621,7 @@ for week, just add a week by week total at bottom
 			}
 			$wRows[] = $r;
 		}
-		
+		//var_dump($wRows);
 		$returnData = array(
 				"weekstart" => $start_date,
 				"purpose" => $wRows
@@ -1415,54 +1631,66 @@ for week, just add a week by week total at bottom
 	{
 		$dayRow = array("weekstart"=>$start_date);
 		$hourCount = mysqli_query($con, $hourCounts);
+		$prettyHour = array();
 		while($r = mysqli_fetch_assoc($hourCount))
 		{
-			if($r['day']=="1")
+			/**if($r['day']=="1")
 			{
 				$r['day']="Sunday";
-				$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
+				//$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
 			}
 			if($r['day']=="2")
 			{
 				$r['day']="Monday";
-				$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
+			//	$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
 			}
 			if($r['day']=="3")
 			{
 				$r['day']="Tuesday";
-				$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
+				//$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
 			}
 			if($r['day']=="4")
 			{
 				$r['day']="Wednesday";
-				$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
+			//	$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
 			}
 			if($r['day']=="5")
 			{
 				$r['day']="Thursday";
-				$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
+			//	$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
 			}
 			if($r['day']=="6")
 			{
 				$r['day']="Friday";
-				$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
+			//	$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
 			}
 			if($r['day']=="7")
 			{
 				$r['day']="Saturday";
-				$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
+			//	$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
 			}
 	
 			//$dayRow[] = array($r["day"]);
 			//$dayRow[] =array(($r["day"]), array(array($r["hour"]=>$r["purpose"])));
 			
+			**/
 			
+			$hourRows[] = $r;
 			
-		
+			if(!array_key_exists($r['day'], $prettyHour)
+			{
+				array_push($prettyHour, $r['day']);
+			}
+			
+	
 			
 		}
-		
-		$returnData = $dayRow;
+	
+	
+		$returnData = array(
+				"weekstart" => $start_date,
+				$prettyHour
+				);
 			
 	}
 	if(isset($month))
@@ -1537,11 +1765,9 @@ for week, just add a week by week total at bottom
    //$response->body(json_encode($pRows));
    //$data = $response->body(json_encode($pRows));
    $combined = array();
-   $combined = array(
-    			"purpose"=>$pRows,
-    			["weekday"=>$wRows,
-    				//"hour"=>$hRows
-    			]
+   $combined = array($wRows
+    			//"purpose"=>$pRows,
+    			
     
     );
     //$combined['weekstart'] = "weekdata";//json_encode(["weekdata"]);
