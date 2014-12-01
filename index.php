@@ -856,6 +856,42 @@ $app->get('/trips/:id/purpose', function ($id) use($app, $con)
 });
 
 
+
+$app->delete('/users', function() use($app, $con)
+{
+	
+
+	    $body = $app->request()->getBody();
+	    
+   	  
+		$values = '';
+		$keys = '';
+	
+		$userId = '';
+	
+	
+	foreach($body as $k=>$v)
+	{	
+		
+		if($k == 'deleteId'){
+			$userId = $v;
+		}		
+    }
+    $query = "Delete from user_password WHERE user_id=".  $userId  ;
+    mysqli_query($con, $query);
+    mysqli_close($con);
+     $result = array("status" => $userId);
+			 json_encode($result);
+			 $response = $app->response();
+   			 $response['Content-Type'] = 'application/json';
+    		 $data = $response->body(json_encode($result));
+    		 
+    		 return $data;
+
+
+});
+
+
 $app->get('/users/:id/workZIP', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
@@ -1677,19 +1713,33 @@ for week, just add a week by week total at bottom
 			
 			$hourRows[] = $r;
 			
-			if(!array_key_exists($r['day'], $prettyHour))
-			{
-				array_push($prettyHour, $r['day']);
-			}
+		//	if(!array_key_exists($r['day'], $prettyHour))
+		//	{
+		//		array_push($prettyHour, $r['day']);
+		//	}
+		
+			
 			
 	
 			
 		}
-	
-	
+	//	for($i = 0; $i<count($hourRows)-1; $i++)
+	//	{
+	//		if($hourRows[$i+1]['day'] != $hourRows[$i]['day'])
+	//		{
+	//			for($k = 1; $k<8; $k++)
+	//			{
+	//				if($prettyHour[$k] == $hourRows[$i+1]['day'])
+	//				{
+	//					array_push($prettyHour[$k], $hourRows[$i+1]['day']);
+	//				}
+	//			}
+	//		}
+	//	}
+	//	var_dump($prettyHour);
 		$returnData = array(
 				"weekstart" => $start_date,
-				$prettyHour
+				//$prettyHour
 				);
 			
 	}

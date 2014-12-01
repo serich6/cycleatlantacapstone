@@ -36,6 +36,12 @@ $('#postNoteButton').click(function() {
 	return false;
 });
 
+$('#delProfile').click(function() {
+	
+	deleteUser();
+	return false;
+});
+
 var div = document.getElementById("dom-target");
 var user_id = div.textContent;
 
@@ -533,6 +539,29 @@ function getNoteData(id)
 
 
 
+function deleteUser() {
+	
+	$.ajax({
+		type: 'DELETE',
+		contentType: 'application/json',
+		url: 'index.php/users',
+		dataType: "json",
+		data: deleteProfileToJSON(),
+		success: function(data){
+	
+		//	if(data["status"]=="success")
+		//	{
+		//		location.href = "success.php"
+				
+			//	console.log(data["status"]);
+		//	}
+			
+		}
+		
+	});
+}
+
+
 function updateUser() {
 	
 	$.ajax({
@@ -553,6 +582,14 @@ function updateUser() {
 		}
 		
 	});
+}
+
+
+function deleteProfileToJSON() {
+	return JSON.stringify({
+		"deleteId": $('#deleteId').val() 
+		
+		});
 }
 
 
