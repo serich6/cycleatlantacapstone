@@ -2166,7 +2166,7 @@ $app->get('/notes', function() use($app, $con)
 		if(substr($query, -1)== 'W'){
 			$query = substr($query, 0, -1);
 		}
-		echo $query;
+		
 		try
 		{
 			$result = mysqli_query($con, $query);
