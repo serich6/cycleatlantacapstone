@@ -549,12 +549,13 @@ function deleteUser() {
 		data: deleteProfileToJSON(),
 		success: function(data){
 	
-		//	if(data["status"]=="success")
-		//	{
-		//		location.href = "success.php"
+			if(data["status"]=="success")
+			{
+				location.href = "logout.php" //logout since they aren't in the system
+				//anymore
 				
 			//	console.log(data["status"]);
-		//	}
+			}
 			
 		}
 		

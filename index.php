@@ -880,7 +880,7 @@ $app->delete('/users', function() use($app, $con)
     $query = "Delete from user_password WHERE user_id=".  $userId  ;
     mysqli_query($con, $query);
     mysqli_close($con);
-     $result = array("status" => $userId);
+     $result = array("status" => "success");
 			 json_encode($result);
 			 $response = $app->response();
    			 $response['Content-Type'] = 'application/json';

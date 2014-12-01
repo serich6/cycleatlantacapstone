@@ -81,7 +81,7 @@ if(!isset($_SESSION['uID'])) {
 		<form id="deleteUser">
 		<br>
 		Would you like to delete your profile?
-		<label></label><br> <input id="deleteId" input type="hidden" name="deleteId" type="text" value=1432 /><br>
+		<label></label><br> <input id="deleteId" input type="hidden" name="deleteId" type="text" value=1439 /><br>
 		
     	<button id="delProfile">Delete Profile</button>
     	</form>
