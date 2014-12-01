@@ -2078,8 +2078,8 @@ $app->get('/notes', function() use($app, $con)
 	$user_id = $req->get('user_id');
 	$trip_id = $req->get('purpose');
 	$recorded = $req->get('notes');
-	$latitude = $req->get('start');
-	$longitude = $req->get('stop');
+	$latitude = $req->get('latitude');
+	$longitude = $req->get('longitude');
 	$altitude = $req->get('altitude');
 	$speed = $req->get('speed');
 	$hAccuracy = $req->get('hAccuracy');
@@ -2155,7 +2155,7 @@ $app->get('/notes', function() use($app, $con)
 	
 	if(count($bad_params)!=0){
 		//for testing
-		echo implode(", ", $bad_params);
+		//echo implode(", ", $bad_params);
 		
 		//SHOULD LOG TO FILE INSTEAD
 	}
@@ -2166,7 +2166,7 @@ $app->get('/notes', function() use($app, $con)
 		if(substr($query, -1)== 'W'){
 			$query = substr($query, 0, -1);
 		}
-
+		echo $query;
 		try
 		{
 			$result = mysqli_query($con, $query);
