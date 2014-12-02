@@ -491,9 +491,7 @@ $app->put('/users/user', function () use($app, $con)
 	}	
 	$query = "UPDATE user SET";	
 	//will fix/clean up later, I was in a hurry to get this to work :p
-	$query2 = "UPDATE user_password SET";//email
-	//$query3 = "UPDATE user_password SET";//password
-	//$query4 = "UPDATE user_password SET";//salt
+	$query2 = "UPDATE user_password SET";
 	
 	//if(isset($age)){
 	if($age!=''){
@@ -542,8 +540,7 @@ $app->put('/users/user', function () use($app, $con)
 		$newHash = create_hash($password, $newSalt);
 		$query2 = $query2 . " salt = " . "'".$newSalt."'"." ,";
 		$query2 = $query2 . " password = " . "'".$newHash."'"." ,";
-		//$query3 = $query3 . " password = '$newHash'"; 
-		//$query4 = $query4 . " salt = '$newSalt'"; 
+		
 
 	}
 	//take of the last AND
@@ -553,8 +550,7 @@ $app->put('/users/user', function () use($app, $con)
 	if(isset($id)){
 		$query = $query . "WHERE" . " id = " . $id ;
 		$query2 = $query2 . "WHERE" . " user_id = '$id'"; 
-		//$query3 = $query3 . "WHERE" . " user_id = '$id'"; 
-		//$query4 = $query4 . "WHERE" . " user_id = '$id'"; 
+		
 	}
 	
 	//echo $query;
