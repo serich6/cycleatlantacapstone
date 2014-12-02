@@ -553,9 +553,6 @@ $app->put('/users/user', function () use($app, $con)
 		
 	}
 	
-	//echo $query;
-	//echo '<br>';
-	
 	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
 	if(substr($query, -1)== 'W'){
 		$query = substr($query, 0, -1);
@@ -565,8 +562,6 @@ $app->put('/users/user', function () use($app, $con)
 	
 	mysqli_query($con, $query);
 	mysqli_query($con, $query2);
-	//mysqli_query($con, $query3);
-	//mysqli_query($con, $query4);
 	
 	
 	$result = array("status" => "success");
