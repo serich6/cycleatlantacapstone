@@ -399,11 +399,15 @@ $app->post('/trips/trip', function () use($app, $con)
 	$values = '';
 	$keys = '';
 	//loop through the JSON data
+	$user_id='';
 
+	
 	foreach($body as $k=>$v)
 	{	
 		//create a comma separated string of keys and values to pass to SQL
-		
+		if($k=='user_id'){
+			$user_id = $v;
+		}
 		$keys .= $k.",";
         $values .= '"'.$v.'"'.",";
 	
@@ -422,12 +426,39 @@ $app->post('/trips/trip', function () use($app, $con)
         echo '{"error":{"text":'. $e->getMessage() .'}}';
       }
 	    	
-    //for debugging purposes, make sure query looks like it should      	
-    header('Location:../../tripMainView.php');
-    exit();
-
-	//NEED TO GET THE GLOBAL TRIP ID BACK
+       	
+    //header('Location:../../tripMainView.php');
+    //exit();
 	
+	
+	//QUERY FOR THE GLOBAL ID
+	$query = 'SELECT id FROM trip WHERE user_id = '. $user_id.' ORDER BY id DESC LIMIT 1';
+	
+	try
+      {    		
+        $result = mysqli_query($con, $query);
+      } catch(PDOException $e) 
+      {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+      }
+
+      
+      $rows = array();
+	  while($r = mysqli_fetch_assoc($result))
+	    	{ 	
+	    		$rows[] = $r;
+	    	}
+	    	
+	//Return the global ID in the body    	
+	$response = $app->response();
+   	$response['Content-Type'] = 'application/json';
+   		 
+    $response->body(json_encode($rows));
+    $data = $response->body(json_encode($rows));
+
+    return $data;
+    exit();
+    
 	});
 
 
