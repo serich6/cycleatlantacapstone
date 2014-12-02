@@ -548,6 +548,8 @@ $app->put('/users/user', function () use($app, $con)
 	}
 	//take of the last AND
 	$query = substr($query, 0, -1);
+	$query2 = substr($query2,0,-1);
+	
 	if(isset($id)){
 		$query = $query . "WHERE" . " id = " . $id ;
 		$query2 = $query2 . "WHERE" . " user_id = '$id'"; 
@@ -561,12 +563,14 @@ $app->put('/users/user', function () use($app, $con)
 	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
 	if(substr($query, -1)== 'W'){
 		$query = substr($query, 0, -1);
+		$query2 = substr($query2, 0, -1);
+
 	}
 	
 	mysqli_query($con, $query);
 	mysqli_query($con, $query2);
-	mysqli_query($con, $query3);
-	mysqli_query($con, $query4);
+	//mysqli_query($con, $query3);
+	//mysqli_query($con, $query4);
 	
 	
 	$result = array("status" => "success");
