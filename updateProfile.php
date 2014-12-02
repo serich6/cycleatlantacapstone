@@ -77,6 +77,15 @@ if(!isset($_SESSION['uID'])) {
 				<button id="submitUpdates">Submit Changes</button>
 			</form>
 		</div>
+	<div id="deleteForm" class="g3">
+		<form id="deleteUser">
+		<br>
+		Would you like to delete your profile?
+		<label></label><br> <input id="deleteId" input type="hidden" name="deleteId" type="text" value=1439 /><br>
+		
+    	<button id="delProfile">Delete Profile</button>
+    	</form>
+		
 	</div>
 	</div>
 

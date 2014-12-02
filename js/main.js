@@ -30,6 +30,18 @@ $('#postTripButton').click(function() {
 	return false;
 });
 
+$('#postNoteButton').click(function() {
+	
+	addNote();
+	return false;
+});
+
+$('#delProfile').click(function() {
+	
+	deleteUser();
+	return false;
+});
+
 var div = document.getElementById("dom-target");
 var user_id = div.textContent;
 
@@ -88,6 +100,24 @@ function addTrip() {
 		data: postTripFormToJSON(),
 		success: function(data, textStatus, jqXHR){
 			alert('Trip added successfully');
+		},
+// 		error: function(jqXHR, textStatus, errorThrown){
+// 			alert('addTrip error: ' + textStatus);
+// 		}
+		
+	});
+}
+
+function addNote() {
+	
+	$.ajax({
+		type: 'POST',
+		contentType: 'application/json',
+		url: "index.php/notes/note",
+		dataType: "json",
+		data: postNoteFormToJSON(),
+		success: function(data, textStatus, jqXHR){
+			alert('Note added successfully');
 		},
 // 		error: function(jqXHR, textStatus, errorThrown){
 // 			alert('addTrip error: ' + textStatus);
@@ -509,6 +539,30 @@ function getNoteData(id)
 
 
 
+function deleteUser() {
+	
+	$.ajax({
+		type: 'DELETE',
+		contentType: 'application/json',
+		url: 'index.php/users',
+		dataType: "json",
+		data: deleteProfileToJSON(),
+		success: function(data){
+	
+			if(data["status"]=="success")
+			{
+				location.href = "logout.php" //logout since they aren't in the system
+				//anymore
+				
+			//	console.log(data["status"]);
+			}
+			
+		}
+		
+	});
+}
+
+
 function updateUser() {
 	
 	$.ajax({
@@ -529,6 +583,14 @@ function updateUser() {
 		}
 		
 	});
+}
+
+
+function deleteProfileToJSON() {
+	return JSON.stringify({
+		"deleteId": $('#deleteId').val() 
+		
+		});
 }
 
 
@@ -576,3 +638,20 @@ function postTripFormToJSON() {
 		"n_coord": $('#n_coord').val()
 		});
 }
+
+function postNoteFormToJSON() {
+	return JSON.stringify({
+		"user_id": $('#user_id').val(), 
+		"trip_id": $('#trip_id').val(),
+		"recorded": $('#recorded').val(), 
+		"latitude": $('#latitude').val(),
+		"longitude": $('#longitude').val(), 
+		"altitude": $('#altitude').val(),
+		"speed": $('#speed').val(),
+		"hAccuracy": $('#hAccuracy').val(),
+		"vAccuracy": $('#vAccuracy').val(),
+		"note_type": $('#note_type').val(),
+		"details": $('#details').val()
+		});
+}
+
