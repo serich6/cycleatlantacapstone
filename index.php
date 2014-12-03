@@ -1685,7 +1685,7 @@ for week, just add a week by week total at bottom
 			}
 			$wRows[] = $r;
 		}
-		//var_dump($wRows);
+		
 		$returnData = array(
 				"weekstart" => $start_date,
 				"purpose" => $wRows
@@ -1695,79 +1695,84 @@ for week, just add a week by week total at bottom
 	{
 		$dayRow = array("weekstart"=>$start_date);
 		$hourCount = mysqli_query($con, $hourCounts);
-		$prettyHour = array();
+		$prettyHour = array(array('Monday'), array('Tuesday'), array('Wednesday'),array("Thursday"), array("Friday"),
+							array("Saturday"), array("Sunday"));
 		while($r = mysqli_fetch_assoc($hourCount))
 		{
-			/**if($r['day']=="1")
+			if($r['day']=="1")
 			{
 				$r['day']="Sunday";
-				//$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
+				
 			}
 			if($r['day']=="2")
 			{
 				$r['day']="Monday";
-			//	$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
+			
 			}
 			if($r['day']=="3")
 			{
 				$r['day']="Tuesday";
-				//$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
+				
 			}
 			if($r['day']=="4")
 			{
 				$r['day']="Wednesday";
-			//	$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
+			
 			}
 			if($r['day']=="5")
 			{
 				$r['day']="Thursday";
-			//	$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
+			
 			}
 			if($r['day']=="6")
 			{
 				$r['day']="Friday";
-			//	$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
+			
 			}
 			if($r['day']=="7")
 			{
 				$r['day']="Saturday";
-			//	$dayRow[] =array("day"=>$r["day"], "hour"=>$r["hour"], "purpose"=>$r["purpose"] ,"total"=>$r["hourCount"]);
+			
 			}
 	
-			//$dayRow[] = array($r["day"]);
-			//$dayRow[] =array(($r["day"]), array(array($r["hour"]=>$r["purpose"])));
 			
-			**/
+			
 			
 			$hourRows[] = $r;
-			
-		//	if(!array_key_exists($r['day'], $prettyHour))
-		//	{
-		//		array_push($prettyHour, $r['day']);
-		//	}
-		
-			
 			
 	
 			
 		}
-	//	for($i = 0; $i<count($hourRows)-1; $i++)
-	//	{
-	//		if($hourRows[$i+1]['day'] != $hourRows[$i]['day'])
-	//		{
-	//			for($k = 1; $k<8; $k++)
-	//			{
-	//				if($prettyHour[$k] == $hourRows[$i+1]['day'])
-	//				{
-	//					array_push($prettyHour[$k], $hourRows[$i+1]['day']);
-	//				}
-	//			}
-	//		}
-	//	}
-	//	var_dump($prettyHour);
+	
+		for($i = 0; $i<count($hourRows)-1; $i++)
+		{
+			for($k = 0; $k<count($prettyHour); $k++)
+			{
+			
+				if(strcmp($hourRows[$i]['day'],$prettyHour[$k][0]) == 0)
+			 	 {		 		
+				
+						 array_push($prettyHour[$k], array('hour'=>$hourRows[$i]['hour'], 'trips'=>array('commute'=>$hourRows[$i]['commute'],
+						 							'social'=>$hourRows[$i]['social'],
+						 							'errand'=>$hourRows[$i]['errand'],'workRelated'=>$hourRows[$i]['workRelated'],
+						 							'school'=>$hourRows[$i]['school'],'exercise'=>$hourRows[$i]['exercise'],
+						 							'shopping'=>$hourRows[$i]['shopping'],'other'=>$hourRows[$i]['other'],
+						 							'total_trips'=>$hourRows[$i]['total']))	);
+				
+			  		}
+				
+						
+				}
+				
+		} 
+			
+		
+		
+		$test = json_encode($prettyHour);
+		echo $test;
 		$returnData = array(
 				"weekstart" => $start_date,
-				//$prettyHour
+				
 				);
 			
 	}
@@ -1840,31 +1845,17 @@ for week, just add a week by week total at bottom
 	
 	$response = $app->response();
 	$response['Content-Type'] = 'application/json';
-   //$response->body(json_encode($pRows));
-   //$data = $response->body(json_encode($pRows));
+  
    $combined = array();
    $combined = array($wRows
-    			//"purpose"=>$pRows,
+    		
     			
     
     );
-    //$combined['weekstart'] = "weekdata";//json_encode(["weekdata"]);
-    //$combined['weekday'] = $wRows;
-    //$combined['weekday']['hour']= $hRows;//json_encode($rows);
-    //$combined['weekday']['purpose'] = $pRows;//json_encode($rows);   
-    
-    //$combined = array(
-  	//["week_start" => $weekSt],  		
-  	//["purpose" => $purData]
-  	//"otherTest" => 'otherTesting',
-  	//"weeklyData" => 'weeklyData'
-	//);
-
+   
 	$newData= json_encode($returnData, JSON_PRETTY_PRINT); 
 	echo $newData;
-    // var_dump($newData);
-   	// return $newData;
-   	//return $data;
+  
     exit();
 
 });
@@ -2271,4 +2262,15 @@ $app->get('/notes', function() use($app, $con)
 });
 
 $app->run();
+
+function in_array_r($needle, $haystack, $strict = false) {
+    foreach ($haystack as $item) {
+        if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && in_array_r($needle, $item, $strict))) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 ?>
