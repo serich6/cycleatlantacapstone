@@ -123,7 +123,7 @@ if(!isset($_SESSION['uID'])) {
 	<div class="cf"></div>
 		<div id="content">
 			 <button>Add New Trip</button>
-				<form action="index.php/trips/trip" method="post" >
+				<form action="../index.php/trips/trip" method="post" >
 
 				user_id:
 				<input name="user_id" value=<?php echo $_SESSION['uID']?> /><br>

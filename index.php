@@ -198,19 +198,19 @@ $app->post('/login', function () use($app, $con)
 			
 			//echo $_SESSION["uID"];
 			
-			header('Location:../portal.php');
+			header('Location:../demo_site/portal.php');
 			exit();
 			
 			
 		}
 		else{
 			
-			header('Location:../badLogin.html');
+			header('Location:../demo_site/badLogin.html');
 			exit();
 		}
 	}
 	else{
-		header('Location:../badLogin.html');
+		header('Location:../demo_site/badLogin.html');
 		exit();
 	}
 	exit();

@@ -1,7 +1,7 @@
 <?php
 //session_cache_limiter(false);
 session_start();
-//print_r($_SESSION['uID']);
+
 ?>
 <!DOCTYPE html>
 
@@ -33,21 +33,22 @@ session_start();
 			<header>
 				<div class="g1">
 					<h2>User Login</h5> 
-					<p id="incorrect">Incorrect email or password</p>
+					<p id="incorrect"></p>
 				</div>
 			</header>
 			
 			<div class="cf"></div>
 			
 			<div id="content">
-				<form action="index.php/login" method="post" name="myform">
+				<form action="../index.php/login" method="post" name="myform">
 				Email:
 				<input name="email" value="none" /> <br>
 				Password:
-				<input name="password" input type="password" value="password" /> <br>
+				<input name="password" input type= "password" value="password" /> <br>
 				<input type="submit" value="Submit">
 
 			</form>
+			<p>Or register <a href="register.php">here</a></p>
 			</div>
 	<footer class="g3 cf">
 		<small>2011 <span class="license">Created by <a href="http://twitter.com/thedayhascome">Josh Hopkins</a> <span class="amp">&amp;</span> <a href="http://40horse.com">40 Horse</a></span>. Released under <a href="http://unlicense.org">Unlicense</a>. </small>

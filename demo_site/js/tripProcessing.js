@@ -13,7 +13,7 @@ function getTripData(id)
 		$.ajax({
 		type: 'GET',
 		contentType: 'application/json',
-		url: "index.php/trips/"+id,
+		url: "../index.php/trips/"+id,
 		dataType: "json",
 		
 		success: function(response){
@@ -81,7 +81,7 @@ function changeTripDetails()
 		$.ajax({
 		type: 'GET',
 		contentType: 'application/json',
-		url: "index.php/trips?id="+ trip,
+		url: "../index.php/trips?id="+ trip,
 		dataType: "json",
 		
 		success: function(response){
@@ -113,7 +113,7 @@ function populateTripTable(id)
 	$.ajax({
 		type: 'GET',
 		contentType: 'application/json',
-		url: "index.php/trips/"+id,
+		url: "../index.php/trips/"+id,
 		dataType: "json",
 		
 		success: function(response){

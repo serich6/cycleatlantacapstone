@@ -12,7 +12,7 @@ function testTrips(id)
 	
 $.ajax({
      type: "GET",
-     url: "index.php/trips/"+id,
+     url: "../index.php/trips/"+id,
      async: false,
     
  
@@ -63,7 +63,7 @@ var freq = new Array();
 	
 $.ajax({
      type: "GET",
-     url: "index.php/rides/"+id,
+     url: "../index.php/rides/"+id,
      async: false,
     
  

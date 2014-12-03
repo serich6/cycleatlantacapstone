@@ -1,7 +1,7 @@
 
 // The root URL for the RESTful services
 //code courtesy (but refactored) of : https://github.com/ccoenraets/wine-cellar-php
-var rootURL = "index.php/users/user";
+var rootURL = "../index.php/users/user";
 
 
 
@@ -55,7 +55,7 @@ function showJSONuser(id)
 	$.ajax({
 		type: 'GET',
 		contentType: 'application/json',
-		url: "index.php/users/"+id,
+		url: "../index.php/users/"+id,
 		dataType: "json",
 		
 		success: function(response){
@@ -95,7 +95,7 @@ function addTrip() {
 	$.ajax({
 		type: 'POST',
 		contentType: 'application/json',
-		url: "index.php/trips/trip",
+		url: "../index.php/trips/trip",
 		dataType: "json",
 		data: postTripFormToJSON(),
 		success: function(data, textStatus, jqXHR){
@@ -113,7 +113,7 @@ function addNote() {
 	$.ajax({
 		type: 'POST',
 		contentType: 'application/json',
-		url: "index.php/notes/note",
+		url: "../index.php/notes/note",
 		dataType: "json",
 		data: postNoteFormToJSON(),
 		success: function(data, textStatus, jqXHR){
@@ -131,7 +131,7 @@ function getHomeZip(id)
 	$.ajax({
 		type: 'GET',
 		contentType: 'application/json',
-		url: "index.php/users/"+ id +"/homeZIP",
+		url: "../index.php/users/"+ id +"/homeZIP",
 		dataType: "json",
 		
 		success: function(response){
@@ -151,7 +151,7 @@ function getWorkZip(id)
 	$.ajax({
 		type: 'GET',
 		contentType: 'application/json',
-		url: "index.php/users/"+id+"/workZIP",
+		url: "../index.php/users/"+id+"/workZIP",
 		dataType: "json",
 		
 		success: function(response){
@@ -170,7 +170,7 @@ function getSchoolZip(id)
 	$.ajax({
 		type: 'GET',
 		contentType: 'application/json',
-		url: "index.php/users/"+id+"/schoolZIP",
+		url: "../index.php/users/"+id+"/schoolZIP",
 		dataType: "json",
 		
 		success: function(response){
@@ -196,7 +196,7 @@ function getEmail(id)
 	$.ajax({
 		type: 'GET',
 		contentType: 'application/json',
-		url: "index.php/users/" + id + "/email",
+		url: "../index.php/users/" + id + "/email",
 		dataType: "json",
 		
 		success: function(response){
@@ -222,7 +222,7 @@ function getCycleFreq(id)
 	$.ajax({
 		type: 'GET',
 		contentType: 'application/json',
-		url: "index.php/users/" + id + "/cycling_freq",
+		url: "../index.php/users/" + id + "/cycling_freq",
 		dataType: "json",
 		
 		success: function(response){
@@ -269,7 +269,7 @@ function getRiderType(id)
 	$.ajax({
 		type: 'GET',
 		contentType: 'application/json',
-		url: "index.php/users/" + id + "/rider_type",
+		url: "../index.php/users/" + id + "/rider_type",
 		dataType: "json",
 		
 		success: function(response){
@@ -409,38 +409,7 @@ function email(data)
 }
       	 
       	 
-/*************************************
-function getAllRiderType(type)
-{
 
-	
-		$.ajax({
-		type: 'GET',
-		contentType: 'application/json',
-		url: "index.php/users/?rider_type=" + type ,
-		dataType: "json",
-		
-		success: function(response){
-   		console.log(response);
-   		
-      	
-      
-  		 email(response[0]);
-      	 schoolZip(response[0]);
-      	 workZip(response[0]);
-      	 homeZip(response[0]);
-      	 riderType(response[0]);
-      	 cycleFrequency(response[0]);
-      	 
-      	
-    }
-		
-	});
-		
-
-
-}
-*******************************************/
 
 
 
@@ -451,7 +420,7 @@ function getUserData(id)
 		$.ajax({
 		type: 'GET',
 		contentType: 'application/json',
-		url: "index.php/users/" + id ,
+		url: "../index.php/users/" + id ,
 		dataType: "json",
 		
 		success: function(response){
@@ -483,7 +452,7 @@ function getNoteData(id)
 		$.ajax({
 		type: 'GET',
 		contentType: 'application/json',
-		url: "index.php/notes/" + id ,
+		url: "../index.php/notes/" + id ,
 		dataType: "json",
 		
 		success: function(response){
@@ -498,7 +467,7 @@ function getNoteData(id)
 	
 		//navigator.geolocation.getCurrentPosition(function(pos) {
 			geocoder = new google.maps.Geocoder();
-			var latlng = new google.maps.LatLng(response[0]["latitude"],response[0]["longitude"]);
+			var latlng = new google.maps.LatLng(response[3]["latitude"],response[3]["longitude"]);
 		//	console.log(latlng);
 			geocoder.geocode({'latLng': latlng}, function(results, status) {
 			if (status == google.maps.GeocoderStatus.OK) {
@@ -544,7 +513,7 @@ function deleteUser() {
 	$.ajax({
 		type: 'DELETE',
 		contentType: 'application/json',
-		url: 'index.php/users',
+		url: '../index.php/users',
 		dataType: "json",
 		data: deleteProfileToJSON(),
 		success: function(data){
@@ -568,7 +537,7 @@ function updateUser() {
 	$.ajax({
 		type: 'PUT',
 		contentType: 'application/json',
-		url: 'index.php/users/user',
+		url: '../index.php/users/user',
 		dataType: "json",
 		data: userFormToJSON(),
 		success: function(data){

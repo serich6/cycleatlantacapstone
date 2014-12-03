@@ -4,7 +4,7 @@ function populateNoteTable(id)
 	$.ajax({
 		type: 'GET',
 		contentType: 'application/json',
-		url: "index.php/notes/"+id,
+		url: "../index.php/notes/"+id,
 		dataType: "json",
 		
 		success: function(response){

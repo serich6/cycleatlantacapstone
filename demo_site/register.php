@@ -46,7 +46,7 @@
 	<div id="content">
 		<strong>Register a new user</strong><br>
 		
-		<form action="index.php/register" method="post" name="myform">
+		<form action="../index.php/register" method="post" name="myform">
 		Email:
 		<input name="email" value="none" /> <br>
 		Password:
