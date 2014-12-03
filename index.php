@@ -29,7 +29,7 @@ $app->add(new \Slim\Middleware\ContentTypes());
 
 
 /*************************************************
-WEB SERVICE FUNCTIONS:
+WEB SERVICE FUNCTIONS: (UTILITY)
 LOGIN
 REGISTER
 ENCRYPT PASSWORD
@@ -331,10 +331,10 @@ $app->post('/register', function () use($app, $con)
   }); 
  
 
-//kelley: post user
-//kelley's iphone uuid: a0d546c1224dfe5fb192e28837ab0447f01be3d6
-//user fields: device = ^, email = none, age = 2, gender = 1, income = 1, ethnicity = 1, homeZIP = 30032,
-//schoolZIP = 30032, workZIP = 30032, cycling_freq = 1, rider_history = 1, rider_type = 1, app_version = 1.0
+/*****************************************************
+END UTILITY CODE
+*******************************************************/ 
+
 
 
 
@@ -348,810 +348,182 @@ USER: GET
 *****************************************************/
 
 
-
-/***************************************************
-USER: POST
-*****************************************************/
-
-
-/***************************************************
-USER: PUT
-*****************************************************/
-
-
-/***************************************************
-USER: DELETE
-*****************************************************/
-
-
-
-
-
-
-
-/***************************************************
-RESOURCE: TRIP
-*****************************************************/
-
-
-/***************************************************
-TRIP: GET
-*****************************************************/
-
-
-
-/***************************************************
-TRIP: POST
-*****************************************************/
-
-
-
-/***************************************************
-TRIP: PUT
-*****************************************************/
-
-
-
-
-
-
-
-
-/***************************************************
-RESOURCE: NOTE
-*****************************************************/
-
-
-/***************************************************
-NOTE: GET
-*****************************************************/
-
-
-/***************************************************
-NOTE: POST
-*****************************************************/
-
-
-/***************************************************
-NOTE: PUT
-*****************************************************/
-
-
-
-
-
-
-
-
-/***************************************************
-FILTER ENDPOINTS
-*****************************************************/
-
-/***************************************************
-RESOURCE: USER
-*****************************************************/
-
-/***************************************************
-RESOURCE: TRIP
-*****************************************************/
-
-/***************************************************
-RESOURCE: NOTE
-*****************************************************/
-
-
-/***************************************************
-ADVANCED ENDPOINTS
-*****************************************************/
-
-/***************************************************
-/RIDES
-*****************************************************/
-
-
-
-
-
-
-
-$app->post('/users/user', function () use($app, $con) 
-{
-	//get the parameters sent over as JSON 
-    $body = $app->request()->params();
-    //initialize key value variables   
-	$values = '';
-	$keys = '';
-	//loop through the JSON data
-	foreach($body as $k=>$v)
-	{	
-		//create a comma separated string of keys and values to pass to SQL
-		$keys .= $k.",";
-        $values .= '"'.$v.'"'.",";
+//USERS filtering URI
+$app->get('/users', function() use($app, $con)
+ {
+	$req = $app->request();
+	//for error logging
+	$bad_request = array();
 	
-    }
-    //knock off the last comma at the end 
-    $keys = substr($keys, 0, -1);
-    $values = substr($values, 0, -1);
-    //build the query, we're adding to the user table for this POST    
-    $query = "Insert INTO user (".$keys.") VALUES (".$values.")";
-    //try-catch block, make sure we can try to insert and not break things      		
-      try
-      {    		
-        mysqli_query($con, $query);
-      } catch(PDOException $e) 
-      {
-        echo '{"error":{"text":'. $e->getMessage() .'}}';
-      }
-	    	
-    //for debugging purposes, make sure query looks like it should      	
-    echo $query;
-
-    });
-//dhruv POST notes
-$app->post('/notes/note', function () use($app, $con) 
-{
-    $body = $app->request()->params();
-	$values = '';
-	$keys = '';
-	foreach($body as $k=>$v)
-	{	
-		//create a comma separated string of keys and values to pass to SQL
 		
-		$keys .= $k.",";
-        $values .= '"'.$v.'"'.",";
-	
-    }
-    $keys = substr($keys, 0, -1);
-    $values = substr($values, 0, -1);
-    $query = "Insert INTO note (".$keys.") VALUES (".$values.")";
-      try
-      {    		
-        mysqli_query($con, $query);
-      } catch(PDOException $e) 
-      {
-        echo '{"error":{"text":'. $e->getMessage() .'}}';
-      }
-	    	
-    echo $query;
+	//set all possible variables...
+	$id = $req->get('id');
+	$age = $req->get('age');
+	$gender = $req->get('gender');
+	$income = $req->get('income');
+	$ethnicity = $req->get('ethnicity');
+	$homeZIP = $req->get('homeZIP');
+	$schoolZIP = $req->get('schoolZIP');
+	$workZIP = $req->get('workZIP');
+	$cycling_freq = $req->get('cycling_freq');
+	$rider_type = $req->get('rider_type');
+	$email = $req->get('email');
+	$device=$req->get('device');
+	$created = $req->get('created');
 
-    });
+	$query = 'SELECT * FROM user WHERE ';
 
-//Sam POST trip (need to work on getting back the global ID
-
-$app->post('/trips/trip', function () use($app, $con) 
-{
-	//get the parameters sent over as JSON 
-    $body = $app->request()->params();
-    //for testing purposes only
-    var_dump($body);
-    //initialize key value variables   
-	$values = '';
-	$keys = '';
-	//loop through the JSON data
-	$user_id='';
-
-	
-	foreach($body as $k=>$v)
-	{	
-		//create a comma separated string of keys and values to pass to SQL
-		if($k=='user_id'){
-			$user_id = $v;
-		}
-		$keys .= $k.",";
-        $values .= '"'.$v.'"'.",";
-	
-    }
-    //knock off the last comma at the end 
-    $keys = substr($keys, 0, -1);
-    $values = substr($values, 0, -1);
-    //build the query, we're adding to the user table for this POST    
-    $query = "Insert INTO trip (".$keys.") VALUES (".$values.")";
-    //try-catch block, make sure we can try to insert and not break things      		
-      try
-      {    		
-        mysqli_query($con, $query);
-      } catch(PDOException $e) 
-      {
-        echo '{"error":{"text":'. $e->getMessage() .'}}';
-      }
-	    	
-       	
-    //header('Location:../../tripMainView.php');
-    //exit();
-	
-	
-	//QUERY FOR THE GLOBAL ID
-	$query = 'SELECT id FROM trip WHERE user_id = '. $user_id.' ORDER BY id DESC LIMIT 1';
-	
-	try
-      {    		
-        $result = mysqli_query($con, $query);
-      } catch(PDOException $e) 
-      {
-        echo '{"error":{"text":'. $e->getMessage() .'}}';
-      }
-
-      
-      $rows = array();
-	  while($r = mysqli_fetch_assoc($result))
-	    	{ 	
-	    		$rows[] = $r;
-	    	}
-	    	
-	//Return the global ID in the body    	
-	$response = $app->response();
-   	$response['Content-Type'] = 'application/json';
-   		 
-    $response->body(json_encode($rows));
-    $data = $response->body(json_encode($rows));
-
-    return $data;
-    exit();
-    
-	});
-
-
-
-//kelley: PUT
-
-/**User PUT for multiple params
-*/
-
-$app->put('/users/user', function () use($app, $con)
-{
-
-	$body = $app->request()->getBody();
-	$_SESSION['userPutJSON'] = $body;
-	$id='';
-	$age='';
-	$email='';
-	$password='';
-	$gender='';
-	$income='';
-	$ethnicity='';
-	$homeZIP='';
-	$schoolZIP='';
-	$workZIP='';
-	$cycling_freq='';
-	$rider_type='';
-	foreach($body as $k=>$v)
-	{
-		if($k=="id")
-		{
-			$id=$v;
-		}
-		if($k=="homeZIP")
-		{
-			$homeZIP=$v;
-		}
-		if($k=="workZIP")
-		{
-			$workZIP=$v;
-		}
-		if($k=="schoolZIP")
-		{
-			$schoolZIP=$v;
-		}
-		if($k=="cycling_freq")
-		{
-			$cycling_freq=$v;
-		}
-		if($k=="rider_type")
-		{
-			$rider_type=$v;
-		}
-		if($k=="email")
-		{
-			$email=$v;
-		}
-		if($k=="password"){
-			$password=$v;
-		}
-		
-	}	
-	$query = "UPDATE user SET";	
-	//will fix/clean up later, I was in a hurry to get this to work :p
-	$query2 = "UPDATE user_password SET";
-	
-	//if(isset($age)){
-	if($age!=''){
-		$query = $query . " 'age' = " . $age . " ,";
-	}
-	
-	//if(isset($gender)){
-	if($gender!=''){
-		$query = $query . " 'gender' = " . $gender . " ,";
-	}
-
-	//if(isset($income)){
-	if($income!=''){
-		$query = $query . " income = " . $income . " ,";
-	}
-	//if(isset($ethnicity)){
-	if($ethnicity!=''){
-		$query = $query . " ethnicity = " . $ethnicity . " ,";
-	}
-	//if(isset($homeZIP)){
-	if($homeZIP!=''){
-		$query = $query . " homeZIP = " . $homeZIP . " ,";
-	}
-	//if(isset($schoolZIP)){
-	if($schoolZIP!=''){
-		$query = $query . " schoolZIP = " . $schoolZIP . " ,";
-	}
-	//if(isset($workZIP)){
-	if($workZIP!=''){
-		$query = $query . " workZIP = " . $workZIP . " ,";
-	}
-	//if(isset($cycling_freq)){
-	if($cycling_freq!=''){
-		$query = $query . " cycling_freq = " . $cycling_freq . " ,";
-	}
-	//if(isset($rider_type)){
-	if($rider_type!=''){
-		$query = $query . " rider_type = " . $rider_type . " ,";
-	}	
-	if($email!=''){
-		$query = $query . " email = " . "'".$email."'"." ,";
-		$query2 = $query2 . " email = " . "'".$email."'"." ,";
-	}	
-	if($password!=''){
-		$newSalt = create_salt();
-		$newHash = create_hash($password, $newSalt);
-		$query2 = $query2 . " salt = " . "'".$newSalt."'"." ,";
-		$query2 = $query2 . " password = " . "'".$newHash."'"." ,";
-		
-
-	}
-	//take of the last AND
-	$query = substr($query, 0, -1);
-	$query2 = substr($query2,0,-1);
-	
+	//if each parameter is set, add it to the query
 	if(isset($id)){
-		$query = $query . "WHERE" . " id = " . $id ;
-		$query2 = $query2 . "WHERE" . " user_id = '$id'"; 
-		
+		if(filter_var($id, FILTER_VALIDATE_INT)){
+			$query = $query . " id = " . $id . " AND ";
+		}
+		else{
+			array_push($bad_request, "id = ". $id);
+			
+		}
+	}
+
+	
+	if(isset($age)){
+		if(filter_var($age, FILTER_VALIDATE_INT)){
+			$query = $query . " age = " . $age . " AND ";
+		}
+		else{
+			array_push($bad_request, "age = ". $age);
+		}
 	}
 	
-	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
-	if(substr($query, -1)== 'W'){
-		$query = substr($query, 0, -1);
-		$query2 = substr($query2, 0, -1);
+	if(isset($gender)){
+		if(filter_var($gender, FILTER_VALIDATE_INT)){
+			$query = $query . " gender = " . $gender . " AND ";
+		}
+		else{
+			array_push($bad_request, "gender = ". $gender);
+		}
+		
+	}
 
+	if(isset($income)){
+		if(filter_var($income, FILTER_VALIDATE_INT)){
+			$query = $query . " income = " . $income . " AND ";
+		}
+		else{
+			array_push($bad_request, "income = ". $income);
+		}
+	}
+	if(isset($ethnicity)){
+		if(filter_var($ethnicity, FILTER_VALIDATE_INT)){
+			$query = $query . " ethnicity = " . $ethnicity . " AND ";
+		}
+		else{
+			array_push($bad_request, "ethnicity = ". $ethnicity);
+		}
+	}
+	if(isset($homeZIP)){
+		if(filter_var($homeZIP, FILTER_VALIDATE_INT)){
+			$query = $query . " homeZIP = " . $homeZIP . " AND ";
+		}
+		else{
+			array_push($bad_request, "homeZIP = ". $homeZIP);
+		}
+	}
+	if(isset($schoolZIP)){
+		if(filter_var($schoolZIP, FILTER_VALIDATE_INT)){
+			$query = $query . " schoolZIP = " . $schoolZIP . " AND ";
+		}
+		else{
+			array_push($bad_request, "schoolZIP = ". $schoolZIP);
+		}
+	}
+	if(isset($workZIP)){
+		if(filter_var($workZIP, FILTER_VALIDATE_INT)){
+			$query = $query . " workZIP = " . $workZIP . " AND ";
+		}
+		else{
+			array_push($bad_request, "workZIP = ". $workZIP);
+		}
+	}
+	if(isset($cycling_freq)){
+		if(filter_var($cycling_freq, FILTER_VALIDATE_INT)){
+			$query = $query . " cycling_freq = " . $cycling_freq . " AND ";
+		}
+		else{
+			array_push($bad_request, "cycling_freq = ". $cycling_freq);
+		}
+	}
+	if(isset($rider_type)){
+		if(filter_var($rider_type, FILTER_VALIDATE_INT)){
+			$query = $query . " rider_type = " . $rider_type . " AND ";
+		}
+		else{
+			array_push($bad_request, "rider_type = ". $rider_type);
+		}	
+	}
+	if(isset($email)){
+		if(filter_var($email, FILTER_VALIDATE_EMAIL)){
+				$query = $query . " email = '" . $email . "' AND ";
+		}
+		else{
+			array_push($bad_request, "email = ". $email);
+		}
+	}	
+	if(isset($device)){
+		if(strpos($device, ';') == FALSE && strpos($device, ' ') == FALSE){
+			$query = $query . " device = '" . $device . "' AND ";
+		}
+		else{
+			array_push($bad_request, "device = ". $device);
+		}
+	}
+	if(isset($created)){
+		if(strpos($created, ';') == FALSE){
+			$query = $query . " created = '" . $created . "' AND ";
+		}
+		else{
+			array_push($bad_request, "created = ". $created);
+		}
+	}
+	if(count($bad_request)!=0){
+		//for testing
+		echo implode(", ", $bad_request);
+		
+		//SHOULD LOG TO FILE INSTEAD
 	}
 	
-	mysqli_query($con, $query);
-	mysqli_query($con, $query2);
+	else{
+		//take of the last AND
+		$query = substr($query, 0, -5);
 	
-	
-	$result = array("status" => "success");
-	json_encode($result);
-	$response = $app->response();
-   	$response['Content-Type'] = 'application/json';
-    $data = $response->body(json_encode($result));
-    return $data;
-});
+		//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
+		if(substr($query, -1)== 'W'){
+			$query = substr($query, 0, -1);
+		}
 
+		try
+		{
+			$result = mysqli_query($con, $query);
+		}
+		catch(PDOException $e)
+		{
+			echo'{"error":{"text":'.$e->getMessage().'}}';
+		}
 
-$app->put('/users/user/:id/workZip', function ($id) use($app, $con) 
-{
-						
-    		$body = $app->request()->getBody();    		
-    		$workZIP = '';
-    		foreach($body as $k=>$v)
-			{					
-				
-				if($k == 'workZIP')
-				{
-					
-					$workZIP = $v;
-					
-				}		
-       			
-	
-    		}		
+		mysqli_close($con);
 		
-	    	 mysqli_query($con,"UPDATE user SET workZIP = '$workZIP' WHERE id = '$id'");
-	    	 mysqli_close($con);
-	    	 $result = array("status" => "success");
-			 json_encode($result);
-			 $response = $app->response();
-   	         $response['Content-Type'] = 'application/json';
-             $data = $response->body(json_encode($result));
-             return $data;
+		while($r = mysqli_fetch_assoc($result))
+		{
+			$rows[] = $r;
+		}
 
-	
-});    
-
-$app->put('/users/user/:id/schoolZip', function ($id) use($app, $con) 
-{
-						
-    		$body = $app->request()->getBody();    		
-    		$schoolZip = '';
-    		foreach($body as $k=>$v)
-			{					
-				
-				if($k == 'schoolZip')
-				{
-					
-					$schoolZip = $v;
-					
-				}		
-       			
-	
-    		}			
-		
-	    	 mysqli_query($con,"UPDATE user SET schoolZIP = '$schoolZIP' WHERE id = '$id'");
-	    	 mysqli_close($con);
-	    	 $result = array("status" => "success");
-			 json_encode($result);
-			 $response = $app->response();
-   		 	 $response['Content-Type'] = 'application/json';
-    	 	 $data = $response->body(json_encode($result));
-    		 return $data;
-
-	
-});    
-
-
-$app->put('/users/user/:id/email', function ($id) use($app, $con) 
-{
-						
-    		$body = $app->request()->getBody();    		
-    		$email = '';
-    		foreach($body as $k=>$v)
-			{					
-				
-				if($k == 'email')
-				{
-					
-					$email = $v;
-					
-				}		
-       			
-	
-    		}			
-		
-	    	 mysqli_query($con,"UPDATE user SET email = '$email' WHERE id = '$id'");
-	    	 mysqli_close($con);
-	    	 $result = array("status" => "success");
-			 json_encode($result);
-			 $response = $app->response();
-   			 $response['Content-Type'] = 'application/json';
-    		 $data = $response->body(json_encode($result));
-    		 return $data;
-
-	
-});    
-//dhruv put / patch income, rider_type, rider_history, cycling_freq
-
-$app->put('/users/user/:id/income', function ($id) use($app, $con) 
-{		
-    		$body = $app->request()->getBody();    		
-    		$income = '';
-    		foreach($body as $k=>$v)
-			{					
-				if($k == 'income')
-				{
-					$income = $v;	
-				}		
-    		}			
-	    	 mysqli_query($con,"UPDATE user SET income = '$income' WHERE id = '$id'");
-	    	 mysqli_close($con);
-}); 
-
-$app->put('/users/user/:id/rider_type', function ($id) use($app, $con) 
-{		
-    		$body = $app->request()->getBody();    		
-    		$rider_type = '';
-    		foreach($body as $k=>$v)
-			{					
-				if($k == 'rider_type')
-				{
-					$rider_type = $v;	
-				}		
-    		}			
-	    	 mysqli_query($con,"UPDATE user SET rider_type = '$rider_type' WHERE id = '$id'");
-	    	 mysqli_close($con);
-}); 
-
-
-$app->put('/users/user/:id/rider_history', function ($id) use($app, $con) 
-{		
-    		$body = $app->request()->getBody();    		
-    		$rider_history = '';
-    		foreach($body as $k=>$v)
-			{					
-				if($k == 'rider_history')
-				{
-					$rider_history = $v;	
-				}		
-    		}			
-	    	 mysqli_query($con,"UPDATE user SET rider_history = '$rider_history' WHERE id = '$id'");
-	    	 mysqli_close($con);
-}); 
-
-$app->put('/users/user/:id/cycling_freq', function ($id) use($app, $con) 
-{		
-    		$body = $app->request()->getBody();    		
-    		$cycling_freq = '';
-    		foreach($body as $k=>$v)
-			{					
-				if($k == 'cycling_freq')
-				{
-					$cycling_freq = $v;	
-				}		
-    		}			
-	    	 mysqli_query($con,"UPDATE user SET cycling_freq = '$cycling_freq' WHERE id = '$id'");
-	    	 mysqli_close($con);
-}); 
-$app->put('/users/user/:id/age', function ($id) use($app, $con) 
-{		
-    		$body = $app->request()->getBody();    		
-    		$age = '';
-    		foreach($body as $k=>$v)
-			{					
-				if($k == 'age')
-				{
-					$age = $v;	
-				}		
-    		}			
-	    	 mysqli_query($con,"UPDATE user SET age = '$age' WHERE id = '$id'");
-	    	 mysqli_close($con);
-}); 
-$app->put('/users/user/:id/gender', function ($id) use($app, $con) 
-{		
-    		$body = $app->request()->getBody();    		
-    		$gender = '';
-    		foreach($body as $k=>$v)
-			{					
-				if($k == 'gender')
-				{
-					$gender = $v;	
-				}		
-    		}			
-	    	 mysqli_query($con,"UPDATE user SET gender = '$gender' WHERE id = '$id'");
-	    	 mysqli_close($con);
-}); 
-$app->put('/users/user/:id/ethnicity', function ($id) use($app, $con) 
-{		
-    		$body = $app->request()->getBody();    		
-    		$ethnicity = '';
-    		foreach($body as $k=>$v)
-			{					
-				if($k == 'ethnicity')
-				{
-					$ethnicity = $v;	
-				}		
-    		}			
-	    	 mysqli_query($con,"UPDATE user SET ethnicity = '$ethnicity' WHERE id = '$id'");
-	    	 mysqli_close($con);
-}); 
-
-//kelley: users/<id>/homeZIP, users/<id>/workZIP, users/<id>/schoolZIP, users/<id>/email
-
-
-$app->get('/notes/:id', function ($id) use($app, $con) 
-{
-
-	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
-	    	$result = mysqli_query($con,"SELECT * FROM note WHERE user_id = '$id'");
-	    		
-	    	mysqli_close($con);
-	    	while($r = mysqli_fetch_assoc($result))
-	    	{
-	    		$rows[] = $r;
-	    	}
-	      	$response = $app->response();
-   		  	$response['Content-Type'] = 'application/json';
+		$response = $app->response();
+   		$response['Content-Type'] = 'application/json';
    		 
-    	  $response->body(json_encode($rows));
-    	  $data = $response->body(json_encode($rows));
-    	  return $data;
-    	  exit();
-});				
-
-
-
-$app->get('/trips/:id/', function ($id) use($app, $con) 
-{
-		//	$user = UserFactory::getUser($id); //how to access methods in factory files
-		//	var_dump($user);
-	
-	    	$result = mysqli_query($con,"SELECT * FROM trip WHERE user_id = '$id'  ORDER BY stop DESC");
-	    
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['workZIP'];
-  		//			echo "<br>";
-		//		}	
-	    	mysqli_close($con);
-	    	$rows = array();
-	    	while($r = mysqli_fetch_assoc($result))
-	    	{
-	    	
-	    		$rows[] = $r;
-	    	}
-	      	$response = $app->response();
-   		  	$response['Content-Type'] = 'application/json';
-   		 
-    	  $response->body(json_encode($rows));
-    	  $data = $response->body(json_encode($rows));
-    	  return $data;
-    	  exit();
-
-	
-});
-
-
-$app->get('/trips/:id/purpose', function ($id) use($app, $con) 
-{
-		//	$user = UserFactory::getUser($id); //how to access methods in factory files
-		//	var_dump($user);
-	
-	    	$result = mysqli_query($con,"SELECT purpose FROM trip WHERE id = '$id' ");
-	    
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['workZIP'];
-  		//			echo "<br>";
-		//		}	
-	    	mysqli_close($con);
-	    	$rows = array();
-	    	while($r = mysqli_fetch_assoc($result))
-	    	{
-	    	
-	    		$rows[] = $r;
-	    	}
-	      	$response = $app->response();
-   		  	$response['Content-Type'] = 'application/json';
-   		 
-    	  $response->body(json_encode($rows));
-    	  $data = $response->body(json_encode($rows));
-    	  return $data;
-    	  exit();
-});
-
-
-$app->get('/trips/:id/notes', function ($id) use($app, $con) 
-{
-		//	$user = UserFactory::getUser($id); //how to access methods in factory files
-		//	var_dump($user);
-	
-	    	$result = mysqli_query($con,"SELECT notes FROM trip WHERE id = '$id' ");
-	    
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['workZIP'];
-  		//			echo "<br>";
-		//		}	
-	    	mysqli_close($con);
-	    	$rows = array();
-	    	while($r = mysqli_fetch_assoc($result))
-	    	{
-	    	
-	    		$rows[] = $r;
-	    	}
-	      	$response = $app->response();
-   		  	$response['Content-Type'] = 'application/json';
-   		 
-    	  $response->body(json_encode($rows));
-    	  $data = $response->body(json_encode($rows));
-    	  return $data;
-    	  exit();
-});
-
-$app->get('/trips/:id/start', function ($id) use($app, $con) 
-{
-		//	$user = UserFactory::getUser($id); //how to access methods in factory files
-		//	var_dump($user);
-	
-	    	$result = mysqli_query($con,"SELECT start FROM trip WHERE id = '$id' ");
-	    
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['workZIP'];
-  		//			echo "<br>";
-		//		}	
-	    	mysqli_close($con);
-	    	$rows = array();
-	    	while($r = mysqli_fetch_assoc($result))
-	    	{
-	    	
-	    		$rows[] = $r;
-	    	}
-	      	$response = $app->response();
-   		  	$response['Content-Type'] = 'application/json';
-   		 
-    	  $response->body(json_encode($rows));
-    	  $data = $response->body(json_encode($rows));
-    	  return $data;
-    	  exit();
-});
-
-$app->get('/trips/:id/stop', function ($id) use($app, $con) 
-{
-		//	$user = UserFactory::getUser($id); //how to access methods in factory files
-		//	var_dump($user);
-	
-	    	$result = mysqli_query($con,"SELECT stop FROM trip WHERE id = '$id' ");
-	    
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['workZIP'];
-  		//			echo "<br>";
-		//		}	
-	    	mysqli_close($con);
-	    	$rows = array();
-	    	while($r = mysqli_fetch_assoc($result))
-	    	{
-	    	
-	    		$rows[] = $r;
-	    	}
-	      	$response = $app->response();
-   		  	$response['Content-Type'] = 'application/json';
-   		 
-    	  $response->body(json_encode($rows));
-    	  $data = $response->body(json_encode($rows));
-    	  return $data;
-    	  exit();
-});
-
-$app->get('/trips/:id/n_coord', function ($id) use($app, $con) 
-{
-		//	$user = UserFactory::getUser($id); //how to access methods in factory files
-		//	var_dump($user);
-	
-	    	$result = mysqli_query($con,"SELECT n_coord FROM trip WHERE id = '$id' ");
-	    
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['workZIP'];
-  		//			echo "<br>";
-		//		}	
-	    	mysqli_close($con);
-	    	$rows = array();
-	    	while($r = mysqli_fetch_assoc($result))
-	    	{
-	    	
-	    		$rows[] = $r;
-	    	}
-	      	$response = $app->response();
-   		  	$response['Content-Type'] = 'application/json';
-   		 
-    	  $response->body(json_encode($rows));
-    	  $data = $response->body(json_encode($rows));
-    	  return $data;
-    	  exit();
-});
-
-
-
-$app->delete('/users', function() use($app, $con)
-{
-	
-
-	    $body = $app->request()->getBody();
-	    
-   	  
-		$values = '';
-		$keys = '';
-	
-		$userId = '';
-	
-	
-	foreach($body as $k=>$v)
-	{	
-		
-		if($k == 'deleteId'){
-			$userId = $v;
-		}		
+    	$response->body(json_encode($rows));
+    	$data = $response->body(json_encode($rows));
+    	return $data;
     }
-    $query = "Delete from user_password WHERE user_id=".  $userId  ;
-    mysqli_query($con, $query);
-    mysqli_close($con);
-     $result = array("status" => "success");
-			 json_encode($result);
-			 $response = $app->response();
-   			 $response['Content-Type'] = 'application/json';
-    		 $data = $response->body(json_encode($result));
-    		 
-    		 return $data;
-
+    exit();	
 
 });
 
@@ -1493,6 +865,716 @@ $app->get('/users/:id/gender', function ($id) use($app, $con)
     	  exit();
 
 });
+
+
+
+
+/***************************************************
+USER: POST
+*****************************************************/
+
+$app->post('/users/user', function () use($app, $con) 
+{
+	//get the parameters sent over as JSON 
+    $body = $app->request()->params();
+    //initialize key value variables   
+	$values = '';
+	$keys = '';
+	//loop through the JSON data
+	foreach($body as $k=>$v)
+	{	
+		//create a comma separated string of keys and values to pass to SQL
+		$keys .= $k.",";
+        $values .= '"'.$v.'"'.",";
+	
+    }
+    //knock off the last comma at the end 
+    $keys = substr($keys, 0, -1);
+    $values = substr($values, 0, -1);
+    //build the query, we're adding to the user table for this POST    
+    $query = "Insert INTO user (".$keys.") VALUES (".$values.")";
+    //try-catch block, make sure we can try to insert and not break things      		
+      try
+      {    		
+        mysqli_query($con, $query);
+      } catch(PDOException $e) 
+      {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+      }
+	    	
+    //for debugging purposes, make sure query looks like it should      	
+    echo $query;
+
+    });
+
+
+/***************************************************
+USER: PUT
+*****************************************************/
+
+
+
+/**User PUT for multiple params
+*/
+
+$app->put('/users/user', function () use($app, $con)
+{
+
+	$body = $app->request()->getBody();
+	$jsonBody = json_encode($body);
+	$_SESSION['userPutJSON'] = $jsonBody;
+	$id='';
+	$age='';
+	$email='';
+	$password='';
+	$gender='';
+	$income='';
+	$ethnicity='';
+	$homeZIP='';
+	$schoolZIP='';
+	$workZIP='';
+	$cycling_freq='';
+	$rider_type='';
+	foreach($body as $k=>$v)
+	{
+		if($k=="id")
+		{
+			$id=$v;
+		}
+		if($k=="homeZIP")
+		{
+			$homeZIP=$v;
+		}
+		if($k=="workZIP")
+		{
+			$workZIP=$v;
+		}
+		if($k=="schoolZIP")
+		{
+			$schoolZIP=$v;
+		}
+		if($k=="cycling_freq")
+		{
+			$cycling_freq=$v;
+		}
+		if($k=="rider_type")
+		{
+			$rider_type=$v;
+		}
+		if($k=="email")
+		{
+			$email=$v;
+		}
+		if($k=="password"){
+			$password=$v;
+		}
+		
+	}	
+	$query = "UPDATE user SET";	
+	//will fix/clean up later, I was in a hurry to get this to work :p
+	$query2 = "UPDATE user_password SET";
+	
+	//if(isset($age)){
+	if($age!=''){
+		$query = $query . " 'age' = " . $age . " ,";
+	}
+	
+	//if(isset($gender)){
+	if($gender!=''){
+		$query = $query . " 'gender' = " . $gender . " ,";
+	}
+
+	//if(isset($income)){
+	if($income!=''){
+		$query = $query . " income = " . $income . " ,";
+	}
+	//if(isset($ethnicity)){
+	if($ethnicity!=''){
+		$query = $query . " ethnicity = " . $ethnicity . " ,";
+	}
+	//if(isset($homeZIP)){
+	if($homeZIP!=''){
+		$query = $query . " homeZIP = " . $homeZIP . " ,";
+	}
+	//if(isset($schoolZIP)){
+	if($schoolZIP!=''){
+		$query = $query . " schoolZIP = " . $schoolZIP . " ,";
+	}
+	//if(isset($workZIP)){
+	if($workZIP!=''){
+		$query = $query . " workZIP = " . $workZIP . " ,";
+	}
+	//if(isset($cycling_freq)){
+	if($cycling_freq!=''){
+		$query = $query . " cycling_freq = " . $cycling_freq . " ,";
+	}
+	//if(isset($rider_type)){
+	if($rider_type!=''){
+		$query = $query . " rider_type = " . $rider_type . " ,";
+	}	
+	if($email!=''){
+		$query = $query . " email = " . "'".$email."'"." ,";
+		$query2 = $query2 . " email = " . "'".$email."'"." ,";
+	}	
+	if($password!=''){
+		$newSalt = create_salt();
+		$newHash = create_hash($password, $newSalt);
+		$query2 = $query2 . " salt = " . "'".$newSalt."'"." ,";
+		$query2 = $query2 . " password = " . "'".$newHash."'"." ,";
+		
+
+	}
+	//take of the last AND
+	$query = substr($query, 0, -1);
+	$query2 = substr($query2,0,-1);
+	
+	if(isset($id)){
+		$query = $query . "WHERE" . " id = " . $id ;
+		$query2 = $query2 . "WHERE" . " user_id = '$id'"; 
+		
+	}
+	
+	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
+	if(substr($query, -1)== 'W'){
+		$query = substr($query, 0, -1);
+		$query2 = substr($query2, 0, -1);
+
+	}
+	
+	mysqli_query($con, $query);
+	mysqli_query($con, $query2);
+	
+	
+	$result = array("status" => "success");
+	json_encode($result);
+	$response = $app->response();
+   	$response['Content-Type'] = 'application/json';
+    $data = $response->body(json_encode($result));
+    return $data;
+});
+
+
+
+
+$app->put('/users/user/:id/workZip', function ($id) use($app, $con) 
+{
+						
+    		$body = $app->request()->getBody();    		
+    		$workZIP = '';
+    		foreach($body as $k=>$v)
+			{					
+				
+				if($k == 'workZIP')
+				{
+					
+					$workZIP = $v;
+					
+				}		
+       			
+	
+    		}		
+		
+	    	 mysqli_query($con,"UPDATE user SET workZIP = '$workZIP' WHERE id = '$id'");
+	    	 mysqli_close($con);
+	    	 $result = array("status" => "success");
+			 json_encode($result);
+			 $response = $app->response();
+   	         $response['Content-Type'] = 'application/json';
+             $data = $response->body(json_encode($result));
+             return $data;
+
+	
+});    
+
+$app->put('/users/user/:id/schoolZip', function ($id) use($app, $con) 
+{
+						
+    		$body = $app->request()->getBody();    		
+    		$schoolZip = '';
+    		foreach($body as $k=>$v)
+			{					
+				
+				if($k == 'schoolZip')
+				{
+					
+					$schoolZip = $v;
+					
+				}		
+       			
+	
+    		}			
+		
+	    	 mysqli_query($con,"UPDATE user SET schoolZIP = '$schoolZIP' WHERE id = '$id'");
+	    	 mysqli_close($con);
+	    	 $result = array("status" => "success");
+			 json_encode($result);
+			 $response = $app->response();
+   		 	 $response['Content-Type'] = 'application/json';
+    	 	 $data = $response->body(json_encode($result));
+    		 return $data;
+
+	
+});    
+
+
+$app->put('/users/user/:id/email', function ($id) use($app, $con) 
+{
+						
+    		$body = $app->request()->getBody();    		
+    		$email = '';
+    		foreach($body as $k=>$v)
+			{					
+				
+				if($k == 'email')
+				{
+					
+					$email = $v;
+					
+				}		
+       			
+	
+    		}			
+		
+	    	 mysqli_query($con,"UPDATE user SET email = '$email' WHERE id = '$id'");
+	    	 mysqli_close($con);
+	    	 $result = array("status" => "success");
+			 json_encode($result);
+			 $response = $app->response();
+   			 $response['Content-Type'] = 'application/json';
+    		 $data = $response->body(json_encode($result));
+    		 return $data;
+
+	
+});    
+//dhruv put / patch income, rider_type, rider_history, cycling_freq
+
+$app->put('/users/user/:id/income', function ($id) use($app, $con) 
+{		
+    		$body = $app->request()->getBody();    		
+    		$income = '';
+    		foreach($body as $k=>$v)
+			{					
+				if($k == 'income')
+				{
+					$income = $v;	
+				}		
+    		}			
+	    	 mysqli_query($con,"UPDATE user SET income = '$income' WHERE id = '$id'");
+	    	 mysqli_close($con);
+}); 
+
+$app->put('/users/user/:id/rider_type', function ($id) use($app, $con) 
+{		
+    		$body = $app->request()->getBody();    		
+    		$rider_type = '';
+    		foreach($body as $k=>$v)
+			{					
+				if($k == 'rider_type')
+				{
+					$rider_type = $v;	
+				}		
+    		}			
+	    	 mysqli_query($con,"UPDATE user SET rider_type = '$rider_type' WHERE id = '$id'");
+	    	 mysqli_close($con);
+}); 
+
+
+$app->put('/users/user/:id/rider_history', function ($id) use($app, $con) 
+{		
+    		$body = $app->request()->getBody();    		
+    		$rider_history = '';
+    		foreach($body as $k=>$v)
+			{					
+				if($k == 'rider_history')
+				{
+					$rider_history = $v;	
+				}		
+    		}			
+	    	 mysqli_query($con,"UPDATE user SET rider_history = '$rider_history' WHERE id = '$id'");
+	    	 mysqli_close($con);
+}); 
+
+$app->put('/users/user/:id/cycling_freq', function ($id) use($app, $con) 
+{		
+    		$body = $app->request()->getBody();    		
+    		$cycling_freq = '';
+    		foreach($body as $k=>$v)
+			{					
+				if($k == 'cycling_freq')
+				{
+					$cycling_freq = $v;	
+				}		
+    		}			
+	    	 mysqli_query($con,"UPDATE user SET cycling_freq = '$cycling_freq' WHERE id = '$id'");
+	    	 mysqli_close($con);
+}); 
+$app->put('/users/user/:id/age', function ($id) use($app, $con) 
+{		
+    		$body = $app->request()->getBody();    		
+    		$age = '';
+    		foreach($body as $k=>$v)
+			{					
+				if($k == 'age')
+				{
+					$age = $v;	
+				}		
+    		}			
+	    	 mysqli_query($con,"UPDATE user SET age = '$age' WHERE id = '$id'");
+	    	 mysqli_close($con);
+}); 
+$app->put('/users/user/:id/gender', function ($id) use($app, $con) 
+{		
+    		$body = $app->request()->getBody();    		
+    		$gender = '';
+    		foreach($body as $k=>$v)
+			{					
+				if($k == 'gender')
+				{
+					$gender = $v;	
+				}		
+    		}			
+	    	 mysqli_query($con,"UPDATE user SET gender = '$gender' WHERE id = '$id'");
+	    	 mysqli_close($con);
+}); 
+$app->put('/users/user/:id/ethnicity', function ($id) use($app, $con) 
+{		
+    		$body = $app->request()->getBody();    		
+    		$ethnicity = '';
+    		foreach($body as $k=>$v)
+			{					
+				if($k == 'ethnicity')
+				{
+					$ethnicity = $v;	
+				}		
+    		}			
+	    	 mysqli_query($con,"UPDATE user SET ethnicity = '$ethnicity' WHERE id = '$id'");
+	    	 mysqli_close($con);
+}); 
+
+
+
+/***************************************************
+USER: DELETE
+*****************************************************/
+$app->delete('/users', function() use($app, $con)
+{
+	
+
+	    $body = $app->request()->getBody();
+	    
+   	  
+		$values = '';
+		$keys = '';
+	
+		$userId = '';
+	
+	
+	foreach($body as $k=>$v)
+	{	
+		
+		if($k == 'deleteId'){
+			$userId = $v;
+		}		
+    }
+    $query = "Delete from user_password WHERE user_id=".  $userId  ;
+    mysqli_query($con, $query);
+    mysqli_close($con);
+     $result = array("status" => "success");
+			 json_encode($result);
+			 $response = $app->response();
+   			 $response['Content-Type'] = 'application/json';
+    		 $data = $response->body(json_encode($result));
+    		 
+    		 return $data;
+
+
+});
+
+/*******************************
+END USER RESOURCE CODE
+********************************/
+
+
+
+
+
+/***************************************************
+RESOURCE: TRIP
+*****************************************************/
+
+
+/***************************************************
+TRIP: GET
+*****************************************************/
+
+//TRIPS filtering URI
+$app->get('/trips', function() use($app, $con)
+ {
+
+	$req = $app->request();
+	$bad_params = array();
+	//set all possible variables...
+	$id = $req->get('id');
+	$user_id = $req->get('user_id');
+	$purpose = $req->get('purpose');
+	$notes = $req->get('notes');
+	$start = $req->get('start');
+	$stop = $req->get('stop');
+	$n_coord = $req->get('n_coord');
+	
+	$query = 'SELECT * FROM trip WHERE ';
+
+	//if each parameter is set, add it to the query
+	if(isset($id)){
+		if(filter_var($id, FILTER_VALIDATE_INT)){
+			$query = $query . " id = " . $id . " AND ";
+		}
+		else{
+			array_push($bad_params, "id = ". $id);
+		}
+	}
+	
+	if(isset($user_id)){
+		if(filter_var($user_id, FILTER_VALIDATE_INT)){
+			$query = $query . " user_id = " . $user_id . " AND ";
+		}
+		else{
+			array_push($bad_params, "user_id = ". $user_id);
+		}
+	}
+	
+	if(isset($notes)){
+		$query = $query . " notes = '" . $notes . "' AND ";
+	}
+
+	if(isset($start)){
+		$query = $query . " start = '" . $start . "' AND ";
+	}
+	if(isset($stop)){
+		$query = $query . " stop = '" . $stop . "' AND ";
+	}
+	if(isset($n_coord)){
+		if(filter_var($n_coord, FILTER_VALIDATE_INT)){
+			$query = $query . " n_coord = " . $n_coord . " AND ";
+		}
+		else{
+			array_push($bad_params, "n_coord = ". $n_coord);
+		}
+	}
+	
+	if(count($bad_params)!=0){
+		//for testing
+		echo implode(", ", $bad_params);
+		
+		//SHOULD LOG TO FILE INSTEAD
+	}
+
+	else{
+		//take of the last AND
+		$query = substr($query, 0, -5);
+
+		//need to check to see if there are NO parameters, the "w" character needs to be taken from the string	
+		if(substr($query, -1)== 'W'){
+			$query = substr($query, 0, -1);
+		}
+	
+		try
+		{
+			$result = mysqli_query($con, $query);
+		}
+		catch(PDOException $e)
+		{
+			echo'{"error":{"text":'.$e->getMessage().'}}';
+		}
+
+		mysqli_close($con);
+	
+		while($r = mysqli_fetch_assoc($result))
+		{
+			$rows[] = $r;
+		}
+		$response = $app->response();
+   		$response['Content-Type'] = 'application/json';
+   		 
+    	$response->body(json_encode($rows));
+    	$data = $response->body(json_encode($rows));
+    	return $data;
+    }
+    exit();	
+
+});
+
+
+$app->get('/trips/:id/', function ($id) use($app, $con) 
+{
+		//	$user = UserFactory::getUser($id); //how to access methods in factory files
+		//	var_dump($user);
+	
+	    	$result = mysqli_query($con,"SELECT * FROM trip WHERE user_id = '$id'  ORDER BY stop DESC");
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
+	    	mysqli_close($con);
+	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    	
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
+
+	
+});
+
+
+$app->get('/trips/:id/purpose', function ($id) use($app, $con) 
+{
+		//	$user = UserFactory::getUser($id); //how to access methods in factory files
+		//	var_dump($user);
+	
+	    	$result = mysqli_query($con,"SELECT purpose FROM trip WHERE id = '$id' ");
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
+	    	mysqli_close($con);
+	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    	
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
+});
+
+
+$app->get('/trips/:id/notes', function ($id) use($app, $con) 
+{
+		//	$user = UserFactory::getUser($id); //how to access methods in factory files
+		//	var_dump($user);
+	
+	    	$result = mysqli_query($con,"SELECT notes FROM trip WHERE id = '$id' ");
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
+	    	mysqli_close($con);
+	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    	
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
+});
+
+$app->get('/trips/:id/start', function ($id) use($app, $con) 
+{
+		//	$user = UserFactory::getUser($id); //how to access methods in factory files
+		//	var_dump($user);
+	
+	    	$result = mysqli_query($con,"SELECT start FROM trip WHERE id = '$id' ");
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
+	    	mysqli_close($con);
+	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    	
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
+});
+
+$app->get('/trips/:id/stop', function ($id) use($app, $con) 
+{
+		//	$user = UserFactory::getUser($id); //how to access methods in factory files
+		//	var_dump($user);
+	
+	    	$result = mysqli_query($con,"SELECT stop FROM trip WHERE id = '$id' ");
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
+	    	mysqli_close($con);
+	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    	
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
+});
+
+$app->get('/trips/:id/n_coord', function ($id) use($app, $con) 
+{
+		//	$user = UserFactory::getUser($id); //how to access methods in factory files
+		//	var_dump($user);
+	
+	    	$result = mysqli_query($con,"SELECT n_coord FROM trip WHERE id = '$id' ");
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
+	    	mysqli_close($con);
+	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    	
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
+});
+
+
+
+
+
 
 
 $app->get('/rides/:id', function($id) use($app, $con)
@@ -2063,281 +2145,243 @@ $app->get('/rides',function() use($app, $con)
 
 });
 
-//USERS filtering URI
-$app->get('/users', function() use($app, $con)
- {
-	$req = $app->request();
-	//for error logging
-	$bad_request = array();
+
+
+/***************************************************
+TRIP: POST
+*****************************************************/
+
+//Sam POST trip (need to work on getting back the global ID
+
+$app->post('/trips/trip', function () use($app, $con) 
+{
+	//get the parameters sent over as JSON 
+    $body = $app->request()->params();
+    //for testing purposes only
+    //var_dump($body);
+    //initialize key value variables   
+	$values = '';
+	$keys = '';
+	//loop through the JSON data
+	$user_id='';
+
 	
+	foreach($body as $k=>$v)
+	{	
+		//create a comma separated string of keys and values to pass to SQL
+		if($k=='user_id'){
+			$user_id = $v;
+		}
+		$keys .= $k.",";
+        $values .= '"'.$v.'"'.",";
+	
+    }
+    //knock off the last comma at the end 
+    $keys = substr($keys, 0, -1);
+    $values = substr($values, 0, -1);
+    //build the query, we're adding to the user table for this POST    
+    $query = "Insert INTO trip (".$keys.") VALUES (".$values.")";
+    //try-catch block, make sure we can try to insert and not break things      		
+      try
+      {    		
+        mysqli_query($con, $query);
+      } catch(PDOException $e) 
+      {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+      }
+	    	
+       	
+    //header('Location:../../tripMainView.php');
+    //exit();
+	
+	
+	//QUERY FOR THE GLOBAL ID
+	$query = 'SELECT id FROM trip WHERE user_id = '. $user_id.' ORDER BY id DESC LIMIT 1';
+	
+	try
+      {    		
+        $result = mysqli_query($con, $query);
+      } catch(PDOException $e) 
+      {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+      }
+
+      
+      $rows = array();
+	  while($r = mysqli_fetch_assoc($result))
+	    	{ 	
+	    		$rows[] = $r;
+	    	}
+	    	
+	//Return the global ID in the body    	
+	$response = $app->response();
+   	$response['Content-Type'] = 'application/json';
+   		 
+    $response->body(json_encode($rows));
+    $data = $response->body(json_encode($rows));
+
+    return $data;
+    exit();
+    
+	});
+
+
+
+/***************************************************
+TRIP: PUT
+*****************************************************/
+
+
+$app->put('/trips/trip', function () use($app, $con)
+{
+
+	$body = $app->request()->getBody();
+//	$jsonBody = json_encode($body);
+//	$_SESSION['userPutJSON'] = $jsonBody;
+	$id='';
+	$user_id='';
+	$start='';
+	$stop='';
+	$purpose='';
+	$notes='';
+	$n_coord='';
+	
+	foreach($body as $k=>$v)
+	{
+		if($k=="id")
+		{
+			$id=$v;
+		}
+		if($k=="user_id")
+		{
+			$user_id=$v;
+		}
+		if($k=="start")
+		{
+			$start=$v;
+		}
+		if($k=="stop")
+		{
+			$stop=$v;
+		}
+		if($k=="purpose")
+		{
+			$purpose=$v;
+		}
+		if($k=="notes")
+		{
+			$notes=$v;
+		}
+		if($k=="n_coord")
+		{
+			$n_coord=$v;
+		}
 		
-	//set all possible variables...
-	$id = $req->get('id');
-	$age = $req->get('age');
-	$gender = $req->get('gender');
-	$income = $req->get('income');
-	$ethnicity = $req->get('ethnicity');
-	$homeZIP = $req->get('homeZIP');
-	$schoolZIP = $req->get('schoolZIP');
-	$workZIP = $req->get('workZIP');
-	$cycling_freq = $req->get('cycling_freq');
-	$rider_type = $req->get('rider_type');
-	$email = $req->get('email');
-	$device=$req->get('device');
-	$created = $req->get('created');
-
-	$query = 'SELECT * FROM user WHERE ';
-
-	//if each parameter is set, add it to the query
-	if(isset($id)){
-		if(filter_var($id, FILTER_VALIDATE_INT)){
-			$query = $query . " id = " . $id . " AND ";
-		}
-		else{
-			array_push($bad_request, "id = ". $id);
-			
-		}
-	}
-
-	
-	if(isset($age)){
-		if(filter_var($age, FILTER_VALIDATE_INT)){
-			$query = $query . " age = " . $age . " AND ";
-		}
-		else{
-			array_push($bad_request, "age = ". $age);
-		}
-	}
-	
-	if(isset($gender)){
-		if(filter_var($gender, FILTER_VALIDATE_INT)){
-			$query = $query . " gender = " . $gender . " AND ";
-		}
-		else{
-			array_push($bad_request, "gender = ". $gender);
-		}
 		
-	}
-
-	if(isset($income)){
-		if(filter_var($income, FILTER_VALIDATE_INT)){
-			$query = $query . " income = " . $income . " AND ";
-		}
-		else{
-			array_push($bad_request, "income = ". $income);
-		}
-	}
-	if(isset($ethnicity)){
-		if(filter_var($ethnicity, FILTER_VALIDATE_INT)){
-			$query = $query . " ethnicity = " . $ethnicity . " AND ";
-		}
-		else{
-			array_push($bad_request, "ethnicity = ". $ethnicity);
-		}
-	}
-	if(isset($homeZIP)){
-		if(filter_var($homeZIP, FILTER_VALIDATE_INT)){
-			$query = $query . " homeZIP = " . $homeZIP . " AND ";
-		}
-		else{
-			array_push($bad_request, "homeZIP = ". $homeZIP);
-		}
-	}
-	if(isset($schoolZIP)){
-		if(filter_var($schoolZIP, FILTER_VALIDATE_INT)){
-			$query = $query . " schoolZIP = " . $schoolZIP . " AND ";
-		}
-		else{
-			array_push($bad_request, "schoolZIP = ". $schoolZIP);
-		}
-	}
-	if(isset($workZIP)){
-		if(filter_var($workZIP, FILTER_VALIDATE_INT)){
-			$query = $query . " workZIP = " . $workZIP . " AND ";
-		}
-		else{
-			array_push($bad_request, "workZIP = ". $workZIP);
-		}
-	}
-	if(isset($cycling_freq)){
-		if(filter_var($cycling_freq, FILTER_VALIDATE_INT)){
-			$query = $query . " cycling_freq = " . $cycling_freq . " AND ";
-		}
-		else{
-			array_push($bad_request, "cycling_freq = ". $cycling_freq);
-		}
-	}
-	if(isset($rider_type)){
-		if(filter_var($rider_type, FILTER_VALIDATE_INT)){
-			$query = $query . " rider_type = " . $rider_type . " AND ";
-		}
-		else{
-			array_push($bad_request, "rider_type = ". $rider_type);
-		}	
-	}
-	if(isset($email)){
-		if(filter_var($email, FILTER_VALIDATE_EMAIL)){
-				$query = $query . " email = '" . $email . "' AND ";
-		}
-		else{
-			array_push($bad_request, "email = ". $email);
-		}
 	}	
-	if(isset($device)){
-		if(strpos($device, ';') == FALSE && strpos($device, ' ') == FALSE){
-			$query = $query . " device = '" . $device . "' AND ";
-		}
-		else{
-			array_push($bad_request, "device = ". $device);
-		}
-	}
-	if(isset($created)){
-		if(strpos($created, ';') == FALSE){
-			$query = $query . " created = '" . $created . "' AND ";
-		}
-		else{
-			array_push($bad_request, "created = ". $created);
-		}
-	}
-	if(count($bad_request)!=0){
-		//for testing
-		echo implode(", ", $bad_request);
-		
-		//SHOULD LOG TO FILE INSTEAD
+	$query = "UPDATE trip SET";	
+	
+	
+
+	if($id!=''){
+		$query = $query . " 'id' = " . $id . " ,";
 	}
 	
-	else{
-		//take of the last AND
-		$query = substr($query, 0, -5);
+
+	if($user_id!=''){
+		$query = $query . " 'user_id' = " . $user_id . " ,";
+	}
+
+	if($start!=''){
+		$query = $query . " start = " . $start . " ,";
+	}
+
+	if($stop!=''){
+		$query = $query . " stop = " . $stop . " ,";
+	}
+
+	if($purpose!=''){
+		$query = $query . " purpose = " . $purpose . " ,";
+	}
 	
-		//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
-		if(substr($query, -1)== 'W'){
-			$query = substr($query, 0, -1);
-		}
-
-		try
-		{
-			$result = mysqli_query($con, $query);
-		}
-		catch(PDOException $e)
-		{
-			echo'{"error":{"text":'.$e->getMessage().'}}';
-		}
-
-		mysqli_close($con);
-		
-		while($r = mysqli_fetch_assoc($result))
-		{
-			$rows[] = $r;
-		}
-
-		$response = $app->response();
-   		$response['Content-Type'] = 'application/json';
-   		 
-    	$response->body(json_encode($rows));
-    	$data = $response->body(json_encode($rows));
-    	return $data;
-    }
-    exit();	
-
-});
-
-//TRIPS filtering URI
-$app->get('/trips', function() use($app, $con)
- {
-
-	$req = $app->request();
-	$bad_params = array();
-	//set all possible variables...
-	$id = $req->get('id');
-	$user_id = $req->get('user_id');
-	$purpose = $req->get('purpose');
-	$notes = $req->get('notes');
-	$start = $req->get('start');
-	$stop = $req->get('stop');
-	$n_coord = $req->get('n_coord');
+	if($notes!=''){
+		$query = $query . " notes = " . $notes . " ,";
+	}
 	
-	$query = 'SELECT * FROM trip WHERE ';
-
-	//if each parameter is set, add it to the query
+	if($n_coord!=''){
+		$query = $query . " n_coord = " . $n_coord . " ,";
+	}
+	
+	
+	//take of the last AND
+	$query = substr($query, 0, -1);
+	
+	
 	if(isset($id)){
-		if(filter_var($id, FILTER_VALIDATE_INT)){
-			$query = $query . " id = " . $id . " AND ";
-		}
-		else{
-			array_push($bad_params, "id = ". $id);
-		}
+		$query = $query . "WHERE" . " id = " . $id ;
+	
 	}
 	
-	if(isset($user_id)){
-		if(filter_var($user_id, FILTER_VALIDATE_INT)){
-			$query = $query . " user_id = " . $user_id . " AND ";
-		}
-		else{
-			array_push($bad_params, "user_id = ". $user_id);
-		}
-	}
-	
-	if(isset($notes)){
-		$query = $query . " notes = '" . $notes . "' AND ";
-	}
-
-	if(isset($start)){
-		$query = $query . " start = '" . $start . "' AND ";
-	}
-	if(isset($stop)){
-		$query = $query . " stop = '" . $stop . "' AND ";
-	}
-	if(isset($n_coord)){
-		if(filter_var($n_coord, FILTER_VALIDATE_INT)){
-			$query = $query . " n_coord = " . $n_coord . " AND ";
-		}
-		else{
-			array_push($bad_params, "n_coord = ". $n_coord);
-		}
-	}
-	
-	if(count($bad_params)!=0){
-		//for testing
-		echo implode(", ", $bad_params);
+	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
+	if(substr($query, -1)== 'W'){
+		$query = substr($query, 0, -1);
 		
-		//SHOULD LOG TO FILE INSTEAD
 	}
-
-	else{
-		//take of the last AND
-		$query = substr($query, 0, -5);
-
-		//need to check to see if there are NO parameters, the "w" character needs to be taken from the string	
-		if(substr($query, -1)== 'W'){
-			$query = substr($query, 0, -1);
-		}
 	
-		try
-		{
-			$result = mysqli_query($con, $query);
-		}
-		catch(PDOException $e)
-		{
-			echo'{"error":{"text":'.$e->getMessage().'}}';
-		}
+	mysqli_query($con, $query);
 
-		mysqli_close($con);
 	
-		while($r = mysqli_fetch_assoc($result))
-		{
-			$rows[] = $r;
-		}
-		$response = $app->response();
-   		$response['Content-Type'] = 'application/json';
-   		 
-    	$response->body(json_encode($rows));
-    	$data = $response->body(json_encode($rows));
-    	return $data;
-    }
-    exit();	
-
+	
+	$result = array("status" => "success");
+	json_encode($result);
+	$response = $app->response();
+   	$response['Content-Type'] = 'application/json';
+    $data = $response->body(json_encode($result));
+    return $data;
 });
+
+
+
+/****************************************************
+END TRIP RESOURCE
+******************************************************/
+
+
+
+/***************************************************
+RESOURCE: NOTE
+*****************************************************/
+
+
+/***************************************************
+NOTE: GET
+*****************************************************/
+
+$app->get('/notes/:id', function ($id) use($app, $con) 
+{
+
+	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
+	    	$result = mysqli_query($con,"SELECT * FROM note WHERE user_id = '$id'");
+	    		
+	    	mysqli_close($con);
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
+});				
+
+
+
+
+
+
 
 //NOTES filtering URI
 $app->get('/notes', function() use($app, $con)
@@ -2464,16 +2508,211 @@ $app->get('/notes', function() use($app, $con)
 
 });
 
+
+/***************************************************
+NOTE: POST
+*****************************************************/
+
+
+//dhruv POST notes
+$app->post('/notes/note', function () use($app, $con) 
+{
+    $body = $app->request()->params();
+	$values = '';
+	$keys = '';
+	foreach($body as $k=>$v)
+	{	
+		//create a comma separated string of keys and values to pass to SQL
+		
+		$keys .= $k.",";
+        $values .= '"'.$v.'"'.",";
+	
+    }
+    $keys = substr($keys, 0, -1);
+    $values = substr($values, 0, -1);
+    $query = "Insert INTO note (".$keys.") VALUES (".$values.")";
+      try
+      {    		
+        mysqli_query($con, $query);
+      } catch(PDOException $e) 
+      {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+      }
+	    	
+    echo $query;
+
+    });
+
+
+
+/***************************************************
+NOTE: PUT
+*****************************************************/
+
+
+$app->put('/trips/trip', function () use($app, $con)
+{
+
+	$body = $app->request()->getBody();
+//	$jsonBody = json_encode($body);
+//	$_SESSION['userPutJSON'] = $jsonBody;
+	$id='';
+	$user_id='';
+	$recorded='';
+	$latitude='';
+	$longitude='';
+	$altitude='';
+	$speed='';
+	$hAccuracy = '';
+	$vAccuracy = '';
+	$note_type = '';
+	$details = '';
+	
+	foreach($body as $k=>$v)
+	{
+		if($k=="id")
+		{
+			$id=$v;
+		}
+		if($k=="user_id")
+		{
+			$user_id=$v;
+		}
+		if($k=="recorded")
+		{
+			$recorded=$v;
+		}
+		if($k=="latitude")
+		{
+			$latitude=$v;
+		}
+		if($k=="longitude")
+		{
+			$longitude=$v;
+		}
+		if($k=="altitude")
+		{
+			$altitude=$v;
+		}
+		if($k=="speed")
+		{
+			$speed=$v;
+		}
+		if($k=="hAccuracy")
+		{
+			$hAccuracy=$v;
+		}
+		if($k=="vAccuracy")
+		{
+			$vAccuracy=$v;
+		}
+		if($k=="note_type")
+		{
+			$note_type=$v;
+		}
+		if($k=="details")
+		{
+			$details=$v;
+		}		
+		
+	}	
+	$query = "UPDATE note SET";	
+	
+	
+
+	if($id!=''){
+		$query = $query . " 'id' = " . $id . " ,";
+	}
+	
+
+	if($user_id!=''){
+		$query = $query . " 'user_id' = " . $user_id . " ,";
+	}
+
+	if($recorded!=''){
+		$query = $query . " recorded = " . $recorded . " ,";
+	}
+
+	if($latitude!=''){
+		$query = $query . " latitude = " . $latitude . " ,";
+	}
+
+	if($longitude!=''){
+		$query = $query . " longitude = " . $longitude . " ,";
+	}
+	
+	if($altitude!=''){
+		$query = $query . " altitude = " . $altitude . " ,";
+	}
+	
+	if($speed!=''){
+		$query = $query . " speed = " . $speed . " ,";
+	}
+	
+	if($hAccuracy!=''){
+		$query = $query . " hAccuracy = " . $hAccuracy . " ,";
+	}
+	
+	if($vAccuracy!=''){
+		$query = $query . " vAccuracy = " . $vAccuracy . " ,";
+	}
+	
+	if($note_type!=''){
+		$query = $query . " note_type = " . $note_type . " ,";
+	}
+	
+		
+	if($details!=''){
+		$query = $query . " details = " . $details . " ,";
+	}
+	
+	
+	
+	//take of the last AND
+	$query = substr($query, 0, -1);
+	
+	
+	if(isset($id)){
+		$query = $query . "WHERE" . " id = " . $id ;
+	
+	}
+	
+	//need to check to see if there are NO parameters, the "w" character needs to be taken from the string
+	if(substr($query, -1)== 'W'){
+		$query = substr($query, 0, -1);
+		
+	}
+	
+	mysqli_query($con, $query);
+
+	
+	
+	$result = array("status" => "success");
+	json_encode($result);
+	$response = $app->response();
+   	$response['Content-Type'] = 'application/json';
+    $data = $response->body(json_encode($result));
+    return $data;
+});
+
+
+
+/***************************************************
+END NOTE RESOURCE
+****************************************************/
+
+
+
+
+
+
+
+
+
+
+
 $app->run();
 
-function in_array_r($needle, $haystack, $strict = false) {
-    foreach ($haystack as $item) {
-        if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && in_array_r($needle, $item, $strict))) {
-            return true;
-        }
-    }
 
-    return false;
-}
 
 ?>
