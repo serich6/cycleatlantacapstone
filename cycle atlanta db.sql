@@ -180,7 +180,15 @@ CREATE TABLE `user` (
   UNIQUE KEY `device` (`device`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1542 DEFAULT CHARSET=utf8;
 
-
+`user_password` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `password` varchar(128) NOT NULL,
+  `email` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
+  `salt` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `UNIQUE KEY` (`user_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
 
 
 
