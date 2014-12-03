@@ -309,10 +309,16 @@ $app->post('/register', function () use($app, $con)
 		  {
 			//echo '{"error":{"text":'. $e->getMessage() .'}}';
 		  }
-		header('Location:../userCreated.php');
+		header('Location:../demo_site/userCreated.php');
 		exit();
 		
 	}//end post
+	
+	if($invalidEmail == true)
+	{
+		header('Location:../demo_site/badRegister.php');
+		exit();
+	}
 
 	
 	
