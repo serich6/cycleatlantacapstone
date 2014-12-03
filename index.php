@@ -879,8 +879,115 @@ $app->get('/trips/:id/purpose', function ($id) use($app, $con)
     	  $data = $response->body(json_encode($rows));
     	  return $data;
     	  exit();
+});
 
+
+$app->get('/trips/:id/notes', function ($id) use($app, $con) 
+{
+		//	$user = UserFactory::getUser($id); //how to access methods in factory files
+		//	var_dump($user);
 	
+	    	$result = mysqli_query($con,"SELECT notes FROM trip WHERE id = '$id' ");
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
+	    	mysqli_close($con);
+	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    	
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
+});
+
+$app->get('/trips/:id/start', function ($id) use($app, $con) 
+{
+		//	$user = UserFactory::getUser($id); //how to access methods in factory files
+		//	var_dump($user);
+	
+	    	$result = mysqli_query($con,"SELECT start FROM trip WHERE id = '$id' ");
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
+	    	mysqli_close($con);
+	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    	
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
+});
+
+$app->get('/trips/:id/stop', function ($id) use($app, $con) 
+{
+		//	$user = UserFactory::getUser($id); //how to access methods in factory files
+		//	var_dump($user);
+	
+	    	$result = mysqli_query($con,"SELECT stop FROM trip WHERE id = '$id' ");
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
+	    	mysqli_close($con);
+	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    	
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
+});
+
+$app->get('/trips/:id/n_coord', function ($id) use($app, $con) 
+{
+		//	$user = UserFactory::getUser($id); //how to access methods in factory files
+		//	var_dump($user);
+	
+	    	$result = mysqli_query($con,"SELECT n_coord FROM trip WHERE id = '$id' ");
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
+	    	mysqli_close($con);
+	    	$rows = array();
+	    	while($r = mysqli_fetch_assoc($result))
+	    	{
+	    	
+	    		$rows[] = $r;
+	    	}
+	      	$response = $app->response();
+   		  	$response['Content-Type'] = 'application/json';
+   		 
+    	  $response->body(json_encode($rows));
+    	  $data = $response->body(json_encode($rows));
+    	  return $data;
+    	  exit();
 });
 
 
