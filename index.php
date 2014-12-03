@@ -1577,37 +1577,6 @@ $app->get('/trips/:id/n_coord', function ($id) use($app, $con)
 
 
 
-$app->get('/rides/:id', function($id) use($app, $con)
-{
-	$result = mysqli_query($con, "select YEAR(start) as year, SUM(IF(purpose = 'Commute', 1, 0)) 
-								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
-								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
-								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
-								SUM(IF(purpose = 'School', 1, 0)) as school, 
-								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
-								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
-								SUM(IF(purpose = 'Other', 1, 0)) as other,
-								COUNT(purpose) as total from trip 
-								WHERE user_id = '$id'  GROUP BY YEAR(start)");
-								
-	mysqli_close($con);
-	
- 	while($r = mysqli_fetch_assoc($result))
-	    	{
-	    		$rows[] = $r;
-	    	}
-	      	$response = $app->response();
-   		  	$response['Content-Type'] = 'application/json';
-   		 
-    	  $response->body(json_encode($rows));
-    	  $data = $response->body(json_encode($rows));
-    	  return $data;
-    	  exit();
-
-});
-
-
-
 $app->get('/rides',function() use($app, $con)
 {
 	$req = $app->request();
