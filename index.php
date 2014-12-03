@@ -8,11 +8,11 @@ require 'Slim/Slim.php';
 require_once('include/UserFactory.php');
 
 /*********************
-since we never actually used the dir structure live in prod for our dev,
+Since we never actually used the dir structure live in prod for our dev,
 we need to include this line like this:
 require_once('../include/UserFactory.php');
 
-to access anything we need from the include directory when we go live to
+To access anything we need from the include directory when we go live to
 production
 ***********************/
 
@@ -29,11 +29,12 @@ $app->add(new \Slim\Middleware\ContentTypes());
 
 
 /*************************************************
-WEB SERVICE FUNCTIONS: (UTILITY)
+WEB SERVICE FUNCTIONS: (UTILITY CODE)
 LOGIN
 REGISTER
 ENCRYPT PASSWORD
 **************************************************/
+
 define("PBKDF2_HASH_ALGORITHM", "sha256");
 define("PBKDF2_ITERATIONS", 1000);
 define("PBKDF2_SALT_BYTE_SIZE", 24);
@@ -45,6 +46,11 @@ define("HASH_ITERATION_INDEX", 1);
 define("HASH_SALT_INDEX", 2);
 define("HASH_PBKDF2_INDEX", 3);
 
+/*****
+*create_hash() was pulled from preexisting code found here:https://crackstation.net/hashing-security.htm#phpsourcecode
+*See website for additional documentation (most is repeated here). 
+*This function creates a secure has of the user password + salt
+*****/
 function create_hash($password, $salt)
 {
     // format: algorithm:iterations:salt:hash
@@ -59,12 +65,20 @@ function create_hash($password, $salt)
             true
         ));
 }
-
+/***
+*create_salt generates a random salt value to be added to the user password
+*Returns: the salt value
+**/
 function create_salt(){
 	$salt = base64_encode(mcrypt_create_iv(PBKDF2_SALT_BYTE_SIZE, MCRYPT_DEV_URANDOM));
 	return $salt;
 }
-
+/*
+*validate_password is used during the log in and delted user processes
+*$password = the user entered password
+*$correct_hash = the has pulled from the table that $password will be compared to
+*once hashed
+*/
 function validate_password($password, $correct_hash)
 {
     $params = explode(":", $correct_hash);
@@ -148,7 +162,11 @@ function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output =
         return bin2hex(substr($output, 0, $key_length));
 }
 
-//Yan: Login
+/*
+* Login Endpoint
+* Method gets data from a JSON object and then validates the login credentials against db values
+* JSON object during testing was passed in from login.php. Similar formats should be used
+*/
 $app->post('/login', function () use($app, $con) 
 {
 	//get the parameters sent over as JSON 
@@ -171,16 +189,13 @@ $app->post('/login', function () use($app, $con)
 		}
 		
     }
-	
-	
-	//echo $emailInput;
-	//echo '<br>';
-	//echo $passwordInput;
+
 	
 	$emailExists = false;
 	$retrievedSalt = '';
 	$retrievedPassword = '';
-	//$userID = '';
+	
+	//complete the query
 	$result = mysqli_query($con, "SELECT email,salt,password, user_id FROM user_password");
 	while($row = mysqli_fetch_array($result)) {
 		if($row['email'] == $emailInput){
@@ -196,23 +211,15 @@ $app->post('/login', function () use($app, $con)
 		}
 	}
 	
-
+	//handle existing emails
 	if($emailExists == true){
 		$hash = create_hash($passwordInput, $retrievedSalt);
-		//echo $hash;
-		if($hash == $retrievedPassword){
-			//echo 'Login success!';
-			//echo $userID;
-			
-			//echo $_SESSION["uID"];
-			
+ 
+ 		if($hash == $retrievedPassword){	
 			header('Location:../demo_site/portal.php');
-			exit();
-			
-			
+			exit();			
 		}
 		else{
-			
 			header('Location:../demo_site/badLogin.html');
 			exit();
 		}
@@ -227,12 +234,17 @@ $app->post('/login', function () use($app, $con)
  
 
 
-//Yan: register new user
+/*
+*Register a new user endpoint
+*Params: email (not null, valid email) and password
+*If successful, the email, password hash, and salt are added to the 'user_password' table
+*/
 $app->post('/register', function () use($app, $con) 
 {
 
 	//get the parameters sent over as JSON 
     $body = $app->request()->params();
+    
     //initialize key value variables   
 	$values = '';
 	$keys = '';
@@ -256,14 +268,13 @@ $app->post('/register', function () use($app, $con)
 		if($k == 'email'){
 			if(filter_var($v, FILTER_VALIDATE_EMAIL))
 			{
-			$userEmail = $v;
+				$userEmail = $v;
 			}
 			}
 		}
 		
-    
-	
 	$invalidEmail = false;
+	
 	//store all emails in an array for comparison purposes 
 	$result = mysqli_query($con, "SELECT email FROM user");
 	$emailArray = Array();
@@ -274,7 +285,7 @@ $app->post('/register', function () use($app, $con)
 	//check if new email matches with any of the emails in db 
 	foreach($emailArray as $email){
 		if($email == $userEmail){
-			//echo "That email already exists";
+			
 			$invalidEmail = true;
 		}
 	}
@@ -284,8 +295,10 @@ $app->post('/register', function () use($app, $con)
 		//knock off the last comma at the end 
 		$keys = substr($keys, 0, -1);
 		$values = substr($values, 0, -1);
+		
 		//build the query, we're adding to the user table for this POST    
 		$query = "Insert INTO user (".$keys.") VALUES (".$values.")";
+		
 		//try-catch block, make sure we can try to insert and not break things      		
 		  try
 		  {    		
@@ -307,7 +320,7 @@ $app->post('/register', function () use($app, $con)
 		//encrypt their password
 		$salt = create_salt();
 		$hash = create_hash($userPassword, $salt);
-		//echo $hash;
+		
 		//POST into UserPassword table 	
 		$query = "Insert INTO user_password (user_id, password, email, salt)
 				VALUES ('$userId','$hash','$userEmail','$salt');";
