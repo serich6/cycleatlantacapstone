@@ -349,11 +349,13 @@ USER: GET
 
 
 //USERS filtering URI
+/******* THIS IS USED TO PASS IN MULTIPLE PARAMETERS; FORMAT: <root_url>/users?<param>=<val>&<param>=<val> for as many inputs as needed**********/
+
 $app->get('/users', function() use($app, $con)
  {
-	$req = $app->request();
-	//for error logging
-	$bad_request = array();
+	$req = $app->request(); //get the request
+	
+	$bad_request = array(); //prep for bad parameters
 	
 		
 	//set all possible variables...
@@ -374,6 +376,7 @@ $app->get('/users', function() use($app, $con)
 	$query = 'SELECT * FROM user WHERE ';
 
 	//if each parameter is set, add it to the query
+	//also checks if params are valid for the expected input using FILTER_VALIDATE_<TYPE> (a PHP function)
 	if(isset($id)){
 		if(filter_var($id, FILTER_VALIDATE_INT)){
 			$query = $query . " id = " . $id . " AND ";
@@ -502,42 +505,39 @@ $app->get('/users', function() use($app, $con)
 
 		try
 		{
-			$result = mysqli_query($con, $query);
+			$result = mysqli_query($con, $query); //perform the query
 		}
 		catch(PDOException $e)
 		{
 			echo'{"error":{"text":'.$e->getMessage().'}}';
 		}
 
-		mysqli_close($con);
+		mysqli_close($con); //close the connection
 		
-		while($r = mysqli_fetch_assoc($result))
+		while($r = mysqli_fetch_assoc($result)) //get all the data requested
 		{
 			$rows[] = $r;
 		}
 
-		$response = $app->response();
-   		$response['Content-Type'] = 'application/json';
+		$response = $app->response(); //prepare the response
+   		$response['Content-Type'] = 'application/json'; //sending JSON back
    		 
-    	$response->body(json_encode($rows));
+    	$response->body(json_encode($rows)); //encode the data
     	$data = $response->body(json_encode($rows));
-    	return $data;
+    	return $data; //return it
     }
-    exit();	
+    exit();	//stop executing program
 
 });
 
+/*******GETS THE WORKZIP DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 
 $app->get('/users/:id/workZIP', function ($id) use($app, $con) 
 {
-		//	$user = UserFactory::getUser($id); //how to access methods in factory files
-		//	var_dump($user);
+		
 	
 	    	$result = mysqli_query($con,"SELECT workZIP FROM user WHERE id = '$id'");
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['workZIP'];
-  		//			echo "<br>";
-		//		}	
+	   
 	    	mysqli_close($con);
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
@@ -557,16 +557,13 @@ $app->get('/users/:id/workZIP', function ($id) use($app, $con)
 
 
 
-
+/*******GETS THE HOMEZIP DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 
 $app->get('/users/:id/homeZIP', function ($id) use($app, $con) 
 {
 
 	    	$result = mysqli_query($con,"SELECT homeZIP FROM user WHERE id = '$id'");
-	    	//	while($row = mysqli_fetch_array($result)) {
-  			//		echo $row['id'] . " " . $row['homeZIP'];
-  			//		echo "<br>";
-			//	}	
+	    	
 	    	mysqli_close($con);
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
@@ -585,16 +582,15 @@ $app->get('/users/:id/homeZIP', function ($id) use($app, $con)
 	
 });
 
+/*******GETS THE SCHOOLZIP DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
+
 $app->get('/users/:id/schoolZIP', function ($id) use($app, $con) 
 {
 
 	    	$result = mysqli_query($con,"SELECT schoolZIP FROM user WHERE id = '$id'");
-	    	//	while($row = mysqli_fetch_array($result)) {
-  			//		echo $row['id'] . " " . $row['schoolZIP'];
-  			//		echo "<br>";
-			//	}	
+	    
 	    	mysqli_close($con);
-	    	    	$rows = array();
+	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
 	    	{
 	    		$rows[] = $r;
@@ -609,17 +605,16 @@ $app->get('/users/:id/schoolZIP', function ($id) use($app, $con)
 
 	
 });
+
+/*******GETS THE EMAIL DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 
 $app->get('/users/:id/email', function ($id) use($app, $con) 
 {
 
 	    	$result = mysqli_query($con,"SELECT email FROM user WHERE id = '$id'");
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['email'];
-  		//			echo "<br>";
-		//		}	
+	  	
 	    	mysqli_close($con);
-	    		    	$rows = array();
+	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
 	    	{
 	    		$rows[] = $r;
@@ -636,13 +631,12 @@ $app->get('/users/:id/email', function ($id) use($app, $con)
 });
 
 
-//Yan
-//users/<id>/ethnicity, users/<id>/created, users/<id>/device
+/*******GETS THE ETHNICITY DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 
 $app->get('/users/:id/ethnicity', function ($id) use($app, $con) 
 {
 
-	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
+	    	
 	    	$result = mysqli_query($con,"SELECT ethnicity FROM user WHERE id = '$id'");
 	    		
 	    	mysqli_close($con);
@@ -659,11 +653,12 @@ $app->get('/users/:id/ethnicity', function ($id) use($app, $con)
     	  exit();
 });				
 
+/*******GETS THE DEVICE DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 
 $app->get('/users/:id/device', function ($id) use($app, $con) 
 {
 
-	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
+	    	
 	    	$result = mysqli_query($con,"SELECT device FROM user WHERE id = '$id'");
 	    		
 	    	mysqli_close($con);
@@ -681,6 +676,8 @@ $app->get('/users/:id/device', function ($id) use($app, $con)
 
 	
 });
+
+/*******GETS THE CREATED DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 
 $app->get('/users/:id/created', function ($id) use($app, $con) 
 {
@@ -705,11 +702,12 @@ $app->get('/users/:id/created', function ($id) use($app, $con)
 });
 					
 
-//Dhruv: income, rider type, rider history,rider frequency
+/*******GETS THE INCOME DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
+
 $app->get('/users/:id/income', function ($id) use($app, $con) 
 {
 
-	    	//need to use this for authentication purposes, hopefully will later pull back a password as well?
+	    	
 	    	$result = mysqli_query($con,"SELECT income FROM user WHERE id = '$id'");
 	    		
 	    	mysqli_close($con);
@@ -726,14 +724,13 @@ $app->get('/users/:id/income', function ($id) use($app, $con)
     	  exit();
 });
 
+/*******GETS THE RIDER_TYPE DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
+
 $app->get('/users/:id/rider_type', function ($id) use($app, $con) 
 {
 
 	    	$result = mysqli_query($con,"SELECT rider_type FROM user WHERE id = '$id'");
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['rider_type'];
-  		//			echo "<br>";
-		//		}	
+	  
 	    	mysqli_close($con);
 	    	 	while($r = mysqli_fetch_assoc($result))
 	    	{
@@ -745,7 +742,7 @@ $app->get('/users/:id/rider_type', function ($id) use($app, $con)
     	  $response->body(json_encode($rows));
     	  $data = $response->body(json_encode($rows));
     	  return $data;
-    	 // var_dump($test);
+    	
     	  exit();
 
 
@@ -756,7 +753,7 @@ $app->get('/users/:id/rider_type', function ($id) use($app, $con)
 
 
 
-
+/*******GETS THE RIDER_HISTORY DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 
 $app->get('/users/:id/rider_history', function ($id) use($app, $con) 
 {
@@ -778,6 +775,8 @@ $app->get('/users/:id/rider_history', function ($id) use($app, $con)
     	  exit();
 
 });
+
+/*******GETS THE CYCLING_FREQ DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 
 $app->get('/users/:id/cycling_freq', function ($id) use($app, $con) 
 {
@@ -804,7 +803,10 @@ $app->get('/users/:id/cycling_freq', function ($id) use($app, $con)
 });
 
 
-//Get a specific user's information for authentication
+/*******GETS THE ID DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
+/****was going to be used for authentication, before /login was created******/
+/*****could still be useful, but currently is not used in the demo website for anything of substance ****/
+
 $app->get('/users/:id', function ($id) use($app, $con) 
 {
 			//need to use this for authentication purposes, hopefully will later pull back a password as well?
@@ -825,7 +827,9 @@ $app->get('/users/:id', function ($id) use($app, $con)
 
 
 });
-//Get a specific user's age
+
+/*******GETS THE AGE DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
+
 $app->get('/users/:id/age', function ($id) use($app, $con) 
 {
 	    	$result = mysqli_query($con,"SELECT age FROM user WHERE id = '$id'");
@@ -844,7 +848,9 @@ $app->get('/users/:id/age', function ($id) use($app, $con)
     	  exit();
 
 });
-//Get a specific user's gender
+
+/*******GETS THE GENDER DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
+
 $app->get('/users/:id/gender', function ($id) use($app, $con) 
 {
 			$result = mysqli_query($con,"SELECT gender FROM user WHERE id = '$id'");
@@ -872,6 +878,13 @@ $app->get('/users/:id/gender', function ($id) use($app, $con)
 /***************************************************
 USER: POST
 *****************************************************/
+
+
+/***** USING A WEBFORM IN THE DEMO, JSON DATA IS PASSED TO THIS ENDPOINT
+THE ENDPOINT PROCESSES IT INTO KEY=VALUE PAIRS, AND CREATES A SQL QUERY
+IT IS AN INSERT STATEMENT THAT INSERTS ALL OF THE GIVEN DATA INTO THE PROPER
+COLUMNS OF A NEW USER IN THE USER TABLE
+***********/
 
 $app->post('/users/user', function () use($app, $con) 
 {
@@ -903,7 +916,7 @@ $app->post('/users/user', function () use($app, $con)
       }
 	    	
     //for debugging purposes, make sure query looks like it should      	
-    echo $query;
+   // echo $query;
 
     });
 
@@ -917,12 +930,28 @@ USER: PUT
 /**User PUT for multiple params
 */
 
+/************
+THIS WILL UPDATE MULTIPLE FIELDS OF USER DATA AT ONCE, AS OPPOSED TO THE ORIGINAL
+STURCTURE OF INDIVIDUAL ENDPOINTS FOR EACH TYPE OF USER DATA
+THIS IS SIMILAR TO THE FILTERING CALL FOR MULTIPLE PARAMTERS, AS WELL AS POSTING 
+MULTIPLE PARAMETERS
+
+MOST BROWSERS DO NOT SUPPORT THE PUT CALL; IN THE JAVASCRIPT/AJAX SIDE OF THINGS,
+THE URI MUST BE INTERCEPTER MID-REQUEST AND THE METHOD MUST BE OVERRIDEN TO PUT
+
+THE DATA WILL COME IN AS KEY=>VALUE PAIRS, FOR TESTING PURPOSES WE STORE
+A JSON ENCODED COPY OF THE DATA IN A SESSION VARIABLE. THIS IS NOT BEST PRACTICE
+AND IS NOT MEANT TO BE A PERMANENT SOLUTION, ONLY FOR TESTING AND DEBUGGING THE
+PUT ENDPOINT FOR USER DATA
+
+*****************/
+
 $app->put('/users/user', function () use($app, $con)
 {
 
-	$body = $app->request()->getBody();
+	$body = $app->request()->getBody(); //get the request body
 	$jsonBody = json_encode($body);
-	$_SESSION['userPutJSON'] = $jsonBody;
+	$_SESSION['userPutJSON'] = $jsonBody; //set session token of the request for debugging and testing
 	$id='';
 	$age='';
 	$email='';
@@ -935,6 +964,7 @@ $app->put('/users/user', function () use($app, $con)
 	$workZIP='';
 	$cycling_freq='';
 	$rider_type='';
+	//go through each key and get the data, if any
 	foreach($body as $k=>$v)
 	{
 		if($k=="id")
@@ -970,9 +1000,12 @@ $app->put('/users/user', function () use($app, $con)
 		}
 		
 	}	
-	$query = "UPDATE user SET";	
+	
+	//beging the query
+	
+	$query = "UPDATE user SET";	//UPDATing data in the table, so SET 
 	//will fix/clean up later, I was in a hurry to get this to work :p
-	$query2 = "UPDATE user_password SET";
+	$query2 = "UPDATE user_password SET"; //for password updates
 	
 	//if(isset($age)){
 	if($age!=''){
@@ -1040,7 +1073,7 @@ $app->put('/users/user', function () use($app, $con)
 		$query2 = substr($query2, 0, -1);
 
 	}
-	
+	//execute queries
 	mysqli_query($con, $query);
 	mysqli_query($con, $query2);
 	
@@ -1050,11 +1083,11 @@ $app->put('/users/user', function () use($app, $con)
 	$response = $app->response();
    	$response['Content-Type'] = 'application/json';
     $data = $response->body(json_encode($result));
-    return $data;
-});
+    return $data; //return manual success code
+}); 
 
 
-
+/*******INDIVIDUAL PUT METHODS FOR USER, NOT EFFICIENT, LEFT HERE FROM FIRST ROUND OF DEV, THESE DO WHAT THE ABOVE END POINT DOES*******/
 
 $app->put('/users/user/:id/workZip', function ($id) use($app, $con) 
 {
@@ -1146,7 +1179,6 @@ $app->put('/users/user/:id/email', function ($id) use($app, $con)
 
 	
 });    
-//dhruv put / patch income, rider_type, rider_history, cycling_freq
 
 $app->put('/users/user/:id/income', function ($id) use($app, $con) 
 {		
@@ -1256,10 +1288,14 @@ $app->put('/users/user/:id/ethnicity', function ($id) use($app, $con)
 /***************************************************
 USER: DELETE
 *****************************************************/
+/*******DELETES THE GIVEN USER  FROM USER_PASSWORD TABLE *******/
+
 $app->delete('/users', function() use($app, $con)
 {
 	
-
+		//THIS COULD BE REFACTORED TO REQUIRE MANUALLY PASSING IN A USER ID
+		//FOR NOW, WE JUST GET IT FROM THE WEB SESSION AND PASS IT OVER IN THE BODY 
+		
 	    $body = $app->request()->getBody();
 	    
    	  
