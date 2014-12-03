@@ -26,6 +26,14 @@ $app->add(new \Slim\Middleware\ContentTypes());
 
 
 // These constants may be changed without breaking existing hashes.
+
+
+/*************************************************
+WEB SERVICE FUNCTIONS:
+LOGIN
+REGISTER
+ENCRYPT PASSWORD
+**************************************************/
 define("PBKDF2_HASH_ALGORITHM", "sha256");
 define("PBKDF2_ITERATIONS", 1000);
 define("PBKDF2_SALT_BYTE_SIZE", 24);
@@ -327,6 +335,123 @@ $app->post('/register', function () use($app, $con)
 //kelley's iphone uuid: a0d546c1224dfe5fb192e28837ab0447f01be3d6
 //user fields: device = ^, email = none, age = 2, gender = 1, income = 1, ethnicity = 1, homeZIP = 30032,
 //schoolZIP = 30032, workZIP = 30032, cycling_freq = 1, rider_history = 1, rider_type = 1, app_version = 1.0
+
+
+
+/***************************************************
+RESOURCE: USER
+*****************************************************/
+
+
+/***************************************************
+USER: GET
+*****************************************************/
+
+
+
+/***************************************************
+USER: POST
+*****************************************************/
+
+
+/***************************************************
+USER: PUT
+*****************************************************/
+
+
+/***************************************************
+USER: DELETE
+*****************************************************/
+
+
+
+
+
+
+
+/***************************************************
+RESOURCE: TRIP
+*****************************************************/
+
+
+/***************************************************
+TRIP: GET
+*****************************************************/
+
+
+
+/***************************************************
+TRIP: POST
+*****************************************************/
+
+
+
+/***************************************************
+TRIP: PUT
+*****************************************************/
+
+
+
+
+
+
+
+
+/***************************************************
+RESOURCE: NOTE
+*****************************************************/
+
+
+/***************************************************
+NOTE: GET
+*****************************************************/
+
+
+/***************************************************
+NOTE: POST
+*****************************************************/
+
+
+/***************************************************
+NOTE: PUT
+*****************************************************/
+
+
+
+
+
+
+
+
+/***************************************************
+FILTER ENDPOINTS
+*****************************************************/
+
+/***************************************************
+RESOURCE: USER
+*****************************************************/
+
+/***************************************************
+RESOURCE: TRIP
+*****************************************************/
+
+/***************************************************
+RESOURCE: NOTE
+*****************************************************/
+
+
+/***************************************************
+ADVANCED ENDPOINTS
+*****************************************************/
+
+/***************************************************
+/RIDES
+*****************************************************/
+
+
+
+
+
 
 
 $app->post('/users/user', function () use($app, $con) 
@@ -1460,36 +1585,7 @@ $app->get('/rides',function() use($app, $con)
 								COUNT(purpose) as total  FROM trip  GROUP BY MONTH(start)";
 	
 
- 
-/**
-JSON for date range
-{weekstart:<date>
-	{purpose:errand, count:91}
-JSON for week_day
-{weekstart:<date>
-	{sunday{purpose:errand,count:91},
-	 monday{purpose:social,count:20}
-	}
-}
-JSON for hour
-{weekstart:<date>
-	"sunday"
-		"1"
-			{purpose:errand, count:20}
-		
-		"2"
-			{purpose,count}
-		
-	
-	"monday"
-		"1"
-		`	{purpose}
-		
-	}
-}
-for month, just add a month by month total at bottom
-for week, just add a week by week total at bottom
-**/
+
 	
 	if(isset($start_date))
 	{
@@ -1556,8 +1652,8 @@ for week, just add a week by week total at bottom
 								SUM(IF(purpose = 'Other', 1, 0)) as other,
 								COUNT(purpose) as total  
 			
-			FROM trip WHERE MONTH(start) >= MONTH(".'"'.$start_date.'"'.") 
-			GROUP BY MONTH(start)";
+			FROM trip WHERE DATE(start) >= DATE(".'"'.$start_date.'"'.") 
+			GROUP BY  MONTH(start)";
 		}
 		if(isset($week))
 		{
@@ -1645,8 +1741,8 @@ for week, just add a week by week total at bottom
 								COUNT(purpose) as total  
 				
 				
-				FROM trip WHERE MONTH(start) >= MONTH(". ' " ' . $start_date . '"' .") 
-				AND MONTH(start) <= MONTH (".'"'.$end_date.'"'.") GROUP BY MONTH(start)";
+				FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
+				AND DATE(start) <= DATE (".'"'.$end_date.'"'.") GROUP BY MONTH(start)";
 			}
 			if(isset($week))
 			{
@@ -1722,8 +1818,8 @@ for week, just add a week by week total at bottom
 								COUNT(purpose) as total  
 			
 			
-			FROM trip WHERE MONTH(start) <= MONTH(". ' " ' . $end_date . '"' .") 
-			GROUP BY MONTH(start)";
+			FROM trip WHERE DATE(start) <= DATE(". ' " ' . $end_date . '"' .") 
+			GROUP BY DATE(start)";
 		}
 		if(isset($week))
 		{
@@ -1890,6 +1986,7 @@ for week, just add a week by week total at bottom
 	if(isset($month))
 	{
 		$monthCount=mysqli_query($con, $monthCounts);
+		$mRows;
 		while($r = mysqli_fetch_assoc($monthCount))
 		{
 			if($r['month']=="1")
@@ -1942,6 +2039,7 @@ for week, just add a week by week total at bottom
 			}
 			$mRows[] = $r;
 		}
+		array_push($returnData, array("month_totals"=>$mRows));
 	}
 	if(isset($week))
 	{
@@ -1957,12 +2055,6 @@ for week, just add a week by week total at bottom
 	$response = $app->response();
 	$response['Content-Type'] = 'application/json';
   
-   $combined = array();
-   $combined = array($wRows
-    		
-    			
-    
-    );
    
 	$newData= json_encode($returnData, JSON_PRETTY_PRINT); 
 	echo $newData;
