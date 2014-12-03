@@ -48,7 +48,7 @@
 		
 		<form action="../index.php/register" method="post" name="myform">
 		Email:
-		<input name="email" value="none" /> <br>
+		<input type="email" name="email" value="none" /> <br>
 		Password:
 		<input name="password" input type="password" value="password" /> <br>
 		Gender:

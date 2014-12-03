@@ -246,10 +246,14 @@ $app->post('/register', function () use($app, $con)
 			$userPassword = $v;
 		}
 		if($k == 'email'){
+			if(filter_var($v, FILTER_VALIDATE_EMAIL))
+			{
 			$userEmail = $v;
+			}
+			}
 		}
 		
-    }
+    
 	
 	$invalidEmail = false;
 	//store all emails in an array for comparison purposes 
@@ -313,12 +317,6 @@ $app->post('/register', function () use($app, $con)
 		exit();
 		
 	}//end post
-	
-	if($invalidEmail == true)
-	{
-		header('Location:../demo_site/badRegister.php');
-		exit();
-	}
 
 	
 	
