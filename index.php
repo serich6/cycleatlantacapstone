@@ -1634,7 +1634,8 @@ $app->get('/rides',function() use($app, $con)
 	$week_day = $req->get('week_day');
 	$hour = $req->get('hour');
 	$week = $req->get('week');
-	$month = $req->get('month');	
+	$month = $req->get('month');
+	$aggregate = $req->get('aggregate');	
 	
 	$purposeCounts='';
 	$purposeCounts = "SELECT SUM(IF(purpose = 'Commute', 1, 0)) 
@@ -1665,7 +1666,7 @@ $app->get('/rides',function() use($app, $con)
 								SUM(IF(purpose = 'Other', 1, 0)) as other,
 								COUNT(purpose) as total 
 						FROM trip GROUP BY WEEK(start), DAYOFWEEK(start), HOUR(start)";
-	$weekCounts = "SELECT start, WEEK(start) as week, SUM(IF(purpose = 'Commute', 1, 0)) 
+	$weekCounts = "SELECT WEEK(start) as week, SUM(IF(purpose = 'Commute', 1, 0)) 
 								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
 								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
 								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
@@ -1757,7 +1758,7 @@ $app->get('/rides',function() use($app, $con)
 		}
 		if(isset($week))
 		{
-			$weekCounts = "SELECT start, WEEK(start) as week, 
+			$weekCounts = "SELECT WEEK(start) as week, 
 			
 			SUM(IF(purpose = 'Commute', 1, 0)) 
 								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
@@ -1846,7 +1847,7 @@ $app->get('/rides',function() use($app, $con)
 			}
 			if(isset($week))
 			{
-				$weekCounts = "SELECT start, WEEK(start) as week, 
+				$weekCounts = "SELECT WEEK(start) as week, 
 				
 				SUM(IF(purpose = 'Commute', 1, 0)) 
 								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
@@ -1882,8 +1883,19 @@ $app->get('/rides',function() use($app, $con)
 		FROM trip WHERE DATE(start) <= DATE(". ' " ' . $end_date . '"' .")";
 		if(isset($week_day))
 		{
-			"SELECT DAYOFWEEK(start) as day, purpose, COUNT(*) as total  FROM trip WHERE DATE(start) <= DATE(". ' " ' . $end_date . '"' .") 
-						GROUP BY WEEK(start), DAYOFWEEK(start)";
+			$weekDayCounts = "SELECT DAYOFWEEK(start) as day,   
+				
+				SUM(IF(purpose = 'Commute', 1, 0)) 
+								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
+								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
+								SUM(IF(purpose = 'Work-Related', 1, 0)) as workRelated, 
+								SUM(IF(purpose = 'School', 1, 0)) as school, 
+								SUM(IF(purpose = 'Exercise', 1, 0)) as exercise, 
+								SUM(IF(purpose = 'Shopping', 1, 0)) as shopping, 
+								SUM(IF(purpose = 'Other', 1, 0)) as other,
+								COUNT(purpose) as total
+				
+				FROM trip WHERE DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY WEEK(start), DAYOFWEEK(start)";
 		}
 		if(isset($hour))
 		{
@@ -1923,7 +1935,7 @@ $app->get('/rides',function() use($app, $con)
 		}
 		if(isset($week))
 		{
-			$weekCounts = "SELECT start, WEEK(start) as week, 
+			$weekCounts = "SELECT WEEK(start) as week, 
 			
 			SUM(IF(purpose = 'Commute', 1, 0)) 
 								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
@@ -1937,7 +1949,7 @@ $app->get('/rides',function() use($app, $con)
 			
 			
 			 FROM trip WHERE 
-			AND WEEK(start) <= WEEK(". ' " ' . $end_date . '"' .") GROUP BY WEEK(start)";
+			 WEEK(start) <= WEEK(". ' " ' . $end_date . '"' .") GROUP BY WEEK(start)";
 		}	
 	}
 	
@@ -1956,9 +1968,14 @@ $app->get('/rides',function() use($app, $con)
 				"purpose" => $pRows
 				);
 	}
+	
 	if(isset($week_day))
 	{
+		print_r(error_get_last());
 		$weekDayCount = mysqli_query($con, $weekDayCounts);
+		$aggregateWeek = array(array('Monday'), array('Tuesday'), array('Wednesday'),array("Thursday"), array("Friday"),
+							array("Saturday"), array("Sunday"));
+							
 	
 		while($r = mysqli_fetch_assoc($weekDayCount))
 		{
@@ -1991,12 +2008,51 @@ $app->get('/rides',function() use($app, $con)
 				$r['day']="Saturday";
 			}
 			$wRows[] = $r;
+			
+			
+			
+		}
+		if(isset($aggregate))
+		{
+			
+			for($m = 0; $m<count($wRows)-1; $m++)
+			{
+				for($n = 0; $n<count($aggregateWeek); $n++)
+				{
+			
+					if(strcmp($wRows[$m]['day'],$aggregateWeek[$n][0]) == 0)
+			 	 	{		 		
+				
+						 array_push($aggregateWeek[$n], array('purpose'=>array('commute'=>$wRows[$m]['commute'],
+						 							'social'=>$wRows[$m]['social'],
+						 							'errand'=>$wRows[$m]['errand'],'workRelated'=>$wRows[$m]['workRelated'],
+						 							'school'=>$wRows[$m]['school'],'exercise'=>$wRows[$m]['exercise'],
+						 							'shopping'=>$wRows[$m]['shopping'],'other'=>$wRows[$m]['other'],
+						 							'total_trips'=>$wRows[$m]['total'])	));
+				
+			  		}
+				
+						
+				}
+				
+			}
+			
+			
+			 
+		}
+		if(isset($aggregate))
+		{
+			$wRows = $aggregateWeek;
 		}
 		
-		$returnData = array(
+			$returnData = array(
 				"weekstart" => $start_date,
-				"purpose" => $wRows
+				"week_days" => $wRows
 				);
+		
+	
+		
+		
 	}
 	if(isset($hour))
 	{
@@ -2075,11 +2131,11 @@ $app->get('/rides',function() use($app, $con)
 			
 		
 		
-		$test = json_encode($prettyHour);
-		echo $test;
+		//$test = json_encode($prettyHour);
+		//echo $test;
 		$returnData = array(
 				"weekstart" => $start_date,
-				
+				"purpose"=>$prettyHour
 				);
 			
 	}
@@ -2148,6 +2204,7 @@ $app->get('/rides',function() use($app, $con)
 		{
 			$weekRows[] = $r;
 		}
+		array_push($returnData, array("week_totals"=>$weekRows));
 	}
 		
 	mysqli_close($con);		
