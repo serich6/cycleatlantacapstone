@@ -2424,6 +2424,10 @@ RESOURCE: NOTE
 NOTE: GET
 *****************************************************/
 
+/**
+* GETS NOTE FROM NOTE ID
+* PARAM: int note id
+**/
 $app->get('/notes/:id', function ($id) use($app, $con) 
 {
 
@@ -2450,7 +2454,11 @@ $app->get('/notes/:id', function ($id) use($app, $con)
 
 
 
-//NOTES filtering URI
+//NOTEs filtering URI
+/** 
+* THIS IS USED TO PASS IN MULTIPLE PARAMETERS; 
+* FORMAT: <root_url>/notes?<param>=<val>&<param>=<val> for as many inputs as needed
+**/
 $app->get('/notes', function() use($app, $con)
  {
 
@@ -2579,9 +2587,14 @@ $app->get('/notes', function() use($app, $con)
 /***************************************************
 NOTE: POST
 *****************************************************/
+/*
+* POSTS NOTE TO NOTE TABLE USING VALUES
+* USING A WEBFORM IN THE DEMO, JSON DATA IS PASSED TO THIS ENDPOINT
+* THE ENDPOINT PROCESSES IT INTO KEY=VALUE PAIRS, AND CREATES A SQL QUERY
+* IT IS AN INSERT STATEMENT THAT INSERTS ALL OF THE GIVEN DATA INTO THE PROPER
+* COLUMNS OF A NEW USER IN THE USER TABLE
+*/
 
-
-//dhruv POST notes
 $app->post('/notes/note', function () use($app, $con) 
 {
     $body = $app->request()->params();
@@ -2615,9 +2628,22 @@ $app->post('/notes/note', function () use($app, $con)
 /***************************************************
 NOTE: PUT
 *****************************************************/
+/**
+THIS WILL UPDATE MULTIPLE FIELDS OF note DATA AT ONCE, AS OPPOSED TO THE ORIGINAL
+STURCTURE OF INDIVIDUAL ENDPOINTS FOR EACH TYPE OF USER DATA
+THIS IS SIMILAR TO THE FILTERING CALL FOR MULTIPLE PARAMTERS, AS WELL AS POSTING 
+MULTIPLE PARAMETERS
 
+MOST BROWSERS DO NOT SUPPORT THE PUT CALL; IN THE JAVASCRIPT/AJAX SIDE OF THINGS,
+THE URI MUST BE INTERCEPTER MID-REQUEST AND THE METHOD MUST BE OVERRIDEN TO PUT
 
-$app->put('/trips/trip', function () use($app, $con)
+THE DATA WILL COME IN AS KEY=>VALUE PAIRS, FOR TESTING PURPOSES WE STORE
+A JSON ENCODED COPY OF THE DATA IN A SESSION VARIABLE. THIS IS NOT BEST PRACTICE
+AND IS NOT MEANT TO BE A PERMANENT SOLUTION, ONLY FOR TESTING AND DEBUGGING THE
+PUT ENDPOINT FOR NOTE DATA
+**/
+
+$app->put('/notes/note', function () use($app, $con)
 {
 
 	$body = $app->request()->getBody();
