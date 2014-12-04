@@ -335,6 +335,7 @@ $app->post('/register', function () use($app, $con)
 			//echo '{"error":{"text":'. $e->getMessage() .'}}';
 		  }
 		header('Location:../demo_site/userCreated.php');
+		
 		exit();
 		
 	}//end post
@@ -1357,6 +1358,9 @@ TRIP: GET
 *****************************************************/
 
 //TRIPS filtering URI
+/******* THIS IS USED TO PASS IN MULTIPLE PARAMETERS; FORMAT: <root_url>/trips?<param>=<val>&<param>=<val> for as many inputs as needed**********/
+
+//TRIPS filtering URI
 $app->get('/trips', function() use($app, $con)
  {
 
@@ -1374,6 +1378,7 @@ $app->get('/trips', function() use($app, $con)
 	$query = 'SELECT * FROM trip WHERE ';
 
 	//if each parameter is set, add it to the query
+	//valid input to prevent sql injections
 	if(isset($id)){
 		if(filter_var($id, FILTER_VALIDATE_INT)){
 			$query = $query . " id = " . $id . " AND ";
@@ -1453,18 +1458,14 @@ $app->get('/trips', function() use($app, $con)
 
 });
 
-
+/*******GETS THE TRIPS DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 $app->get('/trips/:id/', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
 		//	var_dump($user);
 	
 	    	$result = mysqli_query($con,"SELECT * FROM trip WHERE user_id = '$id'  ORDER BY stop DESC");
-	    
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['workZIP'];
-  		//			echo "<br>";
-		//		}	
+	   
 	    	mysqli_close($con);
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1483,7 +1484,7 @@ $app->get('/trips/:id/', function ($id) use($app, $con)
 	
 });
 
-
+/*******GETS THE TRIP'S PURPOSE DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 $app->get('/trips/:id/purpose', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
@@ -1491,10 +1492,6 @@ $app->get('/trips/:id/purpose', function ($id) use($app, $con)
 	
 	    	$result = mysqli_query($con,"SELECT purpose FROM trip WHERE id = '$id' ");
 	    
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['workZIP'];
-  		//			echo "<br>";
-		//		}	
 	    	mysqli_close($con);
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1511,18 +1508,14 @@ $app->get('/trips/:id/purpose', function ($id) use($app, $con)
     	  exit();
 });
 
-
+/*******GETS THE TRIP'S NOTES DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 $app->get('/trips/:id/notes', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
 		//	var_dump($user);
 	
 	    	$result = mysqli_query($con,"SELECT notes FROM trip WHERE id = '$id' ");
-	    
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['workZIP'];
-  		//			echo "<br>";
-		//		}	
+	   
 	    	mysqli_close($con);
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1539,17 +1532,14 @@ $app->get('/trips/:id/notes', function ($id) use($app, $con)
     	  exit();
 });
 
+/*******GETS THE TRIP'S START TIME DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 $app->get('/trips/:id/start', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
 		//	var_dump($user);
 	
 	    	$result = mysqli_query($con,"SELECT start FROM trip WHERE id = '$id' ");
-	    
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['workZIP'];
-  		//			echo "<br>";
-		//		}	
+		
 	    	mysqli_close($con);
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1566,17 +1556,14 @@ $app->get('/trips/:id/start', function ($id) use($app, $con)
     	  exit();
 });
 
+/*******GETS THE TRIP'S STOP TIME DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 $app->get('/trips/:id/stop', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
 		//	var_dump($user);
 	
 	    	$result = mysqli_query($con,"SELECT stop FROM trip WHERE id = '$id' ");
-	    
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['workZIP'];
-  		//			echo "<br>";
-		//		}	
+	 
 	    	mysqli_close($con);
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1593,17 +1580,14 @@ $app->get('/trips/:id/stop', function ($id) use($app, $con)
     	  exit();
 });
 
+/*******GETS THE TRIP'S COORDINATES DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 $app->get('/trips/:id/n_coord', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
 		//	var_dump($user);
 	
 	    	$result = mysqli_query($con,"SELECT n_coord FROM trip WHERE id = '$id' ");
-	    
-	    //		while($row = mysqli_fetch_array($result)) {
-  		//			echo $row['id'] . " " . $row['workZIP'];
-  		//			echo "<br>";
-		//		}	
+	   
 	    	mysqli_close($con);
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1625,7 +1609,13 @@ $app->get('/trips/:id/n_coord', function ($id) use($app, $con)
 
 
 
+//RIDES filtering URI
+/******* 
+This is an extension of trips that involves more processing. 
+Format a query such as /rides?start_date=12/12/14&week_day=true&hour=true
 
+FOR MORE EXTENSIVE DOCUMENTATION, LOOK IN THE API'S USER MANUAL 
+**********/
 $app->get('/rides',function() use($app, $con)
 {
 	$req = $app->request();
@@ -1865,6 +1855,7 @@ $app->get('/rides',function() use($app, $con)
 		}
 				
 	}
+	
 	if(isset($end_date) && IS_NULL($start_date))
 	{
 		$purposeCounts = "SELECT
@@ -2226,8 +2217,7 @@ $app->get('/rides',function() use($app, $con)
 TRIP: POST
 *****************************************************/
 
-//Sam POST trip (need to work on getting back the global ID
-
+/*******POST A TRIP FROM A GIVEN USER *******/
 $app->post('/trips/trip', function () use($app, $con) 
 {
 	//get the parameters sent over as JSON 
@@ -2306,7 +2296,9 @@ $app->post('/trips/trip', function () use($app, $con)
 TRIP: PUT
 *****************************************************/
 
-
+/*******PATCH A TRIP FROM A GIVEN USER 
+	THIS IS USED TO PASS IN MULTIPLE PARAMETERS
+*******/
 $app->put('/trips/trip', function () use($app, $con)
 {
 
