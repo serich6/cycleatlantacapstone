@@ -6,8 +6,8 @@ session_start();
 // $con=mysqli_connect("mysql.govathon.cycleatlanta.org","govathon12db","7Jk3WYNt","catl_govathon");
 
 require 'Slim/Slim.php';
-require_once('include/UserFactory.php');
-require_once('include/Database.php');
+require_once('../include/UserFactory.php');
+require_once('../include/Database.php');
 $con = DatabaseConnectionFactory::getConnection();
 /*********************
 Since we never actually used the dir structure live in prod for our dev,
@@ -218,17 +218,17 @@ $app->post('/login', function () use($app, $con)
 		$hash = create_hash($passwordInput, $retrievedSalt);
  
  		if($hash == $retrievedPassword){	
-			header('Location:../demo_site/portal.php');
-			exit();			
+			//header('Location:../demo_site/portal.php');
+			//exit();			
 		}
 		else{
-			header('Location:../demo_site/badLogin.html');
-			exit();
+			//header('Location:../demo_site/badLogin.html');
+			//exit();
 		}
 	}
 	else{
-		header('Location:../demo_site/badLogin.html');
-		exit();
+		//header('Location:../demo_site/badLogin.html');
+		//exit();
 	}
 	exit();
 	
@@ -336,9 +336,8 @@ $app->post('/register', function () use($app, $con)
 		  {
 			//echo '{"error":{"text":'. $e->getMessage() .'}}';
 		  }
-		header('Location:../demo_site/userCreated.php');
-		
-		exit();
+		//header('Location:../demo_site/userCreated.php');
+		//exit();
 		
 	}//end post
 
@@ -1360,9 +1359,6 @@ TRIP: GET
 *****************************************************/
 
 //TRIPS filtering URI
-/******* THIS IS USED TO PASS IN MULTIPLE PARAMETERS; FORMAT: <root_url>/trips?<param>=<val>&<param>=<val> for as many inputs as needed**********/
-
-//TRIPS filtering URI
 $app->get('/trips', function() use($app, $con)
  {
 
@@ -1380,7 +1376,6 @@ $app->get('/trips', function() use($app, $con)
 	$query = 'SELECT * FROM trip WHERE ';
 
 	//if each parameter is set, add it to the query
-	//valid input to prevent sql injections
 	if(isset($id)){
 		if(filter_var($id, FILTER_VALIDATE_INT)){
 			$query = $query . " id = " . $id . " AND ";
@@ -1460,14 +1455,18 @@ $app->get('/trips', function() use($app, $con)
 
 });
 
-/*******GETS THE TRIPS DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
+
 $app->get('/trips/:id/', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
 		//	var_dump($user);
 	
 	    	$result = mysqli_query($con,"SELECT * FROM trip WHERE user_id = '$id'  ORDER BY stop DESC");
-	   
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
 	    	mysqli_close($con);
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1486,7 +1485,7 @@ $app->get('/trips/:id/', function ($id) use($app, $con)
 	
 });
 
-/*******GETS THE TRIP'S PURPOSE DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
+
 $app->get('/trips/:id/purpose', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
@@ -1494,6 +1493,10 @@ $app->get('/trips/:id/purpose', function ($id) use($app, $con)
 	
 	    	$result = mysqli_query($con,"SELECT purpose FROM trip WHERE id = '$id' ");
 	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
 	    	mysqli_close($con);
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1510,14 +1513,18 @@ $app->get('/trips/:id/purpose', function ($id) use($app, $con)
     	  exit();
 });
 
-/*******GETS THE TRIP'S NOTES DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
+
 $app->get('/trips/:id/notes', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
 		//	var_dump($user);
 	
 	    	$result = mysqli_query($con,"SELECT notes FROM trip WHERE id = '$id' ");
-	   
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
 	    	mysqli_close($con);
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1534,14 +1541,17 @@ $app->get('/trips/:id/notes', function ($id) use($app, $con)
     	  exit();
 });
 
-/*******GETS THE TRIP'S START TIME DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 $app->get('/trips/:id/start', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
 		//	var_dump($user);
 	
 	    	$result = mysqli_query($con,"SELECT start FROM trip WHERE id = '$id' ");
-		
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
 	    	mysqli_close($con);
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1558,14 +1568,17 @@ $app->get('/trips/:id/start', function ($id) use($app, $con)
     	  exit();
 });
 
-/*******GETS THE TRIP'S STOP TIME DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 $app->get('/trips/:id/stop', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
 		//	var_dump($user);
 	
 	    	$result = mysqli_query($con,"SELECT stop FROM trip WHERE id = '$id' ");
-	 
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
 	    	mysqli_close($con);
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1582,14 +1595,17 @@ $app->get('/trips/:id/stop', function ($id) use($app, $con)
     	  exit();
 });
 
-/*******GETS THE TRIP'S COORDINATES DATA FROM A GIVEN USER; PARAM: ID (AN INT) *******/
 $app->get('/trips/:id/n_coord', function ($id) use($app, $con) 
 {
 		//	$user = UserFactory::getUser($id); //how to access methods in factory files
 		//	var_dump($user);
 	
 	    	$result = mysqli_query($con,"SELECT n_coord FROM trip WHERE id = '$id' ");
-	   
+	    
+	    //		while($row = mysqli_fetch_array($result)) {
+  		//			echo $row['id'] . " " . $row['workZIP'];
+  		//			echo "<br>";
+		//		}	
 	    	mysqli_close($con);
 	    	$rows = array();
 	    	while($r = mysqli_fetch_assoc($result))
@@ -1611,16 +1627,11 @@ $app->get('/trips/:id/n_coord', function ($id) use($app, $con)
 
 
 
-//RIDES filtering URI
-/******* 
-This is an extension of trips that involves more processing. 
-Format a query such as /rides?start_date=12/12/14&week_day=true&hour=true
 
-FOR MORE EXTENSIVE DOCUMENTATION, LOOK IN THE API'S USER MANUAL 
-**********/
 $app->get('/rides',function() use($app, $con)
 {
 	$req = $app->request();
+	//the parameters
 	$start_date = $req->get('start_date');
 	$end_date = $req->get('end_date');
 	$week_day = $req->get('week_day');
@@ -1630,6 +1641,9 @@ $app->get('/rides',function() use($app, $con)
 	$aggregate = $req->get('aggregate');	
 	
 	$purposeCounts='';
+	//if no parameters set, set up baisc queries
+	//for all queries, they retrieve the SUMS of trips matching purpose strings
+	//based on the desired paramter flags, they will retrieve dates between certains dates and organize based on days of week, hours, or weeks/months
 	$purposeCounts = "SELECT SUM(IF(purpose = 'Commute', 1, 0)) 
 								as commute, SUM(IF(purpose = 'Social',1, 0)) as social, 
 								SUM(IF(purpose = 'Errand', 1, 0 )) as errand, 
@@ -1679,7 +1693,7 @@ $app->get('/rides',function() use($app, $con)
 	
 
 
-	
+	//if we have a start date	
 	if(isset($start_date))
 	{
 		$purposeCounts = "SELECT SUM(IF(purpose = 'Commute', 1, 0)) 
@@ -1696,7 +1710,7 @@ $app->get('/rides',function() use($app, $con)
 		
 								WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .")";
 		
-		
+		//and if we want week day organization
 		if(isset($week_day))
 		{
 			$weekDayCounts = "SELECT DAYOFWEEK(start) as day, 
@@ -1713,6 +1727,7 @@ $app->get('/rides',function() use($app, $con)
 						FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
 						GROUP BY WEEK(start), DAYOFWEEK(start)";
 		}
+		//and if we want hour organization
 		if(isset($hour))
 		{
 			$hourCounts = "SELECT DAYOFWEEK(start) as day, HOUR(start) as hour,  
@@ -1731,6 +1746,7 @@ $app->get('/rides',function() use($app, $con)
 			FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .")  
 			GROUP BY WEEK(start), DAYOFWEEK(start), HOUR(start)";
 		}
+		//and if we want month totals
 		if(isset($month))
 		{
 			$monthCounts = "SELECT MONTH(start) as month, 
@@ -1748,6 +1764,7 @@ $app->get('/rides',function() use($app, $con)
 			FROM trip WHERE DATE(start) >= DATE(".'"'.$start_date.'"'.") 
 			GROUP BY  MONTH(start)";
 		}
+		//and if we want week totals
 		if(isset($week))
 		{
 			$weekCounts = "SELECT WEEK(start) as week, 
@@ -1765,6 +1782,7 @@ $app->get('/rides',function() use($app, $con)
 			FROM trip WHERE WEEK(start) >= WEEK(".'"'.$start_date.'"'.") 
 			GROUP BY WEEK(start)";
 		}
+		//and if we have an end date
 		if(isset($end_date))
 		{
 			$purposeCounts = "SELECT 
@@ -1781,6 +1799,7 @@ $app->get('/rides',function() use($app, $con)
 			
 			FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
 			AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .")";
+			//and if we have week days
 			if(isset($week_day))
 			{
 				$weekDayCounts = "SELECT DAYOFWEEK(start) as day,   
@@ -1800,6 +1819,7 @@ $app->get('/rides',function() use($app, $con)
 				
 				AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .") GROUP BY WEEK(start), DAYOFWEEK(start)";
 			}	
+			//and if we have hours
 			if(isset($hour))
 			{
 				$hourCounts = "SELECT start, DAYOFWEEK(start) as day, HOUR(start) as hour,  
@@ -1819,6 +1839,7 @@ $app->get('/rides',function() use($app, $con)
 				FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .")  AND DATE(start) <= DATE(". ' " ' . $end_date . '"' .")
 				GROUP BY WEEK(start), DAYOFWEEK(start), HOUR(start)";	
 			}
+			//and if we have months
 			if(isset($month))
 			{
 				$monthCounts = "SELECT MONTH(start) as month, 
@@ -1837,6 +1858,7 @@ $app->get('/rides',function() use($app, $con)
 				FROM trip WHERE DATE(start) >= DATE(". ' " ' . $start_date . '"' .") 
 				AND DATE(start) <= DATE (".'"'.$end_date.'"'.") GROUP BY MONTH(start)";
 			}
+			//and if we have weeks
 			if(isset($week))
 			{
 				$weekCounts = "SELECT WEEK(start) as week, 
@@ -1857,7 +1879,7 @@ $app->get('/rides',function() use($app, $con)
 		}
 				
 	}
-	
+	//the following do same as above, but without a start date set
 	if(isset($end_date) && IS_NULL($start_date))
 	{
 		$purposeCounts = "SELECT
@@ -1945,17 +1967,18 @@ $app->get('/rides',function() use($app, $con)
 			 WEEK(start) <= WEEK(". ' " ' . $end_date . '"' .") GROUP BY WEEK(start)";
 		}	
 	}
-	
+	//set up the array for returning queries
 	$returnData = array();
-	
+	//based on flags, execute the right query
 	if(isset($start_date) || isset($end_date))
 	{
 		$purposeCount = mysqli_query($con, $purposeCounts);
+		//get the data
 		while($r = mysqli_fetch_assoc($purposeCount))
 		{
 			$pRows[] = $r;
 		}
-		
+		//create the aray
 		$returnData = array(
 				"weekstart" => $start_date,
 				"purpose" => $pRows
@@ -1966,10 +1989,11 @@ $app->get('/rides',function() use($app, $con)
 	{
 		print_r(error_get_last());
 		$weekDayCount = mysqli_query($con, $weekDayCounts);
+		//set up array to do matching and organize trips by day of week for repeat days
 		$aggregateWeek = array(array('Monday'), array('Tuesday'), array('Wednesday'),array("Thursday"), array("Friday"),
 							array("Saturday"), array("Sunday"));
 							
-	
+		//get user friendly date codes
 		while($r = mysqli_fetch_assoc($weekDayCount))
 		{
 			if($r['day']=="1")
@@ -2005,6 +2029,7 @@ $app->get('/rides',function() use($app, $con)
 			
 			
 		}
+		//if we want a json of 7 days instead of repeating the weeks over and over
 		if(isset($aggregate))
 		{
 			
@@ -2033,6 +2058,7 @@ $app->get('/rides',function() use($app, $con)
 			
 			 
 		}
+		//determine which data to append to return data
 		if(isset($aggregate))
 		{
 			$wRows = $aggregateWeek;
@@ -2205,10 +2231,10 @@ $app->get('/rides',function() use($app, $con)
 	$response = $app->response();
 	$response['Content-Type'] = 'application/json';
   
-   
+   //encode the data and make it look a little more readable on a webpage
 	$newData= json_encode($returnData, JSON_PRETTY_PRINT); 
-	echo $newData;
-  
+//	echo $newData;
+  	return $newData;
     exit();
 
 });
@@ -2219,7 +2245,8 @@ $app->get('/rides',function() use($app, $con)
 TRIP: POST
 *****************************************************/
 
-/*******POST A TRIP FROM A GIVEN USER *******/
+//Sam POST trip (need to work on getting back the global ID
+
 $app->post('/trips/trip', function () use($app, $con) 
 {
 	//get the parameters sent over as JSON 
@@ -2298,9 +2325,7 @@ $app->post('/trips/trip', function () use($app, $con)
 TRIP: PUT
 *****************************************************/
 
-/*******PATCH A TRIP FROM A GIVEN USER 
-	THIS IS USED TO PASS IN MULTIPLE PARAMETERS
-*******/
+
 $app->put('/trips/trip', function () use($app, $con)
 {
 
@@ -2426,10 +2451,6 @@ RESOURCE: NOTE
 NOTE: GET
 *****************************************************/
 
-/**
-* GETS NOTE FROM NOTE ID
-* PARAM: int note id
-**/
 $app->get('/notes/:id', function ($id) use($app, $con) 
 {
 
@@ -2456,11 +2477,7 @@ $app->get('/notes/:id', function ($id) use($app, $con)
 
 
 
-//NOTEs filtering URI
-/** 
-* THIS IS USED TO PASS IN MULTIPLE PARAMETERS; 
-* FORMAT: <root_url>/notes?<param>=<val>&<param>=<val> for as many inputs as needed
-**/
+//NOTES filtering URI
 $app->get('/notes', function() use($app, $con)
  {
 
@@ -2589,14 +2606,9 @@ $app->get('/notes', function() use($app, $con)
 /***************************************************
 NOTE: POST
 *****************************************************/
-/*
-* POSTS NOTE TO NOTE TABLE USING VALUES
-* USING A WEBFORM IN THE DEMO, JSON DATA IS PASSED TO THIS ENDPOINT
-* THE ENDPOINT PROCESSES IT INTO KEY=VALUE PAIRS, AND CREATES A SQL QUERY
-* IT IS AN INSERT STATEMENT THAT INSERTS ALL OF THE GIVEN DATA INTO THE PROPER
-* COLUMNS OF A NEW USER IN THE USER TABLE
-*/
 
+
+//dhruv POST notes
 $app->post('/notes/note', function () use($app, $con) 
 {
     $body = $app->request()->params();
@@ -2621,7 +2633,7 @@ $app->post('/notes/note', function () use($app, $con)
         echo '{"error":{"text":'. $e->getMessage() .'}}';
       }
 	    	
-    echo $query;
+  //  echo $query;
 
     });
 
@@ -2630,22 +2642,9 @@ $app->post('/notes/note', function () use($app, $con)
 /***************************************************
 NOTE: PUT
 *****************************************************/
-/**
-THIS WILL UPDATE MULTIPLE FIELDS OF note DATA AT ONCE, AS OPPOSED TO THE ORIGINAL
-STURCTURE OF INDIVIDUAL ENDPOINTS FOR EACH TYPE OF USER DATA
-THIS IS SIMILAR TO THE FILTERING CALL FOR MULTIPLE PARAMTERS, AS WELL AS POSTING 
-MULTIPLE PARAMETERS
 
-MOST BROWSERS DO NOT SUPPORT THE PUT CALL; IN THE JAVASCRIPT/AJAX SIDE OF THINGS,
-THE URI MUST BE INTERCEPTER MID-REQUEST AND THE METHOD MUST BE OVERRIDEN TO PUT
 
-THE DATA WILL COME IN AS KEY=>VALUE PAIRS, FOR TESTING PURPOSES WE STORE
-A JSON ENCODED COPY OF THE DATA IN A SESSION VARIABLE. THIS IS NOT BEST PRACTICE
-AND IS NOT MEANT TO BE A PERMANENT SOLUTION, ONLY FOR TESTING AND DEBUGGING THE
-PUT ENDPOINT FOR NOTE DATA
-**/
-
-$app->put('/notes/note', function () use($app, $con)
+$app->put('/trips/trip', function () use($app, $con)
 {
 
 	$body = $app->request()->getBody();
